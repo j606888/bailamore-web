@@ -1,8 +1,12 @@
 const Footer = () => {
   return (
     <footer className="bg-gray-700 text-gray-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="py-4 text-center text-sm">
+      <div className="px-4 flex flex-col items-center p-4 gap-4">
+        <div className="flex justify-center items-center gap-4">
+          <img src="/icons/line.svg" alt="line" className="w-6 h-6" />
+          <img src="/icons/instagram.svg" alt="instagram" className="w-6 h-6" />
+        </div>
+        <div className="text-center text-sm">
           Baila&apos;more @ 2025. All rights reserved.
         </div>
       </div>

@@ -44,11 +44,20 @@ const testimonials: TestimonialType[] = [
       '學習以後可以跟同學一起去party跟夜店high，生活中的大確幸就是開始上課學跳舞了！'
     ],
   },
+  {
+    id: 4,
+    name: 'Emma',
+    title: '更擅長跳夜店舞的女子',
+    image: '/testimonials/emma.png',
+    content: [
+      '老師設計課程非常用心，在同學們需要基礎又想學酷招之間取得一個巧妙的平衡，上課氛圍也很歡樂，情緒價值也沒少給過讚讚讚！'
+    ],
+  },
 ];
 
 const Testimonial = ({ testimonial }: { testimonial: TestimonialType }) => {
   return (
-    <div className="bg-white p-8 rounded-lg shadow-sm max-w-2xl mx-auto  min-h-[480px]">
+    <div className="bg-white border-1 rounded-sm border-gray-200 p-6 max-w-2xl">
       <div className="flex flex-col items-center">
         <div className="w-32 h-32 relative mb-4">
           <Image
@@ -88,16 +97,16 @@ const Testimonials = () => {
   };
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-8 sm:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl font-bold text-gray-900 mb-12 text-center">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center sm:text-4xl sm:mb-8">
           學生心得
         </h2>
         <div className="relative">
           {/* Navigation Buttons */}
           <button
             onClick={handlePrevious}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 transition-colors"
+            className="absolute left-12 top-24 -translate-y-1/2 z-10 p-2 hover:bg-gray-50 transition-colors"
             aria-label="Previous testimonial"
           >
             <svg
@@ -115,7 +124,7 @@ const Testimonials = () => {
           
           <button
             onClick={handleNext}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 transition-colors"
+            className="absolute right-12 top-24 -translate-y-1/2 z-10 p-2 hover:bg-gray-50 transition-colors"
             aria-label="Next testimonial"
           >
             <svg
