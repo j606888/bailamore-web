@@ -1,51 +1,48 @@
+import Image from 'next/image'
+import { Button } from '../ui/button'
 import Link from 'next/link';
-import Image from 'next/image';
+import { LINKS } from '@/constants/links'
 
 const Hero = () => {
   return (
-    <div className="relative h-[320px] md:h-[480px] lg:h-[640px]">
-      {/* Background Image */}
-      <div className="absolute inset-0">
-        <Image
-          src="/images/hero.jpg"
-          alt="Dance class background"
-          fill
-          className="object-cover"
-          priority
-        />
-        {/* Dark overlay */}
-        <div className="absolute inset-0 bg-black/40"></div>
-      </div>
-
-      {/* Content */}
-      <div className="relative h-full flex items-center">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="text-white max-w-3xl">
-            <h1 className="font-poppins text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-2 md:mb-4">
-              第一次跳舞，就從這裡開始
-            </h1>
-            <p className="text-lg md:text-xl lg:text-2xl mb-4 md:mb-8 max-w-2xl">
-              沒舞伴、沒經驗都沒關係，來試一次 Bachata，說不定你會愛上。
-            </p>
-            <div className="flex flex-wrap gap-3 md:gap-4">
-              <Link 
-                href="/register" 
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 md:py-3 md:px-8 rounded-lg transition duration-300"
-              >
-                立即報名
-              </Link>
-              <Link 
-                href="/courses" 
-                className="bg-white hover:bg-gray-100 text-gray-900 font-bold py-2 px-6 md:py-3 md:px-8 rounded-lg transition duration-300"
-              >
-                課程介紹
-              </Link>
-            </div>
-          </div>
+    <div className="px-5 py-10 flex flex-col items-center justify-center gap-6 md:flex-row md:gap-10 md:max-w-7xl md:mx-auto">
+      <div className="flex flex-col items-center justify-center gap-4 md:w-[400px] md:items-start md:flex-shrink-0">
+        <h1 className="font-poppins text-3xl font-bold mb-1 md:text-5xl">
+          第一次跳舞，<br className="hidden md:block" />就從這裡開始
+        </h1>
+        <p className="text-base max-w-2xl text-center md:text-left">
+          沒舞伴、沒經驗都沒關係，來試一次<br />Bachata，說不定你會愛上。
+        </p>
+        <div className="flex flex-wrap gap-4">
+          <Link href={LINKS.LINE} target="_blank" rel="noopener noreferrer">
+            <Button size="lg" className="hover:cursor-pointer">
+              <Image
+                src="/icons/line.svg"
+                alt="line"
+                width={24}
+                height={24}
+            />
+            立即報名
+            </Button>
+          </Link>
+          <Link href="/courses">
+            <Button size="lg" variant="outline">課程介紹</Button>
+          </Link>
         </div>
       </div>
+      <picture>
+        <source srcSet="/images/hero-large.jpg" media="(min-width: 640px)" />
+        <img
+          src="/images/hero.jpg"
+          alt="Dance class background"
+          className="object-cover w-full rounded-xl"
+          loading="lazy"
+          width={1200}
+          height={800}
+        />
+      </picture>
     </div>
-  );
-};
+  )
+}
 
-export default Hero; 
+export default Hero 

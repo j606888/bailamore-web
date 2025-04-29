@@ -53,9 +53,9 @@ const FAQItem = ({ faq, isOpen, onToggle }: {
   onToggle: () => void;
 }) => {
   return (
-    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+    <div className="bg-white rounded-sm border border-gray-200 overflow-hidden">
       <button
-        className="w-full px-6 py-5 flex justify-between items-center text-left hover:bg-gray-50"
+        className="w-full px-6 py-4 flex justify-between items-center text-left hover:cursor-pointer"
         onClick={onToggle}
       >
         <span className="text-lg font-medium text-gray-900">{faq.question}</span>
@@ -91,7 +91,7 @@ const FAQItem = ({ faq, isOpen, onToggle }: {
 };
 
 const FAQ = () => {
-  const [openIds, setOpenIds] = useState<Set<number>>(new Set([1]));
+  const [openIds, setOpenIds] = useState<Set<number>>(new Set([]));
 
   const toggleFAQ = (id: number) => {
     setOpenIds(prev => {
@@ -106,9 +106,9 @@ const FAQ = () => {
   };
 
   return (
-    <section className="py-16 bg-white">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl font-bold text-gray-900 mb-12 text-center">
+    <section className="py-8 bg-slate-50">
+      <div className="max-w-4xl mx-auto px-4 md:px-6">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">
           常見 Q&A
         </h2>
         <div className="flex flex-col gap-4">
