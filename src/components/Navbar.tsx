@@ -37,7 +37,7 @@ const Navbar = () => {
               </Link>
             ))}
             <Link href="https://lin.ee/2dtDvpO" target="_blank" rel="noopener noreferrer">
-              <Button className="ml-2">
+              <Button className="ml-2 cursor-pointer">
                 <Image
                   src="/icons/line.svg"
                   alt="line"
