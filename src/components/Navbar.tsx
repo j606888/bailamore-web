@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { LINKS } from '@/constants/links'
 import Image from 'next/image';
 import { Button } from './ui/button';
 
@@ -9,8 +10,8 @@ const NAV_LINKS = [
   { name: '課程介紹', href: '/courses' },
   { name: '師資介紹', href: '/teachers' },
   { name: '教室資訊', href: '/location' },
-  { name: '活動', href: '/events', disabled: true },
-  { name: '課程紀錄', href: '/record', disabled: true },
+  // { name: '活動', href: '/events', disabled: true },
+  // { name: '課程紀錄', href: '/record', disabled: true },
 ];
 
 const Navbar = () => {
@@ -18,7 +19,7 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-0 left-0 right-0 bg-white shadow-lg z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto px-4 md:px-6">
         <div className="flex justify-between h-16">
           <div className="flex items-center flex-auto">
             <Link href="/" className="flex-shrink-0 flex flex-col items-start">
@@ -36,7 +37,7 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
-            <Link href="https://lin.ee/2dtDvpO" target="_blank" rel="noopener noreferrer">
+            <Link href={LINKS.LINE} target="_blank" rel="noopener noreferrer">
               <Button className="ml-2 cursor-pointer">
                 <Image
                   src="/icons/line.svg"
@@ -74,13 +75,13 @@ const Navbar = () => {
             <Link
               key={link.name}
               href={link.href}
-              className={`block px-1 py-2 text-base border-b border-gray-100 ${link.disabled ? 'cursor-not-allowed text-gray-400' : 'text-gray-800'}`}
+              className={`block px-1 py-2 text-base border-b border-gray-100 text-gray-800`}
               onClick={() => setIsMenuOpen(false)}
             >
               {link.name}
             </Link>
           ))}
-          <Link href="https://lin.ee/2dtDvpO" target="_blank" rel="noopener noreferrer">
+          <Link href={LINKS.LINE} target="_blank" rel="noopener noreferrer">
             <Button className="mt-3">
               <Image
                 src="/icons/line.svg"
