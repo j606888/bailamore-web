@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useRouter  } from 'next/navigation';
+import { Suspense } from 'react'
 import Introduction from '@/components/courses/Introduction';
 import Schedule from '@/components/courses/Schedule';
 import Pricing from '@/components/courses/Pricing';
@@ -52,16 +53,18 @@ export default function CoursesPage() {
         {TABS.map(tab => (
           <div 
             key={tab.query} 
-            className={`px-3 py-3 md:px-4 md:py-4 relative ${tab.query === activeTab ? 'after:content-[""] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-teal-600' : ''}`}
+            className={`px-3 py-3 md:px-4 md:py-4 relative hover:cursor-pointer ${tab.query === activeTab ? 'after:content-[""] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-teal-600' : ''}`}
             onClick={() => handleTabClick(tab.query)}
           >
             <div className={`font-poppins text-xs md:text-base ${tab.query === activeTab ? 'text-teal-600 font-bold' : 'text-gray-600'}`}>{tab.label}</div>
           </div>
         ))}
       </div>
-      {activeTab === 'introduction' && <Introduction />}
-      {activeTab === 'schedule' && <Schedule />}
-      {activeTab === 'pricing' && <Pricing />}
+      <Suspense fallback={<div className="flex items-center justify-center h-64">Loading...</div>}>
+        {activeTab === 'introduction' && <Introduction />}
+        {activeTab === 'schedule' && <Schedule />}
+        {activeTab === 'pricing' && <Pricing />}
+      </Suspense>
     </>
   );
 } 

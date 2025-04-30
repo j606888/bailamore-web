@@ -26,7 +26,7 @@ const Hero = () => {
             </Button>
           </Link>
           <Link href="/courses">
-            <Button size="lg" variant="outline">課程介紹</Button>
+            <Button className='hover:cursor-pointer' size="lg" variant="outline">課程資訊</Button>
           </Link>
         </div>
       </div>

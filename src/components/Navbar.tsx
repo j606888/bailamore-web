@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { Button } from './ui/button';
 
 const NAV_LINKS = [
-  { name: '課程介紹', href: '/courses' },
+  { name: '課程資訊', href: '/courses' },
   { name: '師資介紹', href: '/teachers' },
   { name: '教室資訊', href: '/location' },
   // { name: '活動', href: '/events', disabled: true },
