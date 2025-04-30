@@ -7,7 +7,7 @@ const Hero = () => {
   return (
     <div className="px-5 py-10 flex flex-col items-center justify-center gap-6 md:flex-row md:gap-10 md:max-w-7xl md:mx-auto">
       <div className="flex flex-col items-center justify-center gap-4 md:w-[400px] md:items-start md:flex-shrink-0">
-        <h1 className="font-poppins text-3xl font-bold mb-1 md:text-5xl">
+        <h1 className="font-poppins text-2xl font-bold mb-1 md:text-5xl">
           第一次跳舞，<br className="hidden md:block" />就從這裡開始
         </h1>
         <p className="text-base max-w-2xl text-center md:text-left">
