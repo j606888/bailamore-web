@@ -42,7 +42,7 @@ export default function CoursesPage() {
   };
 
   return (
-    <>
+    <Suspense>
       <div className="mx-auto py-10 flex flex-col items-center justify-center bg-gray-100 md:items-start md:px-6">
         <h1 className="font-poppins text-2xl font-bold">課程資訊</h1>
         <p className="font-poppins text-base">
@@ -60,11 +60,9 @@ export default function CoursesPage() {
           </div>
         ))}
       </div>
-      <Suspense fallback={<div className="flex items-center justify-center h-64">Loading...</div>}>
-        {activeTab === 'introduction' && <Introduction />}
-        {activeTab === 'schedule' && <Schedule />}
-        {activeTab === 'pricing' && <Pricing />}
-      </Suspense>
-    </>
+      {activeTab === 'introduction' && <Introduction />}
+      {activeTab === 'schedule' && <Schedule />}
+      {activeTab === 'pricing' && <Pricing />}
+    </Suspense>
   );
 } 
