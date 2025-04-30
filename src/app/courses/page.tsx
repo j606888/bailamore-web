@@ -1,11 +1,12 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import { useSearchParams, useRouter  } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Suspense } from 'react'
 import Introduction from '@/components/courses/Introduction';
 import Schedule from '@/components/courses/Schedule';
 import Pricing from '@/components/courses/Pricing';
+
 const TABS = [
   {
     label: '舞蹈風格介紹',
@@ -21,13 +22,14 @@ const TABS = [
   }
 ]
 
-export default function CoursesPage() {
+function CoursesContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState(TABS[0].query);
 
   useEffect(() => {
     const tabFromUrl = searchParams.get('tab');
+    
     if (tabFromUrl && TABS.some(tab => tab.query === tabFromUrl)) {
       setActiveTab(tabFromUrl);
     } else {
@@ -42,7 +44,7 @@ export default function CoursesPage() {
   };
 
   return (
-    <Suspense>
+    <>
       <div className="mx-auto py-10 flex flex-col items-center justify-center bg-gray-100 md:items-start md:px-6">
         <h1 className="font-poppins text-2xl font-bold">課程資訊</h1>
         <p className="font-poppins text-base">
@@ -63,6 +65,14 @@ export default function CoursesPage() {
       {activeTab === 'introduction' && <Introduction />}
       {activeTab === 'schedule' && <Schedule />}
       {activeTab === 'pricing' && <Pricing />}
+    </>
+  );
+}
+
+export default function CoursesPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CoursesContent />
     </Suspense>
   );
 } 
