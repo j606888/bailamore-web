@@ -21,6 +21,12 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Bailamore 拉丁舞教室",
   description: "Bailamore 拉丁舞教室",
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+  },
 };
 
 export default function RootLayout({
@@ -30,7 +36,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${roboto.variable} ${poppins.variable} antialiased`}>
+      <body className={`${roboto.variable} ${poppins.variable} font-poppins antialiased`}>
         <div className="min-h-screen flex flex-col">
           <Navbar />
           <main className="flex-grow pt-16">
