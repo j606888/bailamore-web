@@ -85,6 +85,9 @@ const Testimonial = ({ testimonial }: { testimonial: TestimonialType }) => {
 
 const Testimonials = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
   const resetInterval = () => {
@@ -92,15 +95,11 @@ const Testimonials = () => {
       clearInterval(intervalId);
     }
     const newInterval = setInterval(() => {
-      handleNext();
+      setCurrentIndex((prevIndex) => 
+        prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1
+      );
     }, 4000);
     setIntervalId(newInterval);
-  };
-
-  const handleNext = () => {
-    setCurrentIndex((prevIndex) => 
-      prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1
-    );
   };
 
   useEffect(() => {
@@ -111,6 +110,65 @@ const Testimonials = () => {
       }
     };
   }, []);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+    setIsDragging(true);
+    if (intervalId) {
+      clearInterval(intervalId);
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!isDragging) return;
+    
+    const touchDiff = touchStart - touchEnd;
+    const threshold = 50; // minimum distance for swipe
+
+    if (touchDiff > threshold) {
+      // Swipe left
+      setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
+    } else if (touchDiff < -threshold) {
+      // Swipe right
+      setCurrentIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
+    }
+    
+    setIsDragging(false);
+    resetInterval();
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setTouchStart(e.clientX);
+    setIsDragging(true);
+    if (intervalId) {
+      clearInterval(intervalId);
+    }
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    setTouchEnd(e.clientX);
+  };
+
+  const handleMouseUp = () => {
+    if (!isDragging) return;
+    
+    const touchDiff = touchStart - touchEnd;
+    const threshold = 50;
+
+    if (touchDiff > threshold) {
+      setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
+    } else if (touchDiff < -threshold) {
+      setCurrentIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
+    }
+    
+    setIsDragging(false);
+    resetInterval();
+  };
 
   const handleDotClick = (index: number) => {
     setCurrentIndex(index);
@@ -127,8 +185,15 @@ const Testimonials = () => {
         {/* Mobile Slider */}
         <div className="relative overflow-hidden md:hidden">
           <div 
-            className="flex transition-transform duration-500 ease-in-out"
+            className="flex transition-transform duration-300 ease-out"
             style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
           >
             {testimonials.map((testimonial) => (
               <div key={testimonial.id} className="w-full flex-shrink-0 flex justify-center items-center">
