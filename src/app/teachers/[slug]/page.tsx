@@ -36,6 +36,7 @@ const TEACHERS: Record<string, Teacher> = {
     image: '/teachers/Kathy.jpg',
     skills: ['Lady Style', 'Bachata', 'Salsa'],
     courses: ['Lady Style', 'Bachata Lv2', 'Bachata 中階'],
+    instagram: 'kathy_latin_bachata',
     description: [
       'Kathy 擁有豐富的舞蹈背景，是一位兼具優雅與力量的舞者。擅長 Bachata、國標舞（Ballroom Dance）、拉丁舞（Latin Dance）及 Sexy Style，風格多變，充滿舞台魅力。除了擔任 Bachata 與 Salsa 課程的助教外，Kathy 也專門教授 Lady Styling，協助學員從身體線條到氣場自信全面提升。',
       '身為一位專業的國標舞者，Kathy 對舞蹈的細節與表現力有極高的要求，擅長以溫柔耐心的方式引導學員，讓初學者也能自在展現舞姿之美。她相信舞蹈不只是技巧的呈現，更是身體與情感的連結。',
