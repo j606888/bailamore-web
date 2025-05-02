@@ -55,10 +55,10 @@ function CoursesContent() {
         {TABS.map(tab => (
           <div 
             key={tab.query} 
-            className={`px-3 py-3 md:px-4 md:py-4 relative hover:cursor-pointer ${tab.query === activeTab ? 'after:content-[""] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-teal-600' : ''}`}
+            className={`px-4 py-4 relative hover:cursor-pointer ${tab.query === activeTab ? 'after:content-[""] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-teal-600' : ''}`}
             onClick={() => handleTabClick(tab.query)}
           >
-            <div className={`font-poppins text-xs md:text-base ${tab.query === activeTab ? 'text-teal-600 font-bold' : 'text-gray-600'}`}>{tab.label}</div>
+            <div className={`text-sm md:text-base ${tab.query === activeTab ? 'text-teal-600 font-bold' : 'text-gray-600'}`}>{tab.label}</div>
           </div>
         ))}
       </div>

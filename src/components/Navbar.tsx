@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { LINKS } from '@/constants/links'
 import Image from 'next/image';
@@ -16,9 +16,30 @@ const NAV_LINKS = [
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    const handleScroll = () => {
+      setIsMenuOpen(false);
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    window.addEventListener('scroll', handleScroll);
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-white shadow-lg z-50">
+    <nav className="fixed top-0 left-0 right-0 bg-white shadow-lg z-50" ref={menuRef}>
       <div className="mx-auto px-4 md:px-6">
         <div className="flex justify-between h-16">
           <div className="flex items-center flex-auto">
@@ -49,8 +70,6 @@ const Navbar = () => {
               </Button>
             </Link>
           </div>
-
-          {/* Mobile menu button */}
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -62,8 +81,6 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-
-      {/* Mobile Navigation */}
       <div
         className={`${isMenuOpen
           ? 'max-h-[300px] opacity-100'

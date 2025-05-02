@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { LINKS } from '@/constants/links';
 
 type FAQItem = {
   id: number;
@@ -13,7 +14,7 @@ const faqs: FAQItem[] = [
     id: 1,
     question: '如何報名課程',
     answer: [
-      '加入 Line 官方帳號，直接私訊 Sean 即可。',
+      `加入 <a class="text-teal-600 underline" href=${LINKS.LINE} target="_blank" rel="noopener noreferrer">Line 官方帳號</a>，直接私訊 Sean 即可。`,
       '如果想要先體驗的話也可以直接在課程時間來到教室。'
     ],
   },
@@ -35,14 +36,16 @@ const faqs: FAQItem[] = [
     id: 4,
     question: '關於課程選擇',
     answer: [
-      '如果沒有上過類似的課程的新手會建議從 LV1 的課程開始，等到覺得熟練之後再踏入 LV2 的大門。'
+      '如果沒有上過類似的課程的新手會建議從 LV1 的課程開始，等到覺得熟練之後再踏入 LV2 的大門。',
+      `瞭解更多請參考<a class="text-teal-600 underline" href=${LINKS.COURSES} rel="noopener noreferrer">課程資訊</a>`,
     ],
   },
   {
     id: 5,
     question: '關於課程費用',
     answer: [
-      '我們採用課卡的方式，每次購買一張課卡可以使用 6 次。如果要單次上課的話也是可以的，詳情請參考"課程資訊"'
+      '我們採用課卡的方式，每次購買一張課卡可以使用 6 次。',
+      `如果要單次上課的話也是可以的，詳情請參考<a class="text-teal-600 underline" href=${LINKS.PRICING} rel="noopener noreferrer">課程資訊</a>`
     ],
   },
 ];
@@ -79,9 +82,7 @@ const FAQItem = ({ faq, isOpen, onToggle }: {
         <div className="overflow-hidden">
           <div className="px-6 pb-5">
             {faq.answer.map((paragraph, index) => (
-              <p key={index} className="text-gray-700 mb-2 last:mb-0">
-                {paragraph}
-              </p>
+              <p key={index} className="text-gray-700 mb-2 last:mb-0" dangerouslySetInnerHTML={{ __html: paragraph }} />
             ))}
           </div>
         </div>
