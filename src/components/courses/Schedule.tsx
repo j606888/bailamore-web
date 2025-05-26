@@ -3,14 +3,13 @@
 import React from 'react';
 import UserIcon from '../icons/UserIcon';
 
-
 export default function Schedule() {
   return (
     <div className='px-3 py-6 md:px-6 bg-gray-100'>
       <div className='flex flex-col rounded-lg overflow-hidden md:max-w-xl'>
         <div className='bg-[#162834] px-4 py-5 flex flex-col gap-2.5 text-white text-sm'>
           <p className='font-bold'>本期課程時間</p>
-          <p>3/30（日）、4/13（日）、4/20（日）、5/4（日）、5/11（日）、5/25（日）</p>
+          <p>6/8（日）、6/15（日）、6/29（日）、7/6（日）、7/20（日）、7/27（日）</p>
         </div>
         <TimeSlot time='14:00 - 14:50' />
         <div className='flex flex-col px-4 py-4 gap-4 bg-white'>
@@ -22,7 +21,7 @@ export default function Schedule() {
         <div className='flex flex-col px-4 py-4 gap-4 bg-white'>
           <Course classRoom='A' name='Bachata Lv1' teacher='Sean' />
           <hr />
-          <Course classRoom='B' name='Salsa Lv2' teacher='Angus' />
+          <Course classRoom='B' name='Salsa Lv2' teacher='Angus & Kathy' />
         </div>
         <TimeSlot time='16:00 - 16:50' />
         <div className='flex flex-col px-4 py-4 gap-4 bg-white'>
