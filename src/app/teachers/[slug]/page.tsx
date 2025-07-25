@@ -29,7 +29,7 @@ const TEACHERS: Record<string, Teacher> = {
       "他創辦 Baila'more 拉丁社交舞學校，致力於推廣「愛跳舞、多跳舞」的理念，讓每位舞者在歡樂中找到自信與自由。Sean 教學風格親切細膩，擅長拆解動作，激發學員的學習熱情與音樂感，無論是初學者或進階者都能有所收穫。",
       "舞蹈對 Sean 而言不只是技藝，更是連結人與人之間的橋樑，歡迎一起進入這個充滿熱情與愛的舞蹈世界！",
     ],
-    videos: ["https://www.youtube.com/embed/AE5NriBseoY?si=5u75-CtAGmvwPtVn"],
+    videos: ["https://www.youtube.com/embed/TdRV1NkV4Pg?si=MYwpQG-1ZlcPu1QD", "https://www.youtube.com/embed/AE5NriBseoY?si=5u75-CtAGmvwPtVn"],
   },
   kathy: {
     name: 'Kathy',

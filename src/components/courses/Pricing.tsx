@@ -21,7 +21,7 @@ export default function Schedule() {
       </div>
       <div className='flex flex-col rounded-lg overflow-hidden md:max-w-xl shadow-sm'>
         <div className='bg-teal-600 px-4 py-3 flex flex-col text-white'>
-          <p className='font-bold text-lg'>Lv2, 中階課程</p>
+          <p className='font-bold text-lg'>Lv2, 進階課程</p>
           <p className='text-sm'>進階技巧與舞步</p>
         </div>
         <div className='flex flex-col px-4 py-4 gap-4 bg-white'>
@@ -33,7 +33,7 @@ export default function Schedule() {
           <p className='text-sm'>*可插班，沒使用完畢可用於下一期</p>
         </div>
       </div>
-      <div className='flex flex-col rounded-lg overflow-hidden md:max-w-xl shadow-sm'>
+      {/* <div className='flex flex-col rounded-lg overflow-hidden md:max-w-xl shadow-sm'>
         <div className='bg-teal-600 px-4 py-3 flex flex-col text-white'>
           <p className='font-bold text-lg'>Lady Style</p>
           <p className='text-sm'>打造妳獨一無二的舞台魅力</p>
@@ -41,7 +41,7 @@ export default function Schedule() {
         <div className='flex flex-col px-4 py-4 gap-4 bg-white'>
           <Course name='8堂課程' price={2800} />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
