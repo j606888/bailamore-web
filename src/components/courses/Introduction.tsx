@@ -61,30 +61,6 @@ export default function Introduction() {
         <Callout title='Lv1' description='學習基本步伐、舞伴基礎握位與基本轉圈技巧，建立穩固的身體節奏感與律動基礎，適合 Salsa 初學者。' />
         <Callout title='Lv2' description='進階雙人搭配技巧、身體協調與節奏變化，並加入獨舞 Shine 元素，適合已具備 Salsa 基礎、希望提升表現力與舞感的學員。' />
       </div>
-      <div className='flex flex-col gap-3 py-3'>
-        <h3 className='text-2xl font-bold'>Lady Style</h3>
-        <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
-          <iframe 
-            className="absolute top-0 left-0 w-full h-full"
-            src="https://www.youtube.com/embed/3SbhPZ9-qN0?si=Gt2mpLE9EqFicI8A" 
-            title="YouTube video player" 
-            frameBorder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-            referrerPolicy="strict-origin-when-cross-origin" 
-            allowFullScreen
-          ></iframe>
-        </div>
-        <p className='text-sm'>
-          強調女性的優雅和表現力。這種風格注重身體的流暢動作、手臂線條和臉部表情，幫助舞者展現獨特的個人魅力和自信。
-        </p>
-        <div className='flex gap-1 items-center'>
-          <img src='/icons/info.svg' alt='info' className='w-4 h-4' />
-          <p className='text-sm'>
-            課程級別
-          </p>
-        </div>
-        <Callout title='中階' description='適合已經有 Bachata, Salsa 舞會經驗，想要跳得更優雅的 Follower 學習。' />
-      </div>
     </div>
   );
 }

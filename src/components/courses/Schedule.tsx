@@ -9,15 +9,15 @@ export default function Schedule() {
       <div className='flex flex-col rounded-lg overflow-hidden md:max-w-xl'>
         <div className='bg-[#162834] px-4 py-5 flex flex-col gap-2.5 text-white text-sm'>
           <p className='font-bold'>本期課程時間</p>
-          <p>8/3（日）、8/10（日）、8/24（日）、9/7（日）、9/14（日）、9/21（日）</p>
+          <p>1/11（日）、1/18（日）、1/25（日）、2/1（日）、2/8（日）、3/1（日）</p>
         </div>
         <TimeSlot time='14:00 - 15:00' />
         <div className='flex flex-col px-4 py-4 gap-4 bg-white'>
-          <Course name='Bachata Lv1' teacher='Sean' />
+          <Course name='Bachata 進階' teacher='Sean & Kathy' />
         </div>
         <TimeSlot time='15:00 - 16:00' />
         <div className='flex flex-col px-4 py-4 gap-4 bg-white'>
-          <Course name='Bachata Lv2' teacher='Sean & Kathy' />
+          <Course name='Bachata Lv1' teacher='Sean & Kathy' />
         </div>
         <TimeSlot time='16:00 - 17:00' />
         <div className='flex flex-col px-4 py-4 gap-4 bg-white'>
@@ -25,7 +25,7 @@ export default function Schedule() {
         </div>
         <TimeSlot time='17:00 - 18:00' />
         <div className='flex flex-col px-4 py-4 gap-4 bg-white'>
-          <Course name='Bachata 進階' teacher='Sean & Kathy' />
+          <Course name='Bachata Lv2' teacher='Sean & Kathy' />
         </div>
       </div>
     </div>
