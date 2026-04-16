@@ -15,7 +15,7 @@ const Footer = () => {
           <span className="hidden md:block text-sm ml-12">台南市北區長北街71號</span>
         </div>
         <div className="text-center text-sm">
-          Baila&apos;more © 2025 Copyright
+          Baila&apos;more © 2026 Copyright
         </div>
       </div>
     </footer>
