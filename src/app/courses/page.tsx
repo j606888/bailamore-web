@@ -9,12 +9,12 @@ import Pricing from '@/components/courses/Pricing';
 
 const TABS = [
   {
-    label: '舞蹈風格介紹',
-    query: 'introduction'
-  },
-  {
     label: '課表時間',
     query: 'schedule'
+  },
+  {
+    label: '舞蹈風格介紹',
+    query: 'introduction'
   },
   {
     label: '課程費用',
