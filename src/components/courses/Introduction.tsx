@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react';
+import Image from 'next/image';
 import Callout from '../Callout';
 
 export default function Introduction() {
@@ -27,14 +28,14 @@ export default function Introduction() {
           Bachata 起源於多明尼加共和國，是一種感性且富有情感的舞蹈。以四拍節奏和臀部的細微擺動為特色，動作流暢且優雅。Bachata 音樂通常帶有浪漫或憂傷的情感，舞蹈風格強調親密的舞伴連接和身體的波浪動作。
         </p>
         <div className='flex gap-1 items-center'>
-          <img src='/icons/info.svg' alt='info' className='w-4 h-4' />
+          <Image src='/icons/info.svg' alt='info' width={16} height={16} />
           <p className='text-sm'>
             課程級別
           </p>
         </div>
         <Callout title='Lv1' description='學習基本步伐、身體隔離和簡單的舞伴帶領技巧，適合初學者。' />
         <Callout title='Lv2' description='進階身體波浪、複雜的舞伴連接和花式動作，適合已有 Bachata 基礎的學員。' />
-        <Callout title='中階' description='高級技巧、音樂詮釋和即興創作，適合已熟練掌握 Lv2 內容的學員。' />
+        <Callout title='進階' description='高級技巧、音樂詮釋和即興創作，適合已熟練掌握 Lv2 內容的學員。' />
       </div>
       <div className='flex flex-col gap-3 py-3'>
         <h3 className='text-2xl font-bold'>Salsa</h3>
@@ -53,7 +54,7 @@ export default function Introduction() {
         Salsa 是一種充滿活力的拉丁舞蹈，源自古巴和波多黎各。以快節奏的音樂和熱情的舞步聞名，強調節奏感和身體的擺動。Salsa 舞步基於八拍節奏，包含多種旋轉和花式動作，是最受歡迎的社交舞蹈之一。
         </p>
         <div className='flex gap-1 items-center'>
-          <img src='/icons/info.svg' alt='info' className='w-4 h-4' />
+          <Image src='/icons/info.svg' alt='info' width={16} height={16} />
           <p className='text-sm'>
             課程級別
           </p>

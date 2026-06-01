@@ -1,7 +1,7 @@
-'use client'
-
+import type { Metadata } from 'next';
 import React from 'react';
-import { useParams } from 'next/navigation';
+import Image from 'next/image';
+import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import IGIcon from '@/components/icons/IGIcon';
 
@@ -33,23 +33,38 @@ const TEACHERS: Record<string, Teacher> = {
   },
 };
 
-export default function TeacherPage() {
-  const params = useParams();
-  const teacher = TEACHERS[params.slug as keyof typeof TEACHERS];
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const teacher = TEACHERS[slug];
+  if (!teacher) return {};
+  return {
+    title: `${teacher.name}${teacher.title ? `（${teacher.title}）` : ''}`,
+    description: teacher.description[0].slice(0, 160),
+    openGraph: {
+      title: `${teacher.name} — 師資介紹 | Baila'more`,
+      description: teacher.description[0].slice(0, 160),
+      url: `/teachers/${slug}`,
+    },
+  };
+}
+
+export default async function TeacherPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const teacher = TEACHERS[slug as keyof typeof TEACHERS];
 
   if (!teacher) {
-    return <div>Teacher not found</div>;
+    notFound();
   }
 
   return (
     <div className="mx-auto px-3 py-6 flex flex-col gap-6 justify-center md:max-w-3xl md:gap-9">
       <Link href="/teachers" className='text-sm text-[#4B5563] underline flex items-center gap-1'>
-        <img src="/icons/chevron-left.svg" alt="chevron-left" className='w-4 h-4' />
+        <Image src="/icons/chevron-left.svg" alt="chevron-left" width={16} height={16} />
         返回教師列表
       </Link>
       <div className='flex gap-3 items-center md:m-auto md:flex-col md:gap-6'>
-        <div className='w-[92px] h-[92px] md:w-[180px] md:h-[180px]'>
-          <img src={teacher.image} alt={teacher.name} className='w-full h-full object-cover rounded-full' />
+        <div className='relative w-[92px] h-[92px] md:w-[180px] md:h-[180px]'>
+          <Image src={teacher.image} alt={teacher.name} fill className='object-cover rounded-full' />
         </div>
         <div className='flex flex-col gap-1.5'>
           <div className='flex items-baseline gap-1'>
@@ -89,20 +104,20 @@ export default function TeacherPage() {
         <p className='text-[#373737] mb-2 font-bold'>舞蹈展示</p>
         <div className='flex flex-wrap gap-2'>
           {teacher.videos.map((video, index) => (
-            <div  key={index} className="relative w-full" style={{ paddingBottom: '100%' }}>
-            <iframe 
-              className="absolute top-0 left-0 w-full h-full"
-              src={video}
-              title="YouTube video player" 
-              frameBorder="0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-              referrerPolicy="strict-origin-when-cross-origin" 
-              allowFullScreen
-            ></iframe>
-          </div>
+            <div key={index} className="relative w-full" style={{ paddingBottom: '100%' }}>
+              <iframe
+                className="absolute top-0 left-0 w-full h-full"
+                src={video}
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              ></iframe>
+            </div>
           ))}
         </div>
       </div>
     </div>
   );
-} 
+}

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { LINKS } from '@/constants/links'
 
 const Footer = () => {
@@ -7,10 +8,10 @@ const Footer = () => {
         <div className="flex justify-center items-center gap-4">
           <span className="hidden md:block text-sm">追蹤我們</span>
           <a href={LINKS.LINE} target="_blank" rel="noopener noreferrer">
-            <img src="/icons/line.svg" alt="line" className="w-6 h-6" />
+            <Image src="/icons/line.svg" alt="LINE" width={24} height={24} />
           </a>
           <a href="https://www.instagram.com/baila_moredancestudio" target="_blank" rel="noopener noreferrer">
-            <img src="/icons/instagram.svg" alt="instagram" className="w-6 h-6" />
+            <Image src="/icons/instagram.svg" alt="Instagram" width={24} height={24} />
           </a>
           <span className="hidden md:block text-sm ml-12">台南市北區長北街71號</span>
         </div>

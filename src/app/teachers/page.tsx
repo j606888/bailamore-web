@@ -1,10 +1,19 @@
-'use client'
-
+import type { Metadata } from 'next';
 import React from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 
-export default function CoursesPage() {
+export const metadata: Metadata = {
+  title: '師資介紹',
+  description: "認識 Baila'more 的舞蹈老師團隊。專業拉丁舞教學，陪伴你從零開始學習 Bachata 與 Salsa。",
+  openGraph: {
+    title: "師資介紹 | Baila'more",
+    description: "認識 Baila'more 的舞蹈老師團隊。專業拉丁舞教學，陪伴你從零開始學習 Bachata 與 Salsa。",
+    url: '/teachers',
+  },
+};
 
+export default function CoursesPage() {
   return (
     <>
       <div className="mx-auto px-3 py-6 flex flex-col gap-6 items-center justify-center md:px-6">
@@ -14,7 +23,7 @@ export default function CoursesPage() {
         </div>
         <div className='flex flex-col gap-6 md:flex-row md:flex-wrap md:justify-center'>
           <Link href="/teachers/sean" className='w-full max-w-[350px] h-[350px] relative cursor-pointer'>
-            <img src='/teachers/Sean.jpg' alt='Sean' className='w-full h-full object-cover rounded-lg' />
+            <Image src='/teachers/Sean.jpg' alt='Sean' fill className='object-cover rounded-lg' />
             <div className='absolute bottom-3 left-3 right-3 bg-white/80 rounded-lg p-3'>
               <h3 className='text-xl font-bold mb-1'>
                 Sean
@@ -31,4 +40,4 @@ export default function CoursesPage() {
       </div>
     </>
   );
-} 
+}
