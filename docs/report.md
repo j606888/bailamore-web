@@ -120,7 +120,7 @@
 - Navbar logo 用了 Next.js `<Image>`（好）
 - `WhoWeAre`、`Footer` 等多處用原生 `<img>`（未壓縮、沒有 lazy loading）
 
-#### 19. dangerouslySetInnerHTML 在 FAQ
+#### ~~19. dangerouslySetInnerHTML 在 FAQ~~ ✅ 已完成
 - `src/components/home/FAQ.tsx:85` — 把 HTML 字串用 `dangerouslySetInnerHTML` 渲染，只為了讓連結可以點
 - 這是不必要的安全風險；直接改成 JSX 即可
 
