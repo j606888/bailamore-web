@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Roboto, Poppins } from "next/font/google";
 import { Analytics } from '@vercel/analytics/next';
 import "./globals.css";
@@ -20,14 +20,25 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Bailamore 拉丁舞教室",
-  description: "Bailamore 拉丁舞教室",
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
+  metadataBase: new URL('https://www.bailamore-studio.com/'),
+  title: {
+    default: "Baila'more 拉丁舞教室",
+    template: "%s | Baila'more",
   },
+  description: "台南 Bachata & Salsa 社交舞教室。每週日定期開課，適合零基礎學員，不需舞伴即可報名。",
+  openGraph: {
+    siteName: "Baila'more 拉丁舞教室",
+    locale: 'zh_TW',
+    type: 'website',
+    images: [{ url: '/images/hero.jpg', width: 1200, height: 630 }],
+  },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({
@@ -36,7 +47,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="zh-TW">
       <body className={`${roboto.variable} ${poppins.variable} font-poppins antialiased`}>
         <div className="min-h-screen flex flex-col">
           <Navbar />

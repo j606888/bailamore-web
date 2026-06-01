@@ -1,12 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import type { ReactNode } from 'react';
+import Link from 'next/link';
 import { LINKS } from '@/constants/links';
 
 type FAQItem = {
   id: number;
   question: string;
-  answer: string[];
+  answer: ReactNode[];
 };
 
 const faqs: FAQItem[] = [
@@ -14,7 +16,7 @@ const faqs: FAQItem[] = [
     id: 1,
     question: '如何報名課程',
     answer: [
-      `加入 <a class="text-teal-600 underline" href=${LINKS.LINE} target="_blank" rel="noopener noreferrer">Line 官方帳號</a>，直接私訊 Sean 即可。`,
+      <>加入 <a className="text-teal-600 underline" href={LINKS.LINE} target="_blank" rel="noopener noreferrer">Line 官方帳號</a>，直接私訊 Sean 即可。</>,
       '如果想要先體驗的話也可以直接在課程時間來到教室。'
     ],
   },
@@ -37,7 +39,7 @@ const faqs: FAQItem[] = [
     question: '關於課程選擇',
     answer: [
       '如果沒有上過類似的課程的新手會建議從 LV1 的課程開始，等到覺得熟練之後再踏入 LV2 的大門。',
-      `瞭解更多請參考<a class="text-teal-600 underline" href=${LINKS.COURSES} rel="noopener noreferrer">課程資訊</a>`,
+      <>瞭解更多請參考<Link className="text-teal-600 underline" href={LINKS.COURSES} rel="noopener noreferrer">課程資訊</Link></>,
     ],
   },
   {
@@ -45,14 +47,14 @@ const faqs: FAQItem[] = [
     question: '關於課程費用',
     answer: [
       '我們採用課卡的方式，每次購買一張課卡可以使用 6 次。',
-      `如果要單次上課的話也是可以的，詳情請參考<a class="text-teal-600 underline" href=${LINKS.PRICING} rel="noopener noreferrer">課程資訊</a>`
+      <>如果要單次上課的話也是可以的，詳情請參考<Link className="text-teal-600 underline" href={LINKS.PRICING} rel="noopener noreferrer">課程資訊</Link></>
     ],
   },
 ];
 
-const FAQItem = ({ faq, isOpen, onToggle }: { 
-  faq: FAQItem; 
-  isOpen: boolean; 
+const FAQItem = ({ faq, isOpen, onToggle }: {
+  faq: FAQItem;
+  isOpen: boolean;
   onToggle: () => void;
 }) => {
   return (
@@ -74,7 +76,7 @@ const FAQItem = ({ faq, isOpen, onToggle }: {
           )}
         </span>
       </button>
-      <div 
+      <div
         className={`grid transition-all duration-200 ease-in-out ${
           isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
         }`}
@@ -82,7 +84,7 @@ const FAQItem = ({ faq, isOpen, onToggle }: {
         <div className="overflow-hidden">
           <div className="px-6 pb-5">
             {faq.answer.map((paragraph, index) => (
-              <p key={index} className="text-gray-700 mb-2 last:mb-0" dangerouslySetInnerHTML={{ __html: paragraph }} />
+              <p key={index} className="text-gray-700 mb-2 last:mb-0">{paragraph}</p>
             ))}
           </div>
         </div>
@@ -127,4 +129,4 @@ const FAQ = () => {
   );
 };
 
-export default FAQ; 
+export default FAQ;

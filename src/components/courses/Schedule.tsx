@@ -1,143 +1,170 @@
 'use client'
 
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { COURSE_PERIODS, COURSES } from '@/data/schedule';
 
-const COURSE_PERIODS = [
-  '2026/03/08',
-  '2026/03/15',
-  '2026/04/12',
-  '2026/04/26',
-  '2026/05/10',
-  '2026/05/24',
-]
+const WEEKDAY_FULL = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
 
-type CourseData = {
-  time: string
-  name: string
-  card?: string
+const parseDate = (s: string) => {
+  const [y, m, d] = s.split('/').map(Number)
+  return new Date(y, m - 1, d)
 }
 
-const COURSES: CourseData[] = [
-  {
-    time: '14:00 - 15:00',
-    name: 'Bachata 進階',
-    card: '進階課卡',
-  },
-  {
-    time: '15:00 - 16:00',
-    name: 'Bachata Lv1',
-    card: '初階課卡',
-  },
-  {
-    time: '16:00 - 17:00',
-    name: 'Bachata Lv2',
-    card: '進階課卡',
-  },
-  {
-    time: '17:00 - 18:00',
-    name: 'Salsa Lv1',
-    card: '初階課卡',
-  }
-]
-
-const WEEKDAY_MAP = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
-
-const parseDate = (dateString: string) => {
-  const [year, month, day] = dateString.split('/').map(Number)
-  return new Date(year, month - 1, day)
-}
+const isSalsa = (name: string) => name.toLowerCase().includes('salsa')
 
 export default function Schedule() {
-  const periodListRef = useRef<HTMLDivElement>(null)
-  const periodDates = useMemo(() => COURSE_PERIODS.map((dateString) => ({
-    raw: dateString,
-    date: parseDate(dateString),
-  })), [])
-  const now = new Date()
-  now.setHours(0, 0, 0, 0)
+  const ref = useRef<HTMLDivElement>(null)
 
-  const upcomingIndex = periodDates.findIndex(({ date }) => date >= now)
-  const activePeriodIndex = upcomingIndex === -1 ? periodDates.length - 1 : upcomingIndex
+  const periodDates = useMemo(() =>
+    COURSE_PERIODS.map(raw => ({ raw, date: parseDate(raw) })),
+    []
+  )
 
-  const yearLabel = Array.from(new Set(periodDates.map(({ date }) => date.getFullYear()))).join(' / ')
+  const now = useMemo(() => {
+    const d = new Date()
+    d.setHours(0, 0, 0, 0)
+    return d
+  }, [])
+
+  const defaultIndex = useMemo(() => {
+    const i = periodDates.findIndex(({ date }) => date >= now)
+    return i === -1 ? periodDates.length - 1 : i
+  }, [periodDates, now])
+
+  const [selected, setSelected] = useState(defaultIndex)
 
   useEffect(() => {
-    const periodContainer = periodListRef.current
-    if (!periodContainer) return
+    const el = ref.current?.querySelector<HTMLElement>('[data-active="true"]')
+    el?.scrollIntoView({ inline: 'center', block: 'nearest' })
+  }, [selected])
 
-    const activeCard = periodContainer.querySelector<HTMLElement>('[data-period-card-active="true"]')
-    if (!activeCard) return
-
-    activeCard.scrollIntoView({ inline: 'start', block: 'nearest' })
-  }, [activePeriodIndex])
+  const activeDate = periodDates[selected]
+  const isPast = activeDate.date < now
 
   return (
-    <div className='px-3 py-6 md:px-6 bg-gray-100 text-[#162834]'>
-      <div className=' w-full max-w-2xl flex flex-col gap-5'>
-        <div className='bg-white rounded-2xl p-4 md:p-6 flex flex-col gap-4'>
-          <div className='flex items-center justify-between gap-3'>
-            <p className='text-base md:text-lg tracking-wide font-semibold text-[#0c6b63] uppercase'>UPCOMING SUNDAYS</p>
-            <p className='text-xs md:text-sm text-[#7a7a7a] font-medium'>{yearLabel}</p>
-          </div>
-          <div ref={periodListRef} className='-ml-2 pl-2 flex gap-3 overflow-x-auto pb-1 snap-x snap-mandatory'>
-            {periodDates.map(({ raw, date }, index) => {
-              const isActive = index === activePeriodIndex
+    <div className='bg-gray-100 min-h-[60vh]'>
+      <div className='max-w-4xl mx-auto px-4 py-6 md:px-6 md:py-8'>
+        <div className='flex flex-col md:flex-row gap-4 md:gap-5 md:items-start'>
 
-              return (
-                <PeriodCard
-                  key={raw}
-                  isActive={isActive}
-                  month={`${date.getMonth() + 1}月`}
-                  day={date.getDate()}
-                  weekDay={WEEKDAY_MAP[date.getDay()]}
-                />
-              )
-            })}
-          </div>
-        </div>
+          {/* Date Selector */}
+          <aside className='w-full md:w-48 flex-shrink-0'>
+            <div className='bg-white rounded-2xl p-4 shadow-sm border border-gray-100'>
+              <p className='text-[11px] font-bold text-teal-600 uppercase tracking-widest mb-3'>上課日期</p>
+              <div
+                ref={ref}
+                className='flex md:flex-col gap-2 overflow-x-auto pb-1 md:pb-0 md:overflow-visible'
+              >
+                {periodDates.map(({ raw, date }, i) => {
+                  const isActive = i === selected
+                  const past = date < now
+                  return (
+                    <button
+                      key={raw}
+                      data-active={isActive}
+                      onClick={() => setSelected(i)}
+                      className={`flex-shrink-0 min-w-[68px] md:min-w-0 rounded-xl text-center md:text-left transition-all cursor-pointer
+                        flex flex-col md:flex-row items-center gap-0.5 md:gap-3 px-3 py-2.5 md:w-full
+                        ${isActive
+                          ? 'bg-teal-600 text-white shadow-md'
+                          : past
+                          ? 'text-gray-300 hover:bg-gray-50'
+                          : 'text-gray-700 hover:bg-teal-50 hover:text-teal-700'
+                        }`}
+                    >
+                      <div className='md:text-left text-center'>
+                        <p className={`text-[10px] font-semibold leading-none ${isActive ? 'text-teal-100' : 'text-gray-400'}`}>
+                          {date.getMonth() + 1}月
+                        </p>
+                        <p className='text-2xl font-bold leading-tight'>{date.getDate()}</p>
+                      </div>
+                      <div className='md:text-left text-center'>
+                        <p className={`text-xs ${isActive ? 'text-teal-100' : 'text-gray-400'}`}>
+                          {WEEKDAY_FULL[date.getDay()]}
+                        </p>
+                        {past && (
+                          <p className={`text-[10px] ${isActive ? 'text-teal-200' : 'text-gray-300'}`}>已結束</p>
+                        )}
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          </aside>
 
-        {COURSES.map(({ time, name, card }) => (
-          <CourseCard key={`${time}-${name}`} time={time} name={name} card={card} />
-        ))}
-      </div>
-    </div >
-  );
-}
+          {/* Course Timeline */}
+          <main className='flex-1 min-w-0 w-full'>
+            <div className='bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100'>
+              {/* Header */}
+              <div className='flex items-start justify-between mb-5'>
+                <div>
+                  <p className='text-[11px] font-bold text-teal-600 uppercase tracking-widest'>每週日課表</p>
+                  <p className='text-lg font-semibold text-gray-900 mt-1'>
+                    {activeDate.date.getMonth() + 1}月{activeDate.date.getDate()}日
+                    <span className='ml-2 text-sm font-normal text-gray-400'>
+                      {WEEKDAY_FULL[activeDate.date.getDay()]}
+                    </span>
+                  </p>
+                </div>
+                {isPast && (
+                  <span className='text-xs bg-gray-100 text-gray-400 px-2.5 py-1 rounded-full mt-1 flex-shrink-0'>
+                    已結束
+                  </span>
+                )}
+              </div>
 
-const PeriodCard = ({ month, day, weekDay, isActive }: { month: string, day: number, weekDay: string, isActive: boolean }) => {
-  return (
-    <div
-      data-period-card-active={isActive}
-      className={`min-w-[80px] rounded-3xl px-4 py-4 text-center flex flex-col items-center ${isActive ? 'bg-[#0f7f75] text-white shadow-md' : 'bg-[#f1f3f4] text-[#7a7a7a]'
-        } snap-start`}
-    >
-      <p className='text-xs font-semibold'>{month}</p>
-      <p className='text-4xl leading-none font-semibold mt-1'>{day}</p>
-      <p className='text-xs mt-1'>{weekDay}</p>
-    </div>
-  )
-}
+              {/* Timeline */}
+              <div className='relative'>
+                <div className='absolute left-[6px] top-5 bottom-5 w-0.5 bg-gray-100 rounded-full' />
+                <div className='space-y-3'>
+                  {COURSES.map(({ time, name, card }, idx) => {
+                    const [start, end] = time.split(' - ')
+                    const salsa = isSalsa(name)
+                    const isBeginner = card?.includes('初階')
 
-const CourseCard = ({ time, name, card }: CourseData) => {
-  const [startTime, endTime] = time.split(' - ')
-  const isBeginner = card?.includes('初階')
+                    return (
+                      <div key={idx} className='relative flex gap-4 items-start'>
+                        {/* Timeline dot */}
+                        <div className={`w-3.5 h-3.5 rounded-full flex-shrink-0 mt-[15px] z-10 ring-2 ring-white
+                          ${salsa ? 'bg-amber-400' : 'bg-teal-500'}`}
+                        />
 
-  return (
-    <div className='bg-white rounded-2xl px-4 py-5 md:px-6 md:py-6 shadow-[0_1px_6px_rgba(0,0,0,0.05)]'>
-      <div className='flex items-start gap-4 md:gap-6'>
-        <div className='w-[72px] flex-shrink-0 flex flex-col items-center text-[#1f2a30] font-medium'>
-          <p className='text-xl md:text-2xl leading-none'>{startTime}</p>
-          <div className='h-10 md:h-12 w-px bg-[#e3e3e3] my-2' />
-          <p className='text-xl md:text-2xl leading-none text-[#6b7280]'>{endTime}</p>
-        </div>
-        <div className='flex-1 min-w-0 flex flex-col md:flex-row md:items-start md:justify-between gap-2 md:gap-3 pt-0.5'>
-          <p className='text-xl md:text-2xl leading-snug font-semibold text-[#111827] break-words'>{name}</p>
-          {card && (
-            <span className={`w-fit px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap ${isBeginner ? 'bg-[#d9e8f7] text-[#4f5e6f]' : 'bg-[#f8d8c8] text-[#7a5d52]'
-              }`}>
-              {card}
-            </span>
-          )}
+                        {/* Course card */}
+                        <div className={`flex-1 rounded-xl border px-4 py-3.5 transition-colors
+                          ${salsa
+                            ? 'border-amber-100 bg-amber-50/50'
+                            : 'border-teal-100 bg-teal-50/40'
+                          }`}
+                        >
+                          <div className='flex items-start justify-between gap-3 flex-wrap'>
+                            <div>
+                              <p className='font-semibold text-gray-900 text-base'>{name}</p>
+                              <p className='text-sm text-gray-500 mt-0.5'>
+                                {start}
+                                <span className='text-gray-300 mx-1.5'>—</span>
+                                {end}
+                              </p>
+                            </div>
+                            {card && (
+                              <span className={`text-xs font-medium px-2.5 py-1 rounded-full flex-shrink-0
+                                ${isBeginner
+                                  ? 'bg-sky-100 text-sky-700'
+                                  : 'bg-orange-100 text-orange-700'
+                                }`}
+                              >
+                                {card}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+          </main>
+
         </div>
       </div>
     </div>

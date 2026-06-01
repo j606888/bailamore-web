@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 const WhoWeAre = () => {
   return (
     <section className="py-8 bg-slate-50 md:py-16 ">
@@ -19,7 +21,7 @@ const WhoWeAre = () => {
           </div>
         </div>
         <div className="mx-auto px-5 md:px-6 lg:px-8 ">
-          <img src="/images/who-we-are.jpg" alt="who we are" />
+          <Image src="/images/who-we-are.jpg" alt="Baila'more 師生合照" width={800} height={533} className="w-full h-auto" />
         </div>
       </div>
     </section>
