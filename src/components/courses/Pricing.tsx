@@ -11,6 +11,14 @@ export default function Schedule() {
           <p className='text-sm'>適合初學者的基礎課程</p>
         </div>
         <div className='flex flex-col px-4 py-4 gap-4 bg-white'>
+          <div className='flex flex-col gap-1.5'>
+            <p className='text-xs text-gray-400 font-medium'>適用課程</p>
+            <div className='flex flex-wrap gap-1.5'>
+              <span className='text-xs font-medium px-2.5 py-1 rounded-full bg-sky-100 text-sky-700'>Bachata Lv1</span>
+              <span className='text-xs font-medium px-2.5 py-1 rounded-full bg-sky-100 text-sky-700'>Salsa Lv1</span>
+            </div>
+          </div>
+          <hr />
           <Course name='單堂體驗' price={300} />
           <hr />
           <Course name='6堂課程' price={1700} />
@@ -25,6 +33,14 @@ export default function Schedule() {
           <p className='text-sm'>進階技巧與舞步</p>
         </div>
         <div className='flex flex-col px-4 py-4 gap-4 bg-white'>
+          <div className='flex flex-col gap-1.5'>
+            <p className='text-xs text-gray-400 font-medium'>適用課程</p>
+            <div className='flex flex-wrap gap-1.5'>
+              <span className='text-xs font-medium px-2.5 py-1 rounded-full bg-orange-100 text-orange-700'>Bachata 進階</span>
+              <span className='text-xs font-medium px-2.5 py-1 rounded-full bg-orange-100 text-orange-700'>Bachata Lv2</span>
+            </div>
+          </div>
+          <hr />
           <Course name='單堂體驗' price={350} />
           <hr />
           <Course name='6堂課程' price={2000} />
