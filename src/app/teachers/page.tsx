@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { TEACHERS } from '@/data/teachers';
 
 export const metadata: Metadata = {
   title: '師資介紹',
@@ -22,20 +23,22 @@ export default function CoursesPage() {
           <p className='text-base md:text-lg'>認識我們團隊</p>
         </div>
         <div className='flex flex-col gap-6 md:flex-row md:flex-wrap md:justify-center'>
-          <Link href="/teachers/sean" className='w-full max-w-[350px] h-[350px] relative cursor-pointer'>
-            <Image src='/teachers/Sean.jpg' alt='Sean' fill className='object-cover rounded-lg' />
-            <div className='absolute bottom-3 left-3 right-3 bg-white/80 rounded-lg p-3'>
-              <h3 className='text-xl font-bold mb-1'>
-                Sean
-                <span className='text-sm text-gray-500'>（Baila&apos;more創辦人）</span>
-              </h3>
-              <div className='flex gap-2'>
-                {['Bachata Lv1', 'Bachata Lv2', 'Bachata 中階'].map((item) => (
-                  <div key={item} className='text-xs text-white bg-teal-600 p-2 rounded-md'>{item}</div>
-                ))}
+          {Object.entries(TEACHERS).map(([slug, teacher]) => (
+            <Link key={slug} href={`/teachers/${slug}`} className='w-full max-w-[350px] h-[350px] relative cursor-pointer'>
+              <Image src={teacher.image} alt={teacher.name} fill className='object-cover rounded-lg' />
+              <div className='absolute bottom-3 left-3 right-3 bg-white/80 rounded-lg p-3'>
+                <h3 className='text-xl font-bold mb-1'>
+                  {teacher.name}
+                  {teacher.title && <span className='text-sm text-gray-500'>（{teacher.title}）</span>}
+                </h3>
+                <div className='flex gap-2 flex-wrap'>
+                  {teacher.courses.map((item) => (
+                    <div key={item} className='text-xs text-white bg-teal-600 p-2 rounded-md'>{item}</div>
+                  ))}
+                </div>
               </div>
-            </div>
-          </Link>
+            </Link>
+          ))}
         </div>
       </div>
     </>

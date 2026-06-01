@@ -124,7 +124,7 @@
 - `src/components/home/FAQ.tsx:85` — 把 HTML 字串用 `dangerouslySetInnerHTML` 渲染，只為了讓連結可以點
 - 這是不必要的安全風險；直接改成 JSX 即可
 
-#### 20. 資料散落各元件，難維護
+#### ~~20. 資料散落各元件，難維護~~ ✅ 已完成
 - 課程日期在 `Schedule.tsx`、定價在 `Pricing.tsx`、老師資料在 `teachers/[slug]/page.tsx`
 - 每次更新課表或加老師都要進多個元件翻找
 - **建議**：建立 `src/data/` 目錄，統一管理所有內容型資料
@@ -145,4 +145,4 @@
 | ~~🟡 中~~ | ~~刪除死碼（ScheduleLegacy、unused images）~~ ✅ | ~~低~~ |
 | 🟢 低 | 「我們是誰」加亮點數據區塊 | 中 |
 | 🟢 低 | 新增 Photo Gallery | 高 |
-| 🟢 低 | 資料集中到 src/data/ | 中 |
+| ~~🟢 低~~ | ~~資料集中到 src/data/~~ ✅ | ~~中~~ |
