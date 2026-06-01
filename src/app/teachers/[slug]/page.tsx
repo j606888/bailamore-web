@@ -31,33 +31,6 @@ const TEACHERS: Record<string, Teacher> = {
     ],
     videos: ["https://www.youtube.com/embed/TdRV1NkV4Pg?si=MYwpQG-1ZlcPu1QD", "https://www.youtube.com/embed/AE5NriBseoY?si=5u75-CtAGmvwPtVn"],
   },
-  kathy: {
-    name: 'Kathy',
-    image: '/teachers/Kathy.jpg',
-    skills: ['Lady Style', 'Bachata', 'Salsa'],
-    courses: ['Lady Style', 'Bachata Lv2', 'Bachata 中階'],
-    instagram: 'kathy_latin_bachata',
-    description: [
-      'Kathy 擁有豐富的舞蹈背景，是一位兼具優雅與力量的舞者。擅長 Bachata、國標舞（Ballroom Dance）、拉丁舞（Latin Dance）及 Sexy Style，風格多變，充滿舞台魅力。除了擔任 Bachata 與 Salsa 課程的助教外，Kathy 也專門教授 Lady Styling，協助學員從身體線條到氣場自信全面提升。',
-      '身為一位專業的國標舞者，Kathy 對舞蹈的細節與表現力有極高的要求，擅長以溫柔耐心的方式引導學員，讓初學者也能自在展現舞姿之美。她相信舞蹈不只是技巧的呈現，更是身體與情感的連結。',
-      '加入 Baila’more 後，Kathy 致力於打造支持與成長並重的學習環境，陪伴每位學員在舞蹈路上綻放屬於自己的光芒！',
-    ],
-    videos: [
-      "https://www.youtube.com/embed/AE5NriBseoY?si=5u75-CtAGmvwPtVn",
-      "https://www.youtube.com/embed/3SbhPZ9-qN0?si=Gt2mpLE9EqFicI8A"
-    ],
-  },
-  angus: {
-    name: 'Angus',
-    image: '/teachers/Angus.jpg',
-    skills: ['Salsa'],
-    courses: ['Salsa Lv1', 'Salsa Lv2'],
-    description: [
-      'Angus曾在台北各大舞蹈教室學習，師承Magda、YiWen、Larry、Sol等知名老師，並多次參與國內外Salsa活動及教學，致力將不同老師的教學內容融合，走出自己的舞蹈風格！',
-      'Angus learned Salsa with Magda, Larry, and Sol, and other top dancing studios of Taiwan for four years. Also, he joined many global salsa festivals and workshops. After he moves back to Kaohsiung, he wants to promote Salsa in south Taiwan and will do his best to share everything he learned.',
-    ],
-    videos: ["https://www.youtube.com/embed/dVxiFav_Z58?si=ZA16L7qQWs4NUUls"]
-  }
 };
 
 export default function TeacherPage() {

@@ -16,9 +16,6 @@ export default function LocationPage() {
         <p className='text-[#374151]'>
           Baila&apos;more Studio 目前與 About Dancing Studio 合作，租用其專業舞蹈空間進行拉丁舞課程教學。About Dancing Studio 擁有優質的舞蹈環境，包括專業木質地板、全身鏡面牆、高品質音響設備等，為學員提供最佳的學習體驗。
         </p>
-        <p className='text-[#374151]'>
-        教室分為 A、B 兩個獨立空間，兩個空間的入口相距約 20 公尺。A 教室較大，主要用於人數較多的課程；B 教室較小，適合小班制或私人課程。請依照課程表上標示的教室前往正確的位置上課。
-        </p>
         <Callout title='溫馨提醒' description='初次到訪的同學可能會找不到入口，建議提前 10-15 分鐘抵達，或觀看下方影片了解如何抵達各教室。' />
       </div>
       <div className='flex flex-col gap-3 md:flex-row w-full items-start'>
