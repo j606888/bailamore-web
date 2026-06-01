@@ -162,10 +162,6 @@ export default function Schedule() {
                   })}
                 </div>
               </div>
-
-              <p className='text-xs text-gray-400 mt-5 pt-4 border-t border-gray-100'>
-                課程每週日於台南開課 · 請攜帶舞鞋入場
-              </p>
             </div>
           </main>
 

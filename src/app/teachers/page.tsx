@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { UserRound } from 'lucide-react';
 import { TEACHERS } from '@/data/teachers';
 
 export const metadata: Metadata = {
@@ -22,9 +23,9 @@ export default function CoursesPage() {
           <h3 className='text-2xl font-bold md:text-4xl'>師資介紹</h3>
           <p className='text-base md:text-lg'>認識我們團隊</p>
         </div>
-        <div className='flex flex-col gap-6 md:flex-row md:flex-wrap md:justify-center'>
+        <div className='w-full flex flex-col gap-6 md:flex-row md:flex-wrap md:justify-center'>
           {Object.entries(TEACHERS).map(([slug, teacher]) => (
-            <Link key={slug} href={`/teachers/${slug}`} className='w-full max-w-[350px] h-[350px] relative cursor-pointer'>
+            <Link key={slug} href={`/teachers/${slug}`} className='w-full md:w-[350px] h-[350px] relative cursor-pointer'>
               <Image src={teacher.image} alt={teacher.name} fill className='object-cover rounded-lg' />
               <div className='absolute bottom-3 left-3 right-3 bg-white/80 rounded-lg p-3'>
                 <h3 className='text-xl font-bold mb-1'>
@@ -38,6 +39,13 @@ export default function CoursesPage() {
                 </div>
               </div>
             </Link>
+          ))}
+          {([{ role: '老師' }, { role: '助教' }, { role: '助教' }] as { role: string }[]).map(({ role }, i) => (
+            <div key={`coming-soon-${i}`} className='w-full md:w-[350px] h-[350px] bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center gap-3'>
+              <UserRound className='text-gray-300' size={80} />
+              <span className='text-xs font-medium px-3 py-1 rounded-full bg-teal-600/20 text-teal-700'>{role}</span>
+              <span className='text-gray-400 font-semibold text-lg'>即將加入</span>
+            </div>
           ))}
         </div>
       </div>
