@@ -50,6 +50,30 @@ const faqs: FAQItem[] = [
       <>如果要單次上課的話也是可以的，詳情請參考<Link className="text-teal-600 underline" href={LINKS.PRICING} rel="noopener noreferrer">課程資訊</Link></>
     ],
   },
+  {
+    id: 6,
+    question: '上課需要穿什麼？',
+    answer: [
+      '穿著舒適、方便活動的服裝即可，沒有嚴格限制。',
+      '鞋子建議穿有跟的舞鞋或是底部較平滑的室內鞋，避免厚底球鞋，以免影響腳步練習。如果沒有舞鞋，第一次來穿一般平底鞋也完全沒問題。'
+    ],
+  },
+  {
+    id: 7,
+    question: '大概多久能學會？',
+    answer: [
+      '一般來說，上了幾堂 LV1 課程後就能掌握基本步伐，跟著音樂跳出基本感覺。',
+      '社交舞沒有真正的「學完」，每次跳都會有新的體會。重要的是享受過程，很多學員從第一堂課就開始享受跳舞的樂趣！',
+    ],
+  },
+  {
+    id: 8,
+    question: '課程地點在哪裡？如何前往？',
+    answer: [
+      <>上課地點在台南市，詳細地址與地圖請參考<Link className="text-teal-600 underline" href="/location" rel="noopener noreferrer">地點頁面</Link>。</>,
+      '有任何交通上的問題歡迎直接透過 LINE 詢問。',
+    ],
+  },
 ];
 
 const FAQItem = ({ faq, isOpen, onToggle }: {

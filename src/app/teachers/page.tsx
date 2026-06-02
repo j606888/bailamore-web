@@ -25,8 +25,9 @@ export default function CoursesPage() {
         </div>
         <div className='w-full flex flex-col gap-6 md:flex-row md:flex-wrap md:justify-center'>
           {Object.entries(TEACHERS).map(([slug, teacher]) => (
-            <Link key={slug} href={`/teachers/${slug}`} className='w-full md:w-[350px] h-[350px] relative cursor-pointer'>
+            <Link key={slug} href={`/teachers/${slug}`} className='w-full md:w-[350px] h-[350px] relative cursor-pointer group'>
               <Image src={teacher.image} alt={teacher.name} fill className='object-cover rounded-lg' />
+              <div className='absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200 rounded-lg' />
               <div className='absolute bottom-3 left-3 right-3 bg-white/80 rounded-lg p-3'>
                 <h3 className='text-xl font-bold mb-1'>
                   {teacher.name}

@@ -11,6 +11,14 @@ export default function Introduction() {
         <h3 className='text-xl font-bold'>舞蹈風格介紹</h3>
         <p>Baila&apos;more 提供多種拉丁舞蹈課程，每種舞蹈都有其獨特的風格和魅力。選擇適合您的舞蹈風格，開始您的拉丁舞之旅。</p>
       </div>
+      <div className='bg-teal-50 border border-teal-200 rounded-lg p-4 mb-2 flex flex-col gap-2'>
+        <h4 className='font-bold text-teal-800'>我適合哪個課程？</h4>
+        <ul className='text-sm text-teal-900 flex flex-col gap-1 list-disc list-inside'>
+          <li>完全沒有舞蹈經驗 → 從 <strong>Bachata Lv1</strong> 開始，節奏慢、動作直覺，最容易入門</li>
+          <li>有其他舞蹈基礎（街舞、爵士等）→ 同樣建議 <strong>Lv1</strong>，因為社交舞的帶領與跟隨系統需要重新建立</li>
+          <li>已在其他地方上過 Bachata / Salsa → 歡迎直接詢問老師，依程度安排適合的級別</li>
+        </ul>
+      </div>
       <div className='flex flex-col gap-3 py-3'>
         <h3 className='text-2xl font-bold'>Bachata</h3>
         <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>

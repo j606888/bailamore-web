@@ -7,9 +7,9 @@ import Schedule from '@/components/courses/Schedule';
 import Pricing from '@/components/courses/Pricing';
 
 const TABS = [
-  { label: '課表時間', query: 'schedule' },
-  { label: '舞蹈風格介紹', query: 'introduction' },
-  { label: '課程費用', query: 'pricing' },
+  { label: '課表', query: 'schedule' },
+  { label: '風格介紹', query: 'introduction' },
+  { label: '費用', query: 'pricing' },
 ]
 
 export default function CoursesContent() {

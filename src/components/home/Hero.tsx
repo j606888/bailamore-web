@@ -25,13 +25,13 @@ const Hero = () => {
               立即報名
             </Button>
           </Link>
-          <Link href="/courses">
+          <Link href="/courses?tab=pricing">
             <Button
               className="hover:cursor-pointer"
               size="lg"
               variant="outline"
             >
-              課程資訊
+              了解費用
             </Button>
           </Link>
         </div>
@@ -40,7 +40,6 @@ const Hero = () => {
         <video
           autoPlay
           muted
-          controls
           loop
           playsInline
           preload="auto"
