@@ -1,18 +1,26 @@
 'use client'
 
 import React from 'react';
-import { PRICING_TIERS } from '@/data/pricing';
+
+export type PricingTierView = {
+  id: string;
+  title: string;
+  subtitle: string;
+  note: string;
+  applicableCourses: { name: string; colorScheme: 'sky' | 'orange' }[];
+  options: { name: string; price: number }[];
+};
 
 const tagClasses = {
   sky: 'bg-sky-100 text-sky-700',
   orange: 'bg-orange-100 text-orange-700',
 } as const;
 
-export default function Pricing() {
+export default function Pricing({ tiers }: { tiers: PricingTierView[] }) {
   return (
     <div className='px-3 py-6 md:px-6 bg-gray-100 flex flex-col gap-3 md:gap-6'>
-      {PRICING_TIERS.map((tier) => (
-        <div key={tier.title} className='flex flex-col rounded-lg overflow-hidden md:max-w-xl shadow-sm'>
+      {tiers.map((tier) => (
+        <div key={tier.id} className='flex flex-col rounded-lg overflow-hidden md:max-w-xl shadow-sm'>
           <div className='bg-teal-600 px-4 py-3 flex flex-col text-white'>
             <p className='font-bold text-lg'>{tier.title}</p>
             <p className='text-sm'>{tier.subtitle}</p>

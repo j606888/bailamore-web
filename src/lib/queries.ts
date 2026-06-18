@@ -39,6 +39,24 @@ export function getTeacherBySlug(slug: string) {
   return prisma.teacher.findUnique({ where: { slug } })
 }
 
+// ---- 學生推薦 ----
+
+export function getPublishedTestimonials() {
+  return prisma.testimonial.findMany({
+    where: { published: true },
+    orderBy: { sortOrder: 'asc' },
+  })
+}
+
+// ---- 價格 ----
+
+export function getPublishedPricingTiers() {
+  return prisma.pricingTier.findMany({
+    where: { published: true },
+    orderBy: { sortOrder: 'asc' },
+  })
+}
+
 // ---- 後台用（含未發佈）----
 
 export function getAllTeachers() {
@@ -47,4 +65,20 @@ export function getAllTeachers() {
 
 export function getTeacherById(id: string) {
   return prisma.teacher.findUnique({ where: { id } })
+}
+
+export function getAllTestimonials() {
+  return prisma.testimonial.findMany({ orderBy: { sortOrder: 'asc' } })
+}
+
+export function getTestimonialById(id: string) {
+  return prisma.testimonial.findUnique({ where: { id } })
+}
+
+export function getAllPricingTiers() {
+  return prisma.pricingTier.findMany({ orderBy: { sortOrder: 'asc' } })
+}
+
+export function getPricingTierById(id: string) {
+  return prisma.pricingTier.findUnique({ where: { id } })
 }

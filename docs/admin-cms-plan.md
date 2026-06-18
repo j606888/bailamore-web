@@ -281,10 +281,21 @@ model SiteSetting {
 > - 後台側欄「課程表」「師資」已開放（`ready: true`）。
 > - 端到端驗證：前台三頁讀 DB、`/admin` 守衛、「複製上一期」建立→前台出現→刪除、師資列表與編輯表單預填皆通過。
 
-### Phase 2：學生推薦 + 價格
-- [ ] `/admin/testimonials`：CRUD + 頭像上傳 + 排序
-- [ ] `/admin/pricing`：CRUD（含 applicableCourses tag、options）
-- [ ] 前台 Testimonials、`/courses`（pricing 區）改接 DB + ISR
+### Phase 2：學生推薦 + 價格 ✅ 已完成（2026-06-19）
+- [x] `/admin/testimonials`：CRUD + 頭像上傳 + 排序
+- [x] `/admin/pricing`：CRUD（含 applicableCourses tag、options）
+- [x] 前台 Testimonials、`/courses`（pricing 區）改接 DB + ISR
+- [x] 驗證後移除最後一份寫死資料（`src/data/pricing.ts` 已刪除，`src/data/` 已清空）
+
+> **Phase 2 實作重點 / 踩雷紀錄**：
+> - `PricingTier` 新增 `published Boolean @default(true)` 欄位（migration `..._add_pricing_published`），與 `Testimonial` 一致，後台可隱藏方案；前台查詢 `getPublishedPricingTiers()` 只取 `published: true`。
+> - 後台模組比照 Phase 1 師資：`actions.ts`（Server Action + zod + `revalidatePath` + `redirect`）、`*Form.tsx`（`useActionState`）、`*RowActions.tsx`（上/下移交換 `sortOrder`、刪除 `window.confirm`）、`page/new/[id]/edit`。共用元件沿用 `src/components/admin/form.tsx`。
+> - **價格的巢狀 Json 欄位**（`applicableCourses` `[{name,colorScheme}]`、`options` `[{name,price}]`）在 `PricingForm` 用 `useState` 陣列做動態增刪列（課程標籤含 sky/orange 下拉、方案含 number 價格），送出前各以 hidden input 帶 `JSON.stringify`；Server Action `JSON.parse` 後用 zod 驗證（colorScheme enum、`z.coerce.number()`、過濾空白項），讀取時從 Prisma `Json` `as` 回具體型別。
+> - 學生推薦頭像上傳沿用 `uploadImage`（Blob 路徑改 `testimonials/`）；`BLOB_READ_WRITE_TOKEN` 仍為空，測試時直接貼 `/testimonials/*.png` 網址即可。
+> - 前台：首頁 `src/app/(site)/page.tsx` 改 `async` + `revalidate=3600`，`getPublishedTestimonials()` map 成 props（DB `imageUrl`→元件 `image`）傳給維持 client 輪播的 `Testimonials`；`Pricing` 改吃 `tiers` props（型別 `PricingTierView` 由元件 export），`/courses` page 以 `Promise.all` 同時取 schedule 與 pricing。
+> - `prisma/seed.ts` 已把 `PRICING_TIERS` 內嵌（不再 import `src/data/pricing`），刪檔後 seed 仍可用於全新 DB；testimonials 早已內嵌。
+> - 後台側欄「學生推薦」「價格」已開放（`ready: true`）。
+> - 驗證：`yarn lint`（僅既有 useEffect warning）、`yarn build`（`/`、`/courses` 為 ISR 1h，後台路由 dynamic）、`npx tsx prisma/seed.ts` 皆通過。
 
 ### Phase 3：首頁影片 + FAQ
 - [ ] `/admin/hero`：上傳/更換影片（Blob）

@@ -76,11 +76,12 @@ model Testimonial {
 
 // ---- 價格 ----
 model PricingTier {
-  id                String @id @default(cuid())
+  id                String  @id @default(cuid())
   title             String
   subtitle          String
   note              String
-  sortOrder         Int    @default(0)
+  sortOrder         Int     @default(0)
+  published         Boolean @default(true)
   applicableCourses Json // [{ name, colorScheme: 'sky' | 'orange' }]
   options           Json // [{ name, price }]
 }

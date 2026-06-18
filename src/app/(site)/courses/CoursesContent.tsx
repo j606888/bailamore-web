@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Introduction from '@/components/courses/Introduction';
 import Schedule, { type SchedulePeriodView } from '@/components/courses/Schedule';
-import Pricing from '@/components/courses/Pricing';
+import Pricing, { type PricingTierView } from '@/components/courses/Pricing';
 
 const TABS = [
   { label: '課表', query: 'schedule' },
@@ -12,7 +12,13 @@ const TABS = [
   { label: '費用', query: 'pricing' },
 ]
 
-export default function CoursesContent({ periods }: { periods: SchedulePeriodView[] }) {
+export default function CoursesContent({
+  periods,
+  tiers,
+}: {
+  periods: SchedulePeriodView[];
+  tiers: PricingTierView[];
+}) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState(TABS[0].query);
@@ -53,7 +59,7 @@ export default function CoursesContent({ periods }: { periods: SchedulePeriodVie
       </div>
       {activeTab === 'introduction' && <Introduction />}
       {activeTab === 'schedule' && <Schedule periods={periods} />}
-      {activeTab === 'pricing' && <Pricing />}
+      {activeTab === 'pricing' && <Pricing tiers={tiers} />}
     </>
   );
 }
