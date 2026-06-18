@@ -2,8 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Roboto, Poppins } from "next/font/google";
 import { Analytics } from '@vercel/analytics/next';
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
@@ -49,14 +47,8 @@ export default function RootLayout({
   return (
     <html lang="zh-TW">
       <body className={`${roboto.variable} ${poppins.variable} font-poppins antialiased`}>
-        <div className="min-h-screen flex flex-col">
-          <Navbar />
-          <main className="flex-grow pt-16">
-            {children}
-            <Analytics />
-          </main>
-          <Footer />
-        </div>
+        {children}
+        <Analytics />
       </body>
     </html>
   );

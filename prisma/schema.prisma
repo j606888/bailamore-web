@@ -1,0 +1,101 @@
+// Baila'more CMS 資料模型
+// 資料庫：PostgreSQL（託管於 Supabase）
+// 文件： docs/admin-cms-plan.md
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL") // Supabase pooled (6543, ?pgbouncer=true) — app runtime 用
+  directUrl = env("DIRECT_URL") // Supabase direct (5432) — migrate / introspect 用
+}
+
+// ---- 帳號（多帳號、同權限）----
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// ---- 課程表 ----
+model SchedulePeriod {
+  id        String       @id @default(cuid())
+  date      DateTime // 上課日期
+  courses   CourseSlot[]
+  createdAt DateTime     @default(now())
+
+  @@index([date])
+}
+
+model CourseSlot {
+  id        String         @id @default(cuid())
+  period    SchedulePeriod @relation(fields: [periodId], references: [id], onDelete: Cascade)
+  periodId  String
+  startTime String // "14:00"
+  endTime   String // "15:00"
+  name      String // "Bachata Lv1"
+  cardType  String? // "初階課卡" / "進階課卡"
+  sortOrder Int            @default(0)
+
+  @@index([periodId])
+}
+
+// ---- 師資 ----
+model Teacher {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  title       String?
+  imageUrl    String
+  instagram   String?
+  skills      String[] // Postgres 原生陣列
+  courses     String[]
+  description String[] // 多段簡介
+  videos      String[] // YouTube embed 連結
+  sortOrder   Int      @default(0)
+  published   Boolean  @default(true)
+  updatedAt   DateTime @updatedAt
+}
+
+// ---- 學生推薦 ----
+model Testimonial {
+  id         String   @id @default(cuid())
+  name       String
+  title      String // "核心沒力的跳舞小白"
+  imageUrl   String
+  danceStyle String // "Bachata & Salsa"
+  content    String[] // 多段
+  sortOrder  Int      @default(0)
+  published  Boolean  @default(true)
+}
+
+// ---- 價格 ----
+model PricingTier {
+  id                String @id @default(cuid())
+  title             String
+  subtitle          String
+  note              String
+  sortOrder         Int    @default(0)
+  applicableCourses Json // [{ name, colorScheme: 'sky' | 'orange' }]
+  options           Json // [{ name, price }]
+}
+
+// ---- FAQ ----
+model Faq {
+  id        String  @id @default(cuid())
+  question  String
+  answer    String // Markdown（含連結）
+  sortOrder Int     @default(0)
+  published Boolean @default(true)
+}
+
+// ---- 單例設定（首頁影片網址等全站設定）----
+model SiteSetting {
+  key   String @id // 例： "hero_video_url"
+  value String
+}
