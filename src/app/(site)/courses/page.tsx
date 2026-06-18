@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import CoursesContent from './CoursesContent';
-import { getSchedulePeriods } from '@/lib/queries';
+import { getSchedulePeriods, getPublishedPricingTiers } from '@/lib/queries';
 import type { SchedulePeriodView } from '@/components/courses/Schedule';
+import type { PricingTierView } from '@/components/courses/Pricing';
 
 // 課表內容由 DB 提供，存檔後以 revalidatePath('/courses') 即時更新。
 export const revalidate = 3600;
@@ -18,7 +19,11 @@ export const metadata: Metadata = {
 };
 
 export default async function CoursesPage() {
-  const periods = await getSchedulePeriods();
+  const [periods, tiers] = await Promise.all([
+    getSchedulePeriods(),
+    getPublishedPricingTiers(),
+  ]);
+
   const scheduleData: SchedulePeriodView[] = periods.map((p) => ({
     id: p.id,
     date: p.date.toISOString(),
@@ -30,9 +35,18 @@ export default async function CoursesPage() {
     })),
   }));
 
+  const pricingData: PricingTierView[] = tiers.map((t) => ({
+    id: t.id,
+    title: t.title,
+    subtitle: t.subtitle,
+    note: t.note,
+    applicableCourses: t.applicableCourses as PricingTierView['applicableCourses'],
+    options: t.options as PricingTierView['options'],
+  }));
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <CoursesContent periods={scheduleData} />
+      <CoursesContent periods={scheduleData} tiers={pricingData} />
     </Suspense>
   );
 }
