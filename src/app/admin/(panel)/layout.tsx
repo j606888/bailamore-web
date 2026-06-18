@@ -10,8 +10,8 @@ const NAV_ITEMS: { href: string; label: string; ready: boolean }[] = [
   { href: '/admin/teachers', label: '師資', ready: true },
   { href: '/admin/testimonials', label: '學生推薦', ready: true },
   { href: '/admin/pricing', label: '價格', ready: true },
-  { href: '/admin/hero', label: '首頁影片', ready: false },
-  { href: '/admin/faq', label: 'FAQ', ready: false },
+  { href: '/admin/hero', label: '首頁影片', ready: true },
+  { href: '/admin/faq', label: 'FAQ', ready: true },
   { href: '/admin/users', label: '帳號管理', ready: false },
 ]
 

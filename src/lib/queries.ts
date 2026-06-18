@@ -82,3 +82,31 @@ export function getAllPricingTiers() {
 export function getPricingTierById(id: string) {
   return prisma.pricingTier.findUnique({ where: { id } })
 }
+
+// ---- FAQ ----
+
+export function getPublishedFaqs() {
+  return prisma.faq.findMany({
+    where: { published: true },
+    orderBy: { sortOrder: 'asc' },
+  })
+}
+
+export function getAllFaqs() {
+  return prisma.faq.findMany({ orderBy: { sortOrder: 'asc' } })
+}
+
+export function getFaqById(id: string) {
+  return prisma.faq.findUnique({ where: { id } })
+}
+
+// ---- 全站設定（單例 key-value）----
+
+export async function getSiteSetting(key: string) {
+  const row = await prisma.siteSetting.findUnique({ where: { key } })
+  return row?.value ?? null
+}
+
+export function getHeroVideoUrl() {
+  return getSiteSetting('hero_video_url')
+}

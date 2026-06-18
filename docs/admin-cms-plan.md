@@ -297,10 +297,21 @@ model SiteSetting {
 > - 後台側欄「學生推薦」「價格」已開放（`ready: true`）。
 > - 驗證：`yarn lint`（僅既有 useEffect warning）、`yarn build`（`/`、`/courses` 為 ISR 1h，後台路由 dynamic）、`npx tsx prisma/seed.ts` 皆通過。
 
-### Phase 3：首頁影片 + FAQ
-- [ ] `/admin/hero`：上傳/更換影片（Blob）
-- [ ] `/admin/faq`：CRUD，答案用 Markdown 編輯器
-- [ ] 前台 Hero、FAQ 改接 DB + ISR（FAQ 用 react-markdown）
+### Phase 3：首頁影片 + FAQ ✅ 已完成（2026-06-19）
+- [x] `/admin/hero`：上傳/更換影片（Blob）
+- [x] `/admin/faq`：CRUD，答案用 Markdown 編輯器
+- [x] 前台 Hero、FAQ 改接 DB + ISR（FAQ 用 react-markdown）
+
+> **Phase 3 實作重點 / 踩雷紀錄**：
+> - 新增套件 `react-markdown` + `remark-gfm`（FAQ 答案以 Markdown 字串存 DB、前台渲染）。**不需改 schema、不需 migration**（`Faq`、`SiteSetting` 在 Phase 0 已建好）。
+> - **FAQ 後台**比照 Phase 1/2 師資/推薦：`actions.ts`（Server Action + zod + `revalidatePath('/')` + `revalidatePath('/admin/faq')` + `redirect`）、`FaqForm.tsx`（`useActionState`，答案用 `<textarea>`）、`FaqRowActions.tsx`（上/下移交換 `sortOrder`、刪除 `window.confirm`）、`page/new/[id]/edit`。共用元件沿用 `src/components/admin/form.tsx`。
+> - **FAQ 前台**（`src/components/home/FAQ.tsx`）維持 `'use client'` 手風琴，但移除寫死陣列、改吃 `faqs: {id,question,answer}[]` props；`openIds` 由 `Set<number>` 改 `Set<string>`（id 為 cuid）。答案用 `ReactMarkdown` + `remarkGfm` 渲染，`components.a` 套 `text-teal-600 underline`，**外部連結（`https?://`）才加 `target="_blank"`/`rel`**，內部相對路徑（`/courses`、`/location`）不加；`components.p` 沿用 `text-gray-700 mb-2 last:mb-0` 段落樣式。
+> - **首頁影片**是 `SiteSetting` key-value 單例：`/admin/hero` 用 `prisma.siteSetting.upsert({ where: { key: 'hero_video_url' } })`，**單例頁面不需 new/edit/list 子路由**。`saveHeroVideo` 存檔後回傳 `{ ok: true }` state（留在原頁顯示「已儲存」並可看影片預覽），不 redirect。`videoUrl` 用 `z.string().trim().min(1)`（**不用 `.url()`**，以容許相對路徑/既有 Blob 網址）。
+> - 影片上傳 `uploadHeroVideo` 沿用推薦的 `uploadImage` 寫法，但型別限 `video/mp4`、大小上限放寬到 200MB、Blob 路徑改 `hero/`。`BLOB_READ_WRITE_TOKEN` 仍為空屬預期 → 上傳回提示，可先直接貼網址。
+> - Hero 前台（`src/components/home/Hero.tsx`，server component）新增 `videoUrl: string` prop 取代寫死 `<source src>`。
+> - 首頁 `src/app/(site)/page.tsx` 以 `Promise.all` 同時取 `getPublishedTestimonials()` / `getPublishedFaqs()` / `getHeroVideoUrl()`，分別傳 props（`revalidate=3600` 已存在）。查詢層 `src/lib/queries.ts` 新增 `getPublishedFaqs/getAllFaqs/getFaqById` 與 `getSiteSetting(key)/getHeroVideoUrl()`。
+> - 後台側欄「首頁影片」「FAQ」已開放（`ready: true`）。
+> - 驗證：`yarn lint`（僅既有 Testimonials useEffect warning）、`yarn build`（`/` 為 ISR 1h，`/admin/faq`、`/admin/hero` 等後台路由 dynamic）、`npx tsx prisma/seed.ts`（FAQ 8 則 + 影片）皆通過。
 
 ### Phase 4：帳號管理 + 收尾
 - [ ] `/admin/users`：新增/刪除帳號、改密碼
