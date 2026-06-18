@@ -1,80 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import type { ReactNode } from 'react';
-import Link from 'next/link';
-import { LINKS } from '@/constants/links';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 type FAQItem = {
-  id: number;
+  id: string;
   question: string;
-  answer: ReactNode[];
+  answer: string; // Markdown
 };
-
-const faqs: FAQItem[] = [
-  {
-    id: 1,
-    question: '如何報名課程',
-    answer: [
-      <>加入 <a className="text-teal-600 underline" href={LINKS.LINE} target="_blank" rel="noopener noreferrer">Line 官方帳號</a>，直接私訊 Sean 即可。</>,
-      '如果想要先體驗的話也可以直接在課程時間來到教室。'
-    ],
-  },
-  {
-    id: 2,
-    question: '沒有舞蹈經驗可以嗎？',
-    answer: [
-      '當然可以！不管什麼年齡或是有無經驗都非常適合來學習 Bachata & Salsa。'
-    ],
-  },
-  {
-    id: 3,
-    question: '沒有舞伴可以嗎？',
-    answer: [
-      '可以的！上課中舞伴是會不斷輪替的不用擔心沒有人可以練習。'
-    ],
-  },
-  {
-    id: 4,
-    question: '關於課程選擇',
-    answer: [
-      '如果沒有上過類似的課程的新手會建議從 LV1 的課程開始，等到覺得熟練之後再踏入 LV2 的大門。',
-      <>瞭解更多請參考<Link className="text-teal-600 underline" href={LINKS.COURSES} rel="noopener noreferrer">課程資訊</Link></>,
-    ],
-  },
-  {
-    id: 5,
-    question: '關於課程費用',
-    answer: [
-      '我們採用課卡的方式，每次購買一張課卡可以使用 6 次。',
-      <>如果要單次上課的話也是可以的，詳情請參考<Link className="text-teal-600 underline" href={LINKS.PRICING} rel="noopener noreferrer">課程資訊</Link></>
-    ],
-  },
-  {
-    id: 6,
-    question: '上課需要穿什麼？',
-    answer: [
-      '穿著舒適、方便活動的服裝即可，沒有嚴格限制。',
-      '鞋子建議穿有跟的舞鞋或是底部較平滑的室內鞋，避免厚底球鞋，以免影響腳步練習。如果沒有舞鞋，第一次來穿一般平底鞋也完全沒問題。'
-    ],
-  },
-  {
-    id: 7,
-    question: '大概多久能學會？',
-    answer: [
-      '一般來說，上了幾堂 LV1 課程後就能掌握基本步伐，跟著音樂跳出基本感覺。',
-      '社交舞沒有真正的「學完」，每次跳都會有新的體會。重要的是享受過程，很多學員從第一堂課就開始享受跳舞的樂趣！',
-    ],
-  },
-  {
-    id: 8,
-    question: '課程地點在哪裡？如何前往？',
-    answer: [
-      <>上課地點在台南市，詳細地址與地圖請參考<Link className="text-teal-600 underline" href="/location" rel="noopener noreferrer">地點頁面</Link>。</>,
-      '有任何交通上的問題歡迎直接透過 LINE 詢問。',
-    ],
-  },
-];
 
 const FAQItem = ({ faq, isOpen, onToggle }: {
   faq: FAQItem;
@@ -107,9 +41,28 @@ const FAQItem = ({ faq, isOpen, onToggle }: {
       >
         <div className="overflow-hidden">
           <div className="px-6 pb-5">
-            {faq.answer.map((paragraph, index) => (
-              <p key={index} className="text-gray-700 mb-2 last:mb-0">{paragraph}</p>
-            ))}
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                a: ({ href, children }) => {
+                  const external = !!href && /^https?:\/\//.test(href);
+                  return (
+                    <a
+                      href={href}
+                      className="text-teal-600 underline"
+                      {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                    >
+                      {children}
+                    </a>
+                  );
+                },
+                p: ({ children }) => (
+                  <p className="text-gray-700 mb-2 last:mb-0">{children}</p>
+                ),
+              }}
+            >
+              {faq.answer}
+            </ReactMarkdown>
           </div>
         </div>
       </div>
@@ -117,10 +70,10 @@ const FAQItem = ({ faq, isOpen, onToggle }: {
   );
 };
 
-const FAQ = () => {
-  const [openIds, setOpenIds] = useState<Set<number>>(new Set([]));
+const FAQ = ({ faqs }: { faqs: FAQItem[] }) => {
+  const [openIds, setOpenIds] = useState<Set<string>>(new Set());
 
-  const toggleFAQ = (id: number) => {
+  const toggleFAQ = (id: string) => {
     setOpenIds(prev => {
       const newIds = new Set(prev);
       if (newIds.has(id)) {

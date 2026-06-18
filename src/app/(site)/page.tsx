@@ -3,9 +3,9 @@ import Hero from '@/components/home/Hero';
 import WhoWeAre from '@/components/home/WhoWeAre';
 import Testimonials from '@/components/home/Testimonials';
 import FAQ from '@/components/home/FAQ';
-import { getPublishedTestimonials } from '@/lib/queries';
+import { getPublishedTestimonials, getPublishedFaqs, getHeroVideoUrl } from '@/lib/queries';
 
-// 學生推薦由 DB 提供，存檔後以 revalidatePath('/') 即時更新。
+// 首頁影片、學生推薦、FAQ 皆由 DB 提供，存檔後以 revalidatePath('/') 即時更新。
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
@@ -19,7 +19,12 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const testimonials = await getPublishedTestimonials();
+  const [testimonials, faqs, heroVideoUrl] = await Promise.all([
+    getPublishedTestimonials(),
+    getPublishedFaqs(),
+    getHeroVideoUrl(),
+  ]);
+
   const testimonialsData = testimonials.map((t) => ({
     id: t.id,
     name: t.name,
@@ -29,12 +34,18 @@ export default async function Home() {
     danceStyle: t.danceStyle,
   }));
 
+  const faqsData = faqs.map((f) => ({
+    id: f.id,
+    question: f.question,
+    answer: f.answer,
+  }));
+
   return (
     <>
-      <Hero />
+      <Hero videoUrl={heroVideoUrl ?? ''} />
       <WhoWeAre />
       <Testimonials testimonials={testimonialsData} />
-      <FAQ />
+      <FAQ faqs={faqsData} />
     </>
   );
 }

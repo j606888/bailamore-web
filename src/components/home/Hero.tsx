@@ -3,7 +3,7 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { LINKS } from "@/constants/links";
 
-const Hero = () => {
+const Hero = ({ videoUrl }: { videoUrl: string }) => {
   return (
     <div className="px-5 py-10 flex flex-col items-center justify-center gap-6 md:flex-row md:gap-6 md:max-w-7xl md:mx-auto">
       <div className="flex flex-col items-center justify-center gap-4 md:w-[420px] md:items-start md:flex-shrink-0">
@@ -50,10 +50,7 @@ const Hero = () => {
             borderRadius: "10px",
           }}
         >
-          <source
-            src="https://ikhr8fc3iglih52q.public.blob.vercel-storage.com/Bailamore%20Studio%20-%20Demo%20Video.mp4"
-            type="video/mp4"
-          />
+          <source src={videoUrl} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </div>
