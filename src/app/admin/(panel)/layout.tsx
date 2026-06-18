@@ -12,7 +12,7 @@ const NAV_ITEMS: { href: string; label: string; ready: boolean }[] = [
   { href: '/admin/pricing', label: '價格', ready: true },
   { href: '/admin/hero', label: '首頁影片', ready: true },
   { href: '/admin/faq', label: 'FAQ', ready: true },
-  { href: '/admin/users', label: '帳號管理', ready: false },
+  { href: '/admin/users', label: '帳號管理', ready: true },
 ]
 
 export default async function PanelLayout({

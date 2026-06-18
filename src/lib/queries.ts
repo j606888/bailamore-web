@@ -100,6 +100,22 @@ export function getFaqById(id: string) {
   return prisma.faq.findUnique({ where: { id } })
 }
 
+// ---- 帳號（後台用，不回傳 passwordHash）----
+
+export function getAllUsers() {
+  return prisma.user.findMany({
+    orderBy: { createdAt: 'asc' },
+    select: { id: true, email: true, name: true, createdAt: true },
+  })
+}
+
+export function getUserById(id: string) {
+  return prisma.user.findUnique({
+    where: { id },
+    select: { id: true, email: true, name: true },
+  })
+}
+
 // ---- 全站設定（單例 key-value）----
 
 export async function getSiteSetting(key: string) {

@@ -314,9 +314,20 @@ model SiteSetting {
 > - 驗證：`yarn lint`（僅既有 Testimonials useEffect warning）、`yarn build`（`/` 為 ISR 1h，`/admin/faq`、`/admin/hero` 等後台路由 dynamic）、`npx tsx prisma/seed.ts`（FAQ 8 則 + 影片）皆通過。
 
 ### Phase 4：帳號管理 + 收尾
-- [ ] `/admin/users`：新增/刪除帳號、改密碼
-- [ ] 移除全部殘留寫死資料與 `src/data/*` 對照檔
-- [ ] 正式站資料庫（Neon）建立、環境變數、seed 上線資料
+- [x] `/admin/users`：新增/刪除帳號、改密碼（2026-06-19）
+- [x] 移除全部殘留寫死資料與 `src/data/*` 對照檔（Phase 1/2 已逐步刪除，現 `src/data/` 不存在、無任何 `@/data` import）
+- [ ] 正式站資料庫（Neon）建立、環境變數、seed 上線資料（**部署作業，需業主端操作**）
+
+> **Phase 4 帳號管理 實作重點 / 踩雷紀錄**：
+> - `/admin/users` 比照其他後台模組：`actions.ts`（`saveUser` 新增/編輯 + `deleteUser`）、`UserForm.tsx`（`useActionState`）、`UserRowActions.tsx`、`page/new/[id]/edit`。共用 `src/components/admin/form.tsx`。
+> - **帳號無 `sortOrder`**（不需排序），列表 `orderBy: createdAt asc`；故 RowActions 只有「編輯 + 刪除」，無上下移。
+> - **密碼**：`bcrypt.hash(password, 10)`（與 `prisma/seed.ts`、`src/auth.ts` 一致，runs in Node server action 非 edge）。新增必填、至少 8 字元；編輯時密碼欄留空＝不變更（只更新 name/email）。`getUserById`/`getAllUsers` 於 `queries.ts` 用 `select` **排除 `passwordHash`**，不外洩雜湊。
+> - **Email 唯一**：撞號時 catch Prisma `P2002` 回「此 Email 已被使用」；email 統一 `toLowerCase()`。
+> - **刪除自我保護**：`deleteUser` 用 `auth()` 取目前 session，**比對 email**（session.user.id 在現行 JWT 設定未注入，email 才穩定可得）禁止刪除自己；另加 `count() <= 1` 保險，確保至少留一個帳號。RowActions 對自己列停用刪除鈕（`isSelf`）。
+> - 後台側欄「帳號管理」已開放（`ready: true`）。
+> - 驗證：`yarn lint`（僅既有 Testimonials warning）、`yarn build`（`/admin/users`、`/admin/users/new`、`/admin/users/[id]/edit` 皆 dynamic）通過。
+
+> **剩餘僅正式站部署**：建立正式 Supabase/Neon 專案 → Vercel 設環境變數（`DATABASE_URL`/`DIRECT_URL`/`AUTH_SECRET`/`BLOB_READ_WRITE_TOKEN`）→ `prisma migrate deploy` → 跑一次 `prisma/seed.ts` 匯入內容 → 上線後盡早用 `/admin/users` 改掉預設管理員密碼。詳見第 11 節。
 
 ---
 
