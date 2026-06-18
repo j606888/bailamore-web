@@ -1,6 +1,11 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import CoursesContent from './CoursesContent';
+import { getSchedulePeriods } from '@/lib/queries';
+import type { SchedulePeriodView } from '@/components/courses/Schedule';
+
+// 課表內容由 DB 提供，存檔後以 revalidatePath('/courses') 即時更新。
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: '課程資訊',
@@ -12,10 +17,22 @@ export const metadata: Metadata = {
   },
 };
 
-export default function CoursesPage() {
+export default async function CoursesPage() {
+  const periods = await getSchedulePeriods();
+  const scheduleData: SchedulePeriodView[] = periods.map((p) => ({
+    id: p.id,
+    date: p.date.toISOString(),
+    courses: p.courses.map((c) => ({
+      startTime: c.startTime,
+      endTime: c.endTime,
+      name: c.name,
+      cardType: c.cardType,
+    })),
+  }));
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <CoursesContent />
+      <CoursesContent periods={scheduleData} />
     </Suspense>
   );
 }

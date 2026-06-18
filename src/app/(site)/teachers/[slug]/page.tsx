@@ -4,18 +4,28 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import IGIcon from '@/components/icons/IGIcon';
-import { TEACHERS } from '@/data/teachers';
+import { getPublishedTeacherSlugs, getTeacherBySlug } from '@/lib/queries';
+
+export const revalidate = 3600;
+// 新增師資後無需重新 build 也能造訪（DB 即時）
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  const teachers = await getPublishedTeacherSlugs();
+  return teachers.map((t) => ({ slug: t.slug }));
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const teacher = TEACHERS[slug];
+  const teacher = await getTeacherBySlug(slug);
   if (!teacher) return {};
+  const desc = teacher.description[0]?.slice(0, 160) ?? '';
   return {
     title: `${teacher.name}${teacher.title ? `（${teacher.title}）` : ''}`,
-    description: teacher.description[0].slice(0, 160),
+    description: desc,
     openGraph: {
       title: `${teacher.name} — 師資介紹 | Baila'more`,
-      description: teacher.description[0].slice(0, 160),
+      description: desc,
       url: `/teachers/${slug}`,
     },
   };
@@ -23,9 +33,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function TeacherPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const teacher = TEACHERS[slug as keyof typeof TEACHERS];
+  const teacher = await getTeacherBySlug(slug);
 
-  if (!teacher) {
+  if (!teacher || !teacher.published) {
     notFound();
   }
 
@@ -37,7 +47,7 @@ export default async function TeacherPage({ params }: { params: Promise<{ slug: 
       </Link>
       <div className='flex gap-3 items-center md:m-auto md:flex-col md:gap-6'>
         <div className='relative w-[92px] h-[92px] md:w-[180px] md:h-[180px]'>
-          <Image src={teacher.image} alt={teacher.name} fill className='object-cover rounded-full' />
+          <Image src={teacher.imageUrl} alt={teacher.name} fill className='object-cover rounded-full' />
         </div>
         <div className='flex flex-col gap-1.5'>
           <div className='flex items-baseline gap-1'>

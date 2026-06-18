@@ -6,8 +6,8 @@ import { logout } from '../actions'
 // 後台導覽列。ready=false 的項目尚未實作（依 docs/admin-cms-plan.md 分階段開放）。
 const NAV_ITEMS: { href: string; label: string; ready: boolean }[] = [
   { href: '/admin', label: '儀表板', ready: true },
-  { href: '/admin/schedule', label: '課程表', ready: false },
-  { href: '/admin/teachers', label: '師資', ready: false },
+  { href: '/admin/schedule', label: '課程表', ready: true },
+  { href: '/admin/teachers', label: '師資', ready: true },
   { href: '/admin/testimonials', label: '學生推薦', ready: false },
   { href: '/admin/pricing', label: '價格', ready: false },
   { href: '/admin/hero', label: '首頁影片', ready: false },

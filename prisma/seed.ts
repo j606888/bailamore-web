@@ -1,11 +1,59 @@
 import 'dotenv/config'
 import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
-import { COURSE_PERIODS, COURSES } from '../src/data/schedule'
-import { TEACHERS } from '../src/data/teachers'
 import { PRICING_TIERS } from '../src/data/pricing'
 
 const prisma = new PrismaClient()
+
+// ---- 課程表初始資料（原 src/data/schedule.ts；Phase 1 後改由後台維護）----
+const COURSE_PERIODS = [
+  '2026/06/07',
+  '2026/06/14',
+  '2026/06/28',
+  '2026/07/05',
+  '2026/07/19',
+  '2026/07/26',
+]
+
+const COURSES: { time: string; name: string; card?: string }[] = [
+  { time: '14:00 - 15:00', name: 'Bachata 進階', card: '進階課卡' },
+  { time: '15:00 - 16:00', name: 'Bachata Lv1', card: '初階課卡' },
+  { time: '16:00 - 17:00', name: 'Bachata Lv2', card: '進階課卡' },
+  { time: '17:00 - 18:00', name: 'Salsa Lv1', card: '初階課卡' },
+]
+
+// ---- 師資初始資料（原 src/data/teachers.ts；Phase 1 後改由後台維護）----
+const TEACHERS: Record<
+  string,
+  {
+    name: string
+    title?: string
+    image: string
+    skills: string[]
+    instagram?: string
+    courses: string[]
+    description: string[]
+    videos: string[]
+  }
+> = {
+  sean: {
+    name: 'Sean',
+    title: "Baila'more創辦人",
+    image: '/teachers/Sean.jpg',
+    skills: ['Bachata', 'Salsa', 'Zouk'],
+    instagram: 'baila_moredancestudio',
+    courses: ['Bachata Lv1', 'Bachata Lv2', 'Bachata 進階'],
+    description: [
+      'Sean 擁有二年的拉丁舞教學與表演經驗，專精於 Salsa 與 Bachata，風格融合熱情、音樂性與舞台魅力。曾多次參與國內外拉丁舞活動與工作坊，不僅擁有紮實的技術基礎，更擅長引導學員掌握節奏與身體表達。',
+      "他創辦 Baila'more 拉丁社交舞學校，致力於推廣「愛跳舞、多跳舞」的理念，讓每位舞者在歡樂中找到自信與自由。Sean 教學風格親切細膩，擅長拆解動作，激發學員的學習熱情與音樂感，無論是初學者或進階者都能有所收穫。",
+      '舞蹈對 Sean 而言不只是技藝，更是連結人與人之間的橋樑，歡迎一起進入這個充滿熱情與愛的舞蹈世界！',
+    ],
+    videos: [
+      'https://www.youtube.com/embed/TdRV1NkV4Pg?si=MYwpQG-1ZlcPu1QD',
+      'https://www.youtube.com/embed/AE5NriBseoY?si=5u75-CtAGmvwPtVn',
+    ],
+  },
+}
 
 // 將 "2026/06/07" 轉成 Date（本地時區當天）
 const parseDate = (s: string) => {
