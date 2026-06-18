@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Introduction from '@/components/courses/Introduction';
-import Schedule from '@/components/courses/Schedule';
+import Schedule, { type SchedulePeriodView } from '@/components/courses/Schedule';
 import Pricing from '@/components/courses/Pricing';
 
 const TABS = [
@@ -12,7 +12,7 @@ const TABS = [
   { label: '費用', query: 'pricing' },
 ]
 
-export default function CoursesContent() {
+export default function CoursesContent({ periods }: { periods: SchedulePeriodView[] }) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState(TABS[0].query);
@@ -52,7 +52,7 @@ export default function CoursesContent() {
         ))}
       </div>
       {activeTab === 'introduction' && <Introduction />}
-      {activeTab === 'schedule' && <Schedule />}
+      {activeTab === 'schedule' && <Schedule periods={periods} />}
       {activeTab === 'pricing' && <Pricing />}
     </>
   );

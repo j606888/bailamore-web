@@ -3,7 +3,10 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { UserRound } from 'lucide-react';
-import { TEACHERS } from '@/data/teachers';
+import { getPublishedTeachers } from '@/lib/queries';
+
+// 內容由 DB 提供，存檔後以 revalidatePath('/teachers') 即時更新；此處設時間型 ISR 作為保險。
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: '師資介紹',
@@ -15,7 +18,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function CoursesPage() {
+export default async function TeachersPage() {
+  const teachers = await getPublishedTeachers();
+
   return (
     <>
       <div className="mx-auto px-3 py-6 flex flex-col gap-6 items-center justify-center md:px-6">
@@ -24,9 +29,9 @@ export default function CoursesPage() {
           <p className='text-base md:text-lg'>認識我們團隊</p>
         </div>
         <div className='w-full flex flex-col gap-6 md:flex-row md:flex-wrap md:justify-center'>
-          {Object.entries(TEACHERS).map(([slug, teacher]) => (
-            <Link key={slug} href={`/teachers/${slug}`} className='w-full md:w-[350px] h-[350px] relative cursor-pointer group'>
-              <Image src={teacher.image} alt={teacher.name} fill className='object-cover rounded-lg' />
+          {teachers.map((teacher) => (
+            <Link key={teacher.slug} href={`/teachers/${teacher.slug}`} className='w-full md:w-[350px] h-[350px] relative cursor-pointer group'>
+              <Image src={teacher.imageUrl} alt={teacher.name} fill className='object-cover rounded-lg' />
               <div className='absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200 rounded-lg' />
               <div className='absolute bottom-3 left-3 right-3 bg-white/80 rounded-lg p-3'>
                 <h3 className='text-xl font-bold mb-1'>

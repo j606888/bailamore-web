@@ -18,7 +18,7 @@ export default async function AdminDashboardPage() {
         </p>
         <ul className="text-sm text-gray-600 space-y-1.5">
           <li>✅ Phase 0：登入、資料庫骨架、後台框架</li>
-          <li>⬜ Phase 1：課程表、師資</li>
+          <li>✅ Phase 1：課程表、師資</li>
           <li>⬜ Phase 2：學生推薦、價格</li>
           <li>⬜ Phase 3：首頁影片、FAQ</li>
           <li>⬜ Phase 4：帳號管理、收尾</li>

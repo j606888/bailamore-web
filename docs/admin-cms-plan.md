@@ -262,11 +262,24 @@ model SiteSetting {
 > - 密碼含 `!` `*` 要 URL 編碼（`%21` `%2A`）。
 > - Auth.js v5 自架/`next start` 需 `trustHost: true`（已設於 `auth.config.ts`）。
 
-### Phase 1：課程表 + 師資（最高頻）
-- [ ] `/admin/schedule`：新增/編輯/刪除上課日期與時段課程，「複製上一期」
-- [ ] `/admin/teachers`：列表 + 新增/編輯/刪除，圖片上傳、多段簡介、YouTube 連結、排序
-- [ ] 前台 `/courses`（schedule 區）、`/teachers`、`/teachers/[slug]` 改接 DB + ISR
-- [ ] 驗證後移除對應寫死資料
+### Phase 1：課程表 + 師資（最高頻）✅ 已完成（2026-06-18）
+- [x] `/admin/schedule`：新增/編輯/刪除上課日期與時段課程，「複製上一期」
+- [x] `/admin/teachers`：列表 + 新增/編輯/刪除，圖片上傳、多段簡介、YouTube 連結、排序
+- [x] 前台 `/courses`（schedule 區）、`/teachers`、`/teachers/[slug]` 改接 DB + ISR
+- [x] 驗證後移除對應寫死資料（`src/data/schedule.ts`、`src/data/teachers.ts` 已刪除）
+
+> **Phase 1 實作重點 / 踩雷紀錄**：
+> - 新增套件 `@vercel/blob`（師資頭像上傳）。`next.config.ts` 加 `images.remotePatterns` 允許 `*.public.blob.vercel-storage.com`。
+> - **`BLOB_READ_WRITE_TOKEN` 仍為空**：上傳按鈕會回傳提示，可先直接在頭像欄位貼圖片網址（既有 `/teachers/*.jpg` 維持可用）。要測上傳需先到 Vercel → Storage → Blob 取 token 填入 `.env`。
+> - 共用讀取層在 `src/lib/queries.ts`；日期工具在 `src/lib/date.ts`。`server-only` 套件未安裝，故 queries 不 import 它（僅由 server 端使用）。
+> - **課表日期時區**：使用者輸入的日期存成「當日 UTC 正午」（`2026-08-02T12:00:00Z`），在各時區渲染都落在同一日曆日；顯示一律以 `Asia/Taipei` 格式化（見 `src/lib/date.ts`）。
+> - 課表改為 **per-period**：每個日期有自己的 `CourseSlot`；「複製上一期」會抓日期早於新日期且最接近的一期（無則取最新一期）的課程。
+> - 前台互動元件（`Schedule.tsx` 日期切換）維持 client，資料由 server page 以 props 傳入（`SchedulePeriodView`）。
+> - `/teachers/[slug]` 的 `generateStaticParams` 改由 DB 產 slug，並設 `dynamicParams = true`（新增師資免重新 build 即可造訪）。頁面設 `revalidate = 3600` 作時間型 ISR 保險，存檔的 Server Action 內 `revalidatePath` 即時更新。
+> - 寫入操作（save/delete/move/createPeriod/savePeriod）皆為 Server Action，存檔後 `revalidatePath('/teachers' | '/teachers/<slug>' | '/courses')`。
+> - `prisma/seed.ts` 已把課表/師資初始資料改為**內嵌**（不再 import `src/data`），確保刪檔後 seed 仍可用於全新 DB 首次匯入。
+> - 後台側欄「課程表」「師資」已開放（`ready: true`）。
+> - 端到端驗證：前台三頁讀 DB、`/admin` 守衛、「複製上一期」建立→前台出現→刪除、師資列表與編輯表單預填皆通過。
 
 ### Phase 2：學生推薦 + 價格
 - [ ] `/admin/testimonials`：CRUD + 頭像上傳 + 排序
