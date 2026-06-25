@@ -8,8 +8,8 @@ import PricingBoard from '@/components/courses/schedule/PricingBoard';
 
 const TABS = [
   { label: '課表', query: 'schedule' },
-  { label: '風格介紹', query: 'introduction' },
   { label: '費用', query: 'pricing' },
+  { label: '風格介紹', query: 'introduction' },
 ]
 
 export default function CoursesContent() {
