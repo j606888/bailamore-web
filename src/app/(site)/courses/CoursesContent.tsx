@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Introduction from '@/components/courses/Introduction';
 import ScheduleBoard from '@/components/courses/schedule/ScheduleBoard';
-import Pricing, { type PricingTierView } from '@/components/courses/Pricing';
+import PricingBoard from '@/components/courses/schedule/PricingBoard';
 
 const TABS = [
   { label: '課表', query: 'schedule' },
@@ -12,11 +12,7 @@ const TABS = [
   { label: '費用', query: 'pricing' },
 ]
 
-export default function CoursesContent({
-  tiers,
-}: {
-  tiers: PricingTierView[];
-}) {
+export default function CoursesContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState(TABS[0].query);
@@ -30,6 +26,18 @@ export default function CoursesContent({
       router.push(`/courses?tab=${TABS[0].query}`);
     }
   }, [searchParams, router]);
+
+  // 從課表卡的「查看費用 →」跳轉過來時（/courses?tab=pricing#plan-id），
+  // 切到費用 tab 後把對應方案區塊捲入畫面。
+  useEffect(() => {
+    if (activeTab !== 'pricing') return;
+    const hash = window.location.hash.slice(1);
+    if (!hash) return;
+    const timer = setTimeout(() => {
+      document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+    return () => clearTimeout(timer);
+  }, [activeTab]);
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
@@ -57,7 +65,7 @@ export default function CoursesContent({
       </div>
       {activeTab === 'introduction' && <Introduction />}
       {activeTab === 'schedule' && <ScheduleBoard />}
-      {activeTab === 'pricing' && <Pricing tiers={tiers} />}
+      {activeTab === 'pricing' && <PricingBoard />}
     </>
   );
 }

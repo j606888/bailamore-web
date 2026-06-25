@@ -30,6 +30,8 @@ export interface Track {
   datesNote: string; // '共 6 堂・7月為最後 3 堂'
   dates: SessionDate[];
   location: string;
+  pricePlanId: string; // 對應 PRICE_PLANS 的 id
+  priceSummary: string; // 課表卡上顯示的一行費用摘要（各 track 金額不同）
 }
 
 // 每個 theme 對應一組完整字面 Tailwind class（讓 v4 JIT 掃得到），集中於此方便調色。
@@ -144,6 +146,8 @@ export const TRACKS: Track[] = [
       { label: '7/26', status: 'active' },
     ],
     location: TAINAN_LOCATION,
+    pricePlanId: 'card-plan',
+    priceSummary: '課卡制・單堂 $300 起',
   },
   {
     id: 'tainan-tue',
@@ -169,6 +173,8 @@ export const TRACKS: Track[] = [
       { label: '8/18', status: 'upcoming', note: '正式 5' },
     ],
     location: TAINAN_LOCATION,
+    pricePlanId: 'tuesday-plan',
+    priceSummary: '整期五堂 $2000・單堂 $450',
   },
   {
     id: 'kaohsiung-thu',
@@ -193,5 +199,96 @@ export const TRACKS: Track[] = [
       { label: '7/16', status: 'active' },
     ],
     location: KAOHSIUNG_LOCATION,
+    pricePlanId: 'card-plan',
+    priceSummary: '進階課卡・單堂 $350 起',
+  },
+];
+
+// ---- 費用方案（與課表共用顏色，方便客人對應）----
+
+export interface PriceOption {
+  name: string; // '單堂體驗' / '整期五堂'
+  price: number;
+}
+
+export interface PriceCourse {
+  name: string; // 'Bachata Lv1'
+  theme: ThemeKey; // 該課程所屬 track，決定 chip 顏色
+}
+
+export interface PriceTier {
+  title: string; // 'Lv1 課程'
+  subtitle?: string;
+  courses: PriceCourse[]; // 適用課程（chip，依 track 上色）
+  options: PriceOption[];
+}
+
+export interface PriceChip {
+  label: string; // '週日・台南'
+  theme: ThemeKey; // 決定 chip 顏色，與課表一致
+}
+
+export interface PricePlan {
+  id: string; // 錨點 id，對應 Track.pricePlanId
+  name: string; // '課卡方案'
+  chips: PriceChip[]; // 適用的「週X・城市」
+  tiers: PriceTier[];
+  note?: string;
+}
+
+export const PRICE_PLANS: PricePlan[] = [
+  {
+    id: 'card-plan',
+    name: '課卡方案',
+    chips: [
+      { label: '週日・台南', theme: 'tainanSun' },
+      { label: '週四・高雄', theme: 'kaohsiungThu' },
+    ],
+    tiers: [
+      {
+        title: 'Lv1 課程',
+        subtitle: '適合初學者的基礎課程',
+        courses: [
+          { name: 'Bachata Lv1', theme: 'tainanSun' },
+          { name: 'Salsa Lv1', theme: 'tainanSun' },
+        ],
+        options: [
+          { name: '單堂體驗', price: 300 },
+          { name: '6 堂課程', price: 1700 },
+        ],
+      },
+      {
+        title: 'Lv2・進階課程',
+        subtitle: '進階技巧與舞步',
+        courses: [
+          { name: 'Bachata 進階', theme: 'tainanSun' },
+          { name: 'Bachata Lv2', theme: 'tainanSun' },
+          { name: 'Bachata training', theme: 'kaohsiungThu' },
+          { name: 'Kizomba LV1', theme: 'kaohsiungThu' },
+        ],
+        options: [
+          { name: '單堂體驗', price: 350 },
+          { name: '6 堂課程', price: 2000 },
+        ],
+      },
+    ],
+    note: '*課卡可插班，未使用完畢可用於下一期。週日台南與週四高雄共用同一張課卡；高雄課程皆屬進階課卡。',
+  },
+  {
+    id: 'tuesday-plan',
+    name: '週二・新常態班（台南）',
+    chips: [{ label: '週二・台南', theme: 'tainanTue' }],
+    tiers: [
+      {
+        title: '新常態班 5 堂',
+        subtitle: '7/21 起連續五堂',
+        courses: [{ name: 'Bachata LV1', theme: 'tainanTue' }],
+        options: [
+          { name: '整期五堂', price: 2000 },
+          { name: '單堂報名', price: 450 },
+        ],
+      },
+    ],
+    note: '*新常態班為獨立方案，與課卡不通用。',
   },
 ];

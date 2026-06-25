@@ -1,5 +1,8 @@
 'use client'
 
+// ⚠️ 已停用：費用頁改用 src/components/courses/schedule/PricingBoard.tsx（寫死資料）。
+// 本檔保留 PricingTierView 型別與 DB 串接排版，供日後重新接回後台時參考。
+
 import React from 'react';
 
 export type PricingTierView = {

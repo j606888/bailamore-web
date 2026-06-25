@@ -109,8 +109,24 @@ export default function TrackCard({ track }: { track: Track }) {
         </div>
       </div>
 
+      {/* 費用摘要 */}
+      <div className="relative mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl bg-white/70 px-4 py-3">
+        <span className={cn('font-bold', theme.accentText)}>
+          💲 {track.priceSummary}
+        </span>
+        <a
+          href={`/courses?tab=pricing#${track.pricePlanId}`}
+          className={cn(
+            'text-sm font-medium underline-offset-2 hover:underline',
+            theme.accentText
+          )}
+        >
+          查看費用 →
+        </a>
+      </div>
+
       {/* 地點 */}
-      <div className="relative mt-6 flex items-start gap-1.5 text-sm text-[#2d3a5e] md:text-base">
+      <div className="relative mt-4 flex items-start gap-1.5 text-sm text-[#2d3a5e] md:text-base">
         <span aria-hidden>📍</span>
         <span className="font-medium">{track.location}</span>
       </div>
