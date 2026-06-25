@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Introduction from '@/components/courses/Introduction';
-import Schedule, { type SchedulePeriodView } from '@/components/courses/Schedule';
+import ScheduleBoard from '@/components/courses/schedule/ScheduleBoard';
 import Pricing, { type PricingTierView } from '@/components/courses/Pricing';
 
 const TABS = [
@@ -13,10 +13,8 @@ const TABS = [
 ]
 
 export default function CoursesContent({
-  periods,
   tiers,
 }: {
-  periods: SchedulePeriodView[];
   tiers: PricingTierView[];
 }) {
   const searchParams = useSearchParams();
@@ -58,7 +56,7 @@ export default function CoursesContent({
         ))}
       </div>
       {activeTab === 'introduction' && <Introduction />}
-      {activeTab === 'schedule' && <Schedule periods={periods} />}
+      {activeTab === 'schedule' && <ScheduleBoard />}
       {activeTab === 'pricing' && <Pricing tiers={tiers} />}
     </>
   );

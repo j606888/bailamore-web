@@ -1,5 +1,8 @@
 'use client'
 
+// ⚠️ 已停用：課表頁改用 src/components/courses/schedule/（寫死資料）。
+// 本檔保留 SchedulePeriodView 型別與 DB 串接邏輯，供日後重新接回後台時參考。
+
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 const WEEKDAY_FULL = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']

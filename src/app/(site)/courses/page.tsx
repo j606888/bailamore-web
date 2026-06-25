@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import CoursesContent from './CoursesContent';
-import { getSchedulePeriods, getPublishedPricingTiers } from '@/lib/queries';
-import type { SchedulePeriodView } from '@/components/courses/Schedule';
+// 課表（schedule）目前改用寫死資料（src/components/courses/schedule/data.ts），暫不接 DB。
+// getSchedulePeriods() 仍保留在 src/lib/queries.ts，日後可重新接回。
+import { getPublishedPricingTiers } from '@/lib/queries';
 import type { PricingTierView } from '@/components/courses/Pricing';
 
 // 課表內容由 DB 提供，存檔後以 revalidatePath('/courses') 即時更新。
@@ -19,21 +20,7 @@ export const metadata: Metadata = {
 };
 
 export default async function CoursesPage() {
-  const [periods, tiers] = await Promise.all([
-    getSchedulePeriods(),
-    getPublishedPricingTiers(),
-  ]);
-
-  const scheduleData: SchedulePeriodView[] = periods.map((p) => ({
-    id: p.id,
-    date: p.date.toISOString(),
-    courses: p.courses.map((c) => ({
-      startTime: c.startTime,
-      endTime: c.endTime,
-      name: c.name,
-      cardType: c.cardType,
-    })),
-  }));
+  const tiers = await getPublishedPricingTiers();
 
   const pricingData: PricingTierView[] = tiers.map((t) => ({
     id: t.id,
@@ -46,7 +33,7 @@ export default async function CoursesPage() {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <CoursesContent periods={scheduleData} tiers={pricingData} />
+      <CoursesContent tiers={pricingData} />
     </Suspense>
   );
 }
