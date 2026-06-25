@@ -93,25 +93,27 @@ const DANCE_STYLES: DanceStyle[] = [
 
 export default function Introduction() {
   return (
-    <div className="mx-auto flex max-w-2xl flex-col gap-8 px-4 py-8 md:gap-10 md:px-6 md:py-12">
-      <div className="flex flex-col gap-3">
-        <h2 className="font-poppins text-2xl font-bold text-[#2d3a5e] md:text-3xl">
-          舞蹈風格介紹
-        </h2>
-        <p className="text-sm text-gray-600 md:text-base">
-          我們開設 Bachata、Salsa、Kizomba 三種拉丁社交舞。先看看示範影片，感受一下每種舞在跳什麼，再挑一個最讓你心動的開始吧。
-        </p>
-        <div className="flex items-start gap-3 rounded-2xl border border-[#e8c9c3] bg-[#fbeae6] px-4 py-3.5">
-          <span className="text-xl leading-none" aria-hidden>✨</span>
-          <p className="text-sm text-[#2d3a5e] md:text-base">
-            <strong>沒有任何舞蹈經驗？</strong>從 <strong className="text-[#d4796e]">Bachata</strong> 開始最容易上手——節奏慢、動作直覺，第一堂課就能跳起來。
+    <div className="bg-[#faf0e1]">
+      <div className="mx-auto flex max-w-2xl flex-col gap-8 px-4 py-8 md:gap-10 md:px-6 md:py-12">
+        <div className="flex flex-col gap-3">
+          <h2 className="font-poppins text-2xl font-bold text-[#2d3a5e] md:text-3xl">
+            舞蹈風格介紹
+          </h2>
+          <p className="text-sm text-gray-600 md:text-base">
+            我們開設 Bachata、Salsa、Kizomba 三種拉丁社交舞。先看看示範影片，感受一下每種舞在跳什麼，再挑一個最讓你心動的開始吧。
           </p>
+          <div className="flex items-start gap-3 rounded-2xl border border-[#e8c9c3] bg-[#fbeae6] px-4 py-3.5">
+            <span className="text-xl leading-none" aria-hidden>✨</span>
+            <p className="text-sm text-[#2d3a5e] md:text-base">
+              <strong>沒有任何舞蹈經驗？</strong>從 <strong className="text-[#d4796e]">Bachata</strong> 開始最容易上手——節奏慢、動作直覺，第一堂課就能跳起來。
+            </p>
+          </div>
         </div>
-      </div>
 
-      {DANCE_STYLES.map((dance) => (
-        <DanceCard key={dance.id} dance={dance} />
-      ))}
+        {DANCE_STYLES.map((dance) => (
+          <DanceCard key={dance.id} dance={dance} />
+        ))}
+      </div>
     </div>
   );
 }
