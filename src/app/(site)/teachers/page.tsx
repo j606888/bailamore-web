@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { UserRound } from 'lucide-react';
 import { getPublishedTeachers } from '@/lib/queries';
+import SectionHeading from '@/components/SectionHeading';
 
 // 內容由 DB 提供，存檔後以 revalidatePath('/teachers') 即時更新；此處設時間型 ISR 作為保險。
 export const revalidate = 3600;
@@ -20,18 +20,69 @@ export const metadata: Metadata = {
 
 export default async function TeachersPage() {
   const teachers = await getPublishedTeachers();
+  // 第一位（sortOrder 最小）以橫幅大卡呈現，其餘排成等寬卡片列。
+  const [featured, ...rest] = teachers;
 
   return (
     <>
-      <div className="mx-auto px-3 py-6 flex flex-col gap-6 items-center justify-center md:px-6">
-        <div className='flex flex-col items-center'>
-          <h3 className='text-2xl font-bold md:text-4xl'>師資介紹</h3>
-          <p className='text-base md:text-lg'>認識我們團隊</p>
-        </div>
-        <div className='w-full flex flex-col gap-6 md:flex-row md:flex-wrap md:justify-center'>
-          {teachers.map((teacher) => (
-            <Link key={teacher.slug} href={`/teachers/${teacher.slug}`} className='w-full md:w-[350px] h-[350px] relative cursor-pointer group'>
-              <Image src={teacher.imageUrl} alt={teacher.name} fill className='object-cover rounded-lg' />
+      <div className="max-w-6xl mx-auto px-3 py-6 flex flex-col gap-6 items-center justify-center md:px-6 md:gap-8">
+        <SectionHeading
+          as='h1'
+          eyebrow='認識我們團隊'
+          title='師資介紹'
+          subtitle='四位老師、四種風格，陪你從第一步跳到舞池中央'
+          size='lg'
+          className='py-2 md:py-4'
+        />
+
+        {featured && (
+          <Link
+            href={`/teachers/${featured.slug}`}
+            className='w-full grid grid-cols-1 md:grid-cols-[minmax(0,420px)_1fr] rounded-xl overflow-hidden bg-white shadow-sm ring-1 ring-gray-200 transition-shadow duration-200 hover:shadow-lg group'
+          >
+            <div className='relative h-[280px] md:h-[360px]'>
+              <Image
+                src={featured.imageUrl}
+                alt={featured.name}
+                fill
+                priority
+                sizes='(min-width: 768px) 420px, 100vw'
+                className='object-cover'
+              />
+            </div>
+            <div className='flex flex-col justify-center gap-4 p-6 md:p-10'>
+              <h3 className='text-2xl font-bold md:text-3xl'>
+                {featured.name}
+                {featured.title && <span className='text-sm font-normal text-gray-500 md:text-base'>（{featured.title}）</span>}
+              </h3>
+              <div className='flex gap-2 flex-wrap'>
+                {featured.courses.map((item) => (
+                  <div key={item} className='text-xs text-white bg-teal-600 px-3 py-2 rounded-md'>{item}</div>
+                ))}
+              </div>
+              {featured.description[0] && (
+                <p className='text-sm text-gray-600 leading-relaxed line-clamp-3 md:text-base'>{featured.description[0]}</p>
+              )}
+              <span className='text-sm font-medium text-teal-600 group-hover:underline'>認識 {featured.name} →</span>
+            </div>
+          </Link>
+        )}
+
+        {/* 其餘老師：桌機三欄、平板兩欄、手機單欄，卡片等寬填滿容器。 */}
+        <div className='w-full grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'>
+          {rest.map((teacher) => (
+            <Link
+              key={teacher.slug}
+              href={`/teachers/${teacher.slug}`}
+              className='h-[350px] relative cursor-pointer group'
+            >
+              <Image
+                src={teacher.imageUrl}
+                alt={teacher.name}
+                fill
+                sizes='(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw'
+                className='object-cover rounded-lg'
+              />
               <div className='absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200 rounded-lg' />
               <div className='absolute bottom-3 left-3 right-3 bg-white/80 rounded-lg p-3'>
                 <h3 className='text-xl font-bold mb-1'>
@@ -45,13 +96,6 @@ export default async function TeachersPage() {
                 </div>
               </div>
             </Link>
-          ))}
-          {([{ role: '老師' }, { role: '助教' }, { role: '助教' }] as { role: string }[]).map(({ role }, i) => (
-            <div key={`coming-soon-${i}`} className='w-full md:w-[350px] h-[350px] bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center gap-3'>
-              <UserRound className='text-gray-300' size={80} />
-              <span className='text-xs font-medium px-3 py-1 rounded-full bg-teal-600/20 text-teal-700'>{role}</span>
-              <span className='text-gray-400 font-semibold text-lg'>即將加入</span>
-            </div>
           ))}
         </div>
       </div>
