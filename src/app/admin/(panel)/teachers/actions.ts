@@ -23,8 +23,9 @@ const splitParagraphs = (v: string) =>
     .map((s) => s.trim())
     .filter(Boolean)
 
-// 一行一個 URL，並把 watch / youtu.be 連結正規化為 embed
+// 一行一個 URL：YouTube 正規化為 embed，影片檔網址（Blob）原樣保留
 const normalizeYoutube = (url: string): string => {
+  if (!/^https?:\/\/([\w-]+\.)*(youtube\.com|youtu\.be)\//.test(url)) return url
   if (/youtube\.com\/embed\//.test(url)) return url
   const id =
     url.match(/[?&]v=([\w-]+)/)?.[1] ?? url.match(/youtu\.be\/([\w-]+)/)?.[1]

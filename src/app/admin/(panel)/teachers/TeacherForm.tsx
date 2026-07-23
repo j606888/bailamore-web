@@ -128,7 +128,7 @@ export default function TeacherForm({ teacher }: { teacher?: TeacherInput }) {
         />
       </Field>
 
-      <Field label="舞蹈展示 (YouTube)" htmlFor="videos" hint="一行一個連結，watch / youtu.be 連結會自動轉成 embed">
+      <Field label="舞蹈展示" htmlFor="videos" hint="一行一個連結。YouTube 會自動轉成 embed；Blob 影片檔網址（.mp4）則直接播放">
         <textarea
           id="videos"
           name="videos"

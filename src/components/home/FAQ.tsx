@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import SectionHeading from '@/components/SectionHeading';
 
 type FAQItem = {
   id: string;
@@ -88,9 +89,11 @@ const FAQ = ({ faqs }: { faqs: FAQItem[] }) => {
   return (
     <section className="py-8 bg-slate-50">
       <div className="max-w-4xl mx-auto px-4 md:px-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">
-          常見 Q&A
-        </h2>
+        <SectionHeading
+          eyebrow="報名前先看這裡"
+          title="常見 Q&A"
+          className="mb-8"
+        />
         <div className="flex flex-col gap-4">
           {faqs.map((faq) => (
             <FAQItem
