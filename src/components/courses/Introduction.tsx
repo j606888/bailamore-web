@@ -93,7 +93,7 @@ const DANCE_STYLES: DanceStyle[] = [
 
 export default function Introduction() {
   return (
-    <div className="bg-[#faf0e1]">
+    <div className="bg-white">
       <div className="mx-auto flex max-w-2xl flex-col gap-8 px-4 py-8 md:gap-10 md:px-6 md:py-12">
         <div className="flex flex-col gap-3">
           <h2 className="font-poppins text-2xl font-bold text-[#2d3a5e] md:text-3xl">

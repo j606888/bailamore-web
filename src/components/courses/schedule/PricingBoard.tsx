@@ -3,7 +3,7 @@ import { PRICE_PLANS, THEMES, type PricePlan, type PriceTier } from './data';
 
 export default function PricingBoard() {
   return (
-    <div className="bg-[#faf0e1]">
+    <div className="bg-white">
       <div className="mx-auto flex max-w-2xl flex-col gap-8 px-4 py-8 md:gap-10 md:px-6 md:py-12">
         <div className="flex flex-col">
           <h2 className="font-poppins text-2xl font-bold text-[#2d3a5e] md:text-3xl">
@@ -25,7 +25,7 @@ function PlanSection({ plan }: { plan: PricePlan }) {
   return (
     <section
       id={plan.id}
-      className="scroll-mt-20 overflow-hidden rounded-3xl bg-white shadow-sm"
+      className="scroll-mt-20 overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-gray-200"
     >
       {/* 標頭：方案名 + 適用課程彩色 chip */}
       <div className="flex flex-col gap-2 px-5 py-4 md:px-6 md:py-5">

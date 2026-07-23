@@ -41,7 +41,7 @@ export default function MonthOverview() {
       </div>
 
       {/* 月曆 */}
-      <div className="mt-5 rounded-2xl bg-white p-3 shadow-sm md:p-5">
+      <div className="mt-5 rounded-2xl bg-white p-3 shadow-sm ring-1 ring-gray-200 md:p-5">
         <div className="grid grid-cols-7 gap-1 md:gap-2">
           {WEEKDAYS.map((w, i) => (
             <div
