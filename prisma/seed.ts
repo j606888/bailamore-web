@@ -125,7 +125,7 @@ const TESTIMONIALS = [
   {
     name: '靜靜',
     title: '熟了後是吵吵女紙',
-    imageUrl: '/testimonials/jingjing.jpg',
+    imageUrl: '/testimonials/jingjing.png',
     danceStyle: 'Bachata & Salsa',
     content: [
       '你問我跳舞是什麼？大概就是「跳出自我，舞出自信」',
