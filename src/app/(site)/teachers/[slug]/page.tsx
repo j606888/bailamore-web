@@ -102,7 +102,7 @@ export default async function TeacherPage({ params }: { params: Promise<{ slug: 
                     src={video}
                     controls
                     playsInline
-                    preload="none"
+                    preload="metadata"
                   />
                 ) : (
                   <iframe
