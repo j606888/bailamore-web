@@ -10,6 +10,9 @@ export const revalidate = 3600;
 // 新增師資後無需重新 build 也能造訪（DB 即時）
 export const dynamicParams = true;
 
+// 影片檔（Vercel Blob 等）用 <video> 播放，其餘視為 YouTube embed
+const isFileVideo = (url: string) => /\.(mp4|mov|webm|m4v)(\?|$)/i.test(url);
+
 export async function generateStaticParams() {
   const teachers = await getPublishedTeacherSlugs();
   return teachers.map((t) => ({ slug: t.slug }));
@@ -83,24 +86,40 @@ export default async function TeacherPage({ params }: { params: Promise<{ slug: 
           ))}
         </div>
       </div>
-      <div className='w-full max-w-[350px]'>
-        <p className='text-[#373737] mb-2 font-bold'>舞蹈展示</p>
-        <div className='flex flex-wrap gap-2'>
-          {teacher.videos.map((video, index) => (
-            <div key={index} className="relative w-full" style={{ paddingBottom: '100%' }}>
-              <iframe
-                className="absolute top-0 left-0 w-full h-full"
-                src={video}
-                title="YouTube video player"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
-              ></iframe>
-            </div>
-          ))}
+      {teacher.videos.length > 0 && (
+        <div className='w-full max-w-[350px]'>
+          <p className='text-[#373737] mb-2 font-bold'>舞蹈展示</p>
+          <div className='flex flex-wrap gap-2'>
+            {teacher.videos.map((video, index) => (
+              // 上傳的影片多為直式（9:16），YouTube embed 維持正方形
+              <div
+                key={index}
+                className={`relative w-full bg-black rounded-lg overflow-hidden ${isFileVideo(video) ? 'aspect-[9/16]' : 'aspect-square'}`}
+              >
+                {isFileVideo(video) ? (
+                  <video
+                    className="absolute top-0 left-0 w-full h-full object-contain"
+                    src={video}
+                    controls
+                    playsInline
+                    preload="none"
+                  />
+                ) : (
+                  <iframe
+                    className="absolute top-0 left-0 w-full h-full"
+                    src={video}
+                    title="YouTube video player"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allowFullScreen
+                  ></iframe>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
