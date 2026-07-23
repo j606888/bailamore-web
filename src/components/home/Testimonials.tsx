@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { Quote } from 'lucide-react';
+import SectionHeading from '@/components/SectionHeading';
 
 type TestimonialType = {
   id: string;
@@ -14,26 +16,27 @@ type TestimonialType = {
 
 const Testimonial = ({ testimonial }: { testimonial: TestimonialType }) => {
   return (
-    <div className="bg-white border-1 rounded-sm border-gray-200 p-6 min-w-[300px] max-w-md h-[500px] md:w-[430px]">
-      <div className="flex flex-col items-center">
-        <div className="w-32 h-32 relative mb-4">
+    <div className="flex flex-col h-full bg-white rounded-xl p-6 min-w-[300px] max-w-md ring-1 ring-gray-200 shadow-sm transition-shadow duration-200 hover:shadow-md md:w-[430px] md:p-8">
+      <div className="flex flex-col items-center text-center">
+        <div className="w-24 h-24 relative mb-4">
           <Image
             src={testimonial.image}
             alt={testimonial.name}
             fill
-            className="rounded-full object-cover"
+            sizes="96px"
+            className="rounded-full object-cover ring-4 ring-teal-600/15"
           />
         </div>
-        <h3 className="text-2xl font-bold text-gray-900 mb-1">{testimonial.name}</h3>
-        <p className="text-gray-600 mb-2">{testimonial.title}</p>
-        <span className="text-xs font-medium px-3 py-1 rounded-full bg-teal-600/10 text-teal-700 mb-4">{testimonial.danceStyle} 學員</span>
-        <div className="space-y-4 text-center">
-          {testimonial.content.map((paragraph, index) => (
-            <p key={index} className="text-gray-700">
-              {paragraph}
-            </p>
-          ))}
-        </div>
+        <h3 className="text-xl font-bold text-gray-900">{testimonial.name}</h3>
+        <p className="text-sm text-gray-500">{testimonial.title}</p>
+        <span className="mt-3 text-xs font-medium px-3 py-1 rounded-full bg-teal-600/10 text-teal-700">{testimonial.danceStyle} 學員</span>
+      </div>
+      {/* 引號當作心得段落的起點，內文改左對齊以利長段閱讀 */}
+      <Quote className="mt-6 mb-3 shrink-0 text-teal-600/25 fill-teal-600/25" size={28} />
+      <div className="space-y-3 text-left text-sm text-gray-700 leading-relaxed md:text-base">
+        {testimonial.content.map((paragraph, index) => (
+          <p key={index}>{paragraph}</p>
+        ))}
       </div>
     </div>
   );
@@ -134,10 +137,13 @@ const Testimonials = ({ testimonials }: { testimonials: TestimonialType[] }) => 
   return (
     <section className="py-8 md:py-16">
       <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center md:text-3xl md:mb-8">
-          學生心得
-        </h2>
-        
+        <SectionHeading
+          eyebrow="真實學員回饋"
+          title="學生心得"
+          subtitle="從不敢下場，到自在享受每一支舞"
+          className="mb-8 md:mb-12"
+        />
+
         {/* Mobile Slider */}
         <div className="relative overflow-hidden md:hidden">
           <div 
