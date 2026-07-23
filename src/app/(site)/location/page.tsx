@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import React from 'react';
 import Image from 'next/image';
+import SectionHeading from '@/components/SectionHeading';
 
 const VIDEO_URL =
   'https://ikhr8fc3iglih52q.public.blob.vercel-storage.com/%E6%8C%87%E5%BC%95%28%E5%AD%97%E5%B9%95%29.mp4';
@@ -24,15 +25,14 @@ export default function LocationPage() {
   return (
     <div className='mx-auto px-3 py-6 flex flex-col gap-8 items-center justify-center md:px-6 md:max-w-4xl'>
       {/* 頁首 */}
-      <div className='flex flex-col items-center text-center'>
-        <p className='text-sm font-semibold tracking-widest text-teal-600 md:text-base'>
-          全新據點・丁宅
-        </p>
-        <h3 className='text-2xl font-bold md:text-4xl'>教室位置</h3>
-        <p className='text-base text-gray-600 md:text-lg'>
-          Baila&apos;more 上課地點
-        </p>
-      </div>
+      <SectionHeading
+        as='h1'
+        size='lg'
+        eyebrow='全新據點・丁宅'
+        title='教室位置'
+        subtitle="Baila'more 上課地點"
+        className='py-2 md:py-4'
+      />
 
       {/* 入口照片：認門 */}
       <div className='w-full flex flex-col gap-3'>

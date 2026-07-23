@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Introduction from '@/components/courses/Introduction';
 import ScheduleBoard from '@/components/courses/schedule/ScheduleBoard';
 import PricingBoard from '@/components/courses/schedule/PricingBoard';
+import SectionHeading from '@/components/SectionHeading';
 
 const TABS = [
   { label: '課表', query: 'schedule' },
@@ -46,13 +47,16 @@ export default function CoursesContent() {
 
   return (
     <>
-      <div className="mx-auto py-10 flex flex-col items-center justify-center bg-gray-100 md:items-start md:px-6">
-        <h1 className="font-poppins text-2xl font-bold">課程資訊</h1>
-        <p className="font-poppins text-base">
-          了解我們的舞蹈風格、課表時間和費用
-        </p>
+      <div className="w-full px-4 py-10 flex flex-col items-center justify-center md:px-6">
+        <SectionHeading
+          as="h1"
+          size="lg"
+          eyebrow="課表・費用・風格"
+          title="課程資訊"
+          subtitle="了解我們的舞蹈風格、課表時間和費用"
+        />
       </div>
-      <div className="flex px-3 border-b border-[#E3E3E3] md:px-6">
+      <div className="flex justify-center px-3 border-b border-[#E3E3E3] md:px-6">
         {TABS.map(tab => (
           <div
             key={tab.query}

@@ -1,13 +1,16 @@
 import Image from 'next/image';
+import SectionHeading from '@/components/SectionHeading';
 
 const WhoWeAre = () => {
   return (
     <section className="py-8 bg-slate-50 md:py-16 ">
       <div className="md:flex md:flex-row-reverse md:max-w-7xl md:mx-auto">
         <div className="mx-auto px-5 mb-4 md:flex md:flex-col md:justify-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center md:text-left md:text-3xl">
-            我們是誰
-          </h2>
+          <SectionHeading
+            eyebrow="關於 Baila'more"
+            title="我們是誰"
+            className="mb-4"
+          />
           <div className="space-y-4 text-base text-gray-700">
             <p>
               我們是 Baila’more Studio，一群愛跳舞的朋友，現在也是一間想把熱情傳出去的舞蹈教室！
