@@ -42,10 +42,14 @@ export const TEACHERS: Teacher[] = [
     slug: 'dingding',
     name: '丁丁',
     imageUrl: '/teachers/dingding.jpg',
-    skills: [],
+    instagram: 'damn.dingding',
+    skills: ['Bachata', 'Salsa', 'Zouk'],
     courses: ['Bachata Lv1'],
-    description: ['（老師簡介即將更新）'], // TODO: 補上丁丁的簡介
-    videos: [],
+    description: ['嗨嗨，我是丁丁，我超愛跳 Salsa'], // TODO: 補上丁丁的簡介
+    videos: [
+      'https://ikhr8fc3iglih52q.public.blob.vercel-storage.com/ding-1.mp4',
+      'https://ikhr8fc3iglih52q.public.blob.vercel-storage.com/ding-2.mp4',
+    ],
     sortOrder: 1,
     published: true,
   },
@@ -53,10 +57,14 @@ export const TEACHERS: Teacher[] = [
     slug: 'charlene',
     name: 'Charlene',
     imageUrl: '/teachers/Charlene.jpg',
-    skills: [],
+    instagram: 'baila.with.char',
+    skills: ['Bachata'],
     courses: ['Bachata Lv1'],
-    description: ['（老師簡介即將更新）'], // TODO: 補上 Charlene 的簡介
-    videos: [],
+    description: ['（她還有想到要打什麼）'], // TODO: 補上 Charlene 的簡介
+    videos: [
+      'https://ikhr8fc3iglih52q.public.blob.vercel-storage.com/charlene-1.mp4',
+      'https://ikhr8fc3iglih52q.public.blob.vercel-storage.com/charlene-2.mp4',
+    ],
     sortOrder: 2,
     published: true,
   },
@@ -64,7 +72,8 @@ export const TEACHERS: Teacher[] = [
     slug: 'nini',
     name: 'Nini',
     imageUrl: '/teachers/Nini.png',
-    skills: [],
+    instagram: 'jessaminni',
+    skills: ['Bachata', 'Salsa'],
     courses: ['單人 Salsa'],
     description: ['（老師簡介即將更新）'], // TODO: 補上 Nini 的簡介
     videos: [],

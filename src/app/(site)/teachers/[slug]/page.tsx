@@ -50,12 +50,12 @@ export default async function TeacherPage({ params }: { params: Promise<{ slug: 
         <div className='relative w-[92px] h-[92px] md:w-[180px] md:h-[180px]'>
           <Image src={teacher.imageUrl} alt={teacher.name} fill className='object-cover rounded-full' />
         </div>
-        <div className='flex flex-col gap-1.5'>
+        <div className='flex flex-col gap-1.5 md:items-center'>
           <div className='flex items-baseline gap-1'>
             <h2 className='text-2xl font-bold md:text-4xl'>{teacher.name}</h2>
             {teacher.title && <span className='text-sm text-gray-500 font-bold md:text-xl'>({teacher.title})</span>}
           </div>
-          <div className='flex flex-wrap gap-2'>
+          <div className='flex flex-wrap gap-2 md:justify-center'>
             {teacher.skills.map((skill) => (
               <div key={skill} className='text-xs text-white bg-teal-600 px-2 py-1 rounded-2xl md:text-base md:px-4 md:py-1 md:rounded-3xl'>{skill}</div>
             ))}
