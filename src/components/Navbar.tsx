@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { LINKS } from '@/constants/links'
 import Image from 'next/image';
+import IGIcon from '@/components/icons/IGIcon';
 import { Button } from './ui/button';
 
 const NAV_LINKS = [
@@ -58,15 +59,10 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
-            <Link href={LINKS.LINE} target="_blank" rel="noopener noreferrer">
+            <Link href={LINKS.INSTAGRAM_DM} target="_blank" rel="noopener noreferrer">
               <Button className="ml-2 cursor-pointer">
-                <Image
-                  src="/icons/line.svg"
-                  alt="line"
-                  width={24}
-                  height={24}
-                />
-                立即報名
+                <IGIcon className="w-6 h-6" color="#ffffff" />
+                IG 私訊報名
               </Button>
             </Link>
           </div>
@@ -98,15 +94,10 @@ const Navbar = () => {
               {link.name}
             </Link>
           ))}
-          <Link href={LINKS.LINE} target="_blank" rel="noopener noreferrer">
+          <Link href={LINKS.INSTAGRAM_DM} target="_blank" rel="noopener noreferrer">
             <Button className="mt-3">
-              <Image
-                src="/icons/line.svg"
-                alt="line"
-                width={24}
-                height={24}
-              />
-              立即報名
+              <IGIcon className="w-6 h-6" color="#ffffff" />
+              IG 私訊報名
             </Button>
           </Link>
         </div>

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import IGIcon from "@/components/icons/IGIcon";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { LINKS } from "@/constants/links";
@@ -19,10 +19,10 @@ const Hero = ({ videoUrl }: { videoUrl: string }) => {
           Bachata，說不定你會愛上。
         </p>
         <div className="flex flex-wrap gap-4">
-          <Link href={LINKS.LINE} target="_blank" rel="noopener noreferrer">
+          <Link href={LINKS.INSTAGRAM_DM} target="_blank" rel="noopener noreferrer">
             <Button size="lg" className="hover:cursor-pointer">
-              <Image src="/icons/line.svg" alt="line" width={24} height={24} />
-              立即報名
+              <IGIcon className="w-6 h-6" color="#ffffff" />
+              IG 私訊報名
             </Button>
           </Link>
           <Link href="/courses?tab=pricing">

@@ -28,13 +28,13 @@ const Footer = () => {
           <div className="flex flex-col gap-3">
             <h3 className="text-sm font-semibold text-gray-200 uppercase tracking-wider">聯絡我們</h3>
             <div className="flex flex-col gap-2 text-sm">
+              <a href={LINKS.INSTAGRAM_DM} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors">
+                <Image src="/icons/instagram.svg" alt="Instagram" width={20} height={20} />
+                Instagram 報名 / 諮詢
+              </a>
               <a href={LINKS.LINE} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors">
                 <Image src="/icons/line.svg" alt="LINE" width={20} height={20} />
-                LINE 報名 / 諮詢
-              </a>
-              <a href="https://www.instagram.com/baila_moredancestudio" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors">
-                <Image src="/icons/instagram.svg" alt="Instagram" width={20} height={20} />
-                Instagram
+                LINE
               </a>
               <p className="text-gray-400 mt-1">台南市北區長北街71號</p>
             </div>

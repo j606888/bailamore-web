@@ -14,7 +14,7 @@ export const FAQS: Faq[] = [
     id: 'how-to-register',
     question: '如何報名課程',
     answer:
-      '加入 [Line 官方帳號](https://line.me/R/ti/p/@bailamore)，直接私訊 Sean 即可。\n\n如果想要先體驗的話也可以直接在課程時間來到教室。',
+      '透過 [Instagram 私訊](https://ig.me/m/baila_moredancestudio)我們即可完成報名。\n\n如果想要先體驗的話也可以直接在課程時間來到教室。',
     sortOrder: 0,
     published: true,
   },
@@ -68,7 +68,7 @@ export const FAQS: Faq[] = [
     id: 'location',
     question: '課程地點在哪裡？如何前往？',
     answer:
-      '上課地點在台南市，詳細地址與地圖請參考[地點頁面](/location)。\n\n有任何交通上的問題歡迎直接透過 LINE 詢問。',
+      '上課地點在台南市，詳細地址與地圖請參考[地點頁面](/location)。\n\n有任何交通上的問題歡迎直接透過 Instagram 私訊詢問。',
     sortOrder: 7,
     published: true,
   },
