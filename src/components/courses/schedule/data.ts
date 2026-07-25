@@ -12,8 +12,26 @@ export interface TimeSlot {
 
 export interface SessionDate {
   label: string; // "7/5"
-  status: SessionStatus;
-  note?: string; // "體驗課" / "正式 1" / "已結束"
+  note?: string; // "體驗課" / "正式 1"
+  upcoming?: boolean; // 下一期（尚未開放/預告）場次，顯示為淡色
+}
+
+// 場次是否已結束由「真實日期」決定，不寫死。
+// label 只有月/日，年份一律取 MONTH.year（目前課表不跨年）。
+export function getSessionStatus(
+  date: SessionDate,
+  now: Date = new Date()
+): SessionStatus {
+  if (date.upcoming) return 'upcoming';
+
+  const [month, day] = date.label.split('/').map(Number);
+  if (!month || !day) return 'active';
+
+  const sessionDay = new Date(MONTH.year, month - 1, day);
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  // 當天仍算進行中，隔天才標記為已結束
+  return sessionDay < today ? 'done' : 'active';
 }
 
 export interface Track {
@@ -141,12 +159,12 @@ export const TRACKS: Track[] = [
     datesTitle: '本期場次',
     datesNote: '共 6 堂・橫跨 8–9 月',
     dates: [
-      { label: '8/9', status: 'active' },
-      { label: '8/23', status: 'active' },
-      { label: '8/30', status: 'active' },
-      { label: '9/13', status: 'upcoming' },
-      { label: '9/20', status: 'upcoming' },
-      { label: '9/27', status: 'upcoming' },
+      { label: '8/9' },
+      { label: '8/23' },
+      { label: '8/30' },
+      { label: '9/13' },
+      { label: '9/20' },
+      { label: '9/27' },
     ],
     location: TAINAN_LOCATION,
     pricePlanId: 'card-plan',
@@ -168,12 +186,11 @@ export const TRACKS: Track[] = [
     datesTitle: '場次',
     datesNote: '正式課至 8/18 結束・共 5 堂',
     dates: [
-      { label: '7/7', status: 'done', note: '已結束' },
-      { label: '7/21', status: 'done', note: '已結束' },
-      { label: '7/28', status: 'done', note: '已結束' },
-      { label: '8/4', status: 'active', note: '正式 3' },
-      { label: '8/11', status: 'active', note: '正式 4' },
-      { label: '8/18', status: 'active', note: '正式 5' },
+      { label: '7/21', note: '第一堂' },
+      { label: '7/28', note: '第二堂' },
+      { label: '8/4', note: '第三堂' },
+      { label: '8/11', note: '第四堂' },
+      { label: '8/18', note: '第五堂' },
     ],
     location: TAINAN_LOCATION,
     pricePlanId: 'tuesday-plan',
@@ -194,10 +211,10 @@ export const TRACKS: Track[] = [
     datesTitle: '本期場次',
     datesNote: '共 4 堂・每週四',
     dates: [
-      { label: '8/6', status: 'active' },
-      { label: '8/13', status: 'active' },
-      { label: '8/20', status: 'active' },
-      { label: '8/27', status: 'active' },
+      { label: '8/6' },
+      { label: '8/13' },
+      { label: '8/20' },
+      { label: '8/27' },
     ],
     location: KAOHSIUNG_LOCATION,
     pricePlanId: 'card-plan',

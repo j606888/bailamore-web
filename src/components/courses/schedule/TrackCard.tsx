@@ -1,9 +1,16 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { THEMES, type Track } from './data';
+import { getSessionStatus, THEMES, type SessionStatus, type Track } from './data';
 
 export default function TrackCard({ track }: { track: Track }) {
   const theme = THEMES[track.theme];
   const weekdayEn = track.sessionLabelEn.slice(0, 3);
+  // 頁面是預先產生的靜態 HTML，build 當下的日期會過期；
+  // 掛載後再用瀏覽器當下時間重算「已結束」狀態，避免 hydration mismatch。
+  const [now, setNow] = useState<Date | null>(null);
+  useEffect(() => setNow(new Date()), []);
 
   return (
     <section
@@ -102,6 +109,7 @@ export default function TrackCard({ track }: { track: Track }) {
             <DateChip
               key={d.label}
               date={d}
+              status={now ? getSessionStatus(d, now) : d.upcoming ? 'upcoming' : 'active'}
               weekdayEn={weekdayEn}
               accentBg={theme.accentBg}
             />
@@ -136,15 +144,17 @@ export default function TrackCard({ track }: { track: Track }) {
 
 function DateChip({
   date,
+  status,
   weekdayEn,
   accentBg,
 }: {
   date: Track['dates'][number];
+  status: SessionStatus;
   weekdayEn: string;
   accentBg: string;
 }) {
-  const isDone = date.status === 'done';
-  const isUpcoming = date.status === 'upcoming';
+  const isDone = status === 'done';
+  const isUpcoming = status === 'upcoming';
   const bar = isDone || isUpcoming ? 'bg-gray-300' : accentBg;
 
   return (
@@ -171,9 +181,9 @@ function DateChip({
         >
           {date.label}
         </span>
-        {date.note && (
+        {(isDone || date.note) && (
           <span className="mt-0.5 text-[10px] leading-tight text-gray-500 md:text-xs">
-            {date.note}
+            {isDone ? '已結束' : date.note}
           </span>
         )}
       </div>
