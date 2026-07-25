@@ -11,14 +11,6 @@ export interface Faq {
 
 export const FAQS: Faq[] = [
   {
-    id: 'how-to-register',
-    question: '如何報名課程',
-    answer:
-      '透過 [Instagram 私訊](https://ig.me/m/baila_moredancestudio)我們即可完成報名。\n\n如果想要先體驗的話也可以直接在課程時間來到教室。',
-    sortOrder: 0,
-    published: true,
-  },
-  {
     id: 'no-experience',
     question: '沒有舞蹈經驗可以嗎？',
     answer: '當然可以！不管什麼年齡或是有無經驗都非常適合來學習 Bachata & Salsa。',
@@ -30,6 +22,14 @@ export const FAQS: Faq[] = [
     question: '沒有舞伴可以嗎？',
     answer: '可以的！上課中舞伴是會不斷輪替的不用擔心沒有人可以練習。',
     sortOrder: 2,
+    published: true,
+  },
+  {
+    id: 'how-long-to-learn',
+    question: '大概多久能學會？',
+    answer:
+      '一般來說，上了幾堂 LV1 課程後就能掌握基本步伐，跟著音樂跳出基本感覺。\n\n社交舞沒有真正的「學完」，每次跳都會有新的體會。重要的是享受過程，很多學員從第一堂課就開始享受跳舞的樂趣！',
+    sortOrder: 6,
     published: true,
   },
   {
@@ -48,38 +48,7 @@ export const FAQS: Faq[] = [
     sortOrder: 4,
     published: true,
   },
-  {
-    id: 'what-to-wear',
-    question: '上課需要穿什麼？',
-    answer:
-      '穿著舒適、方便活動的服裝即可，沒有嚴格限制。\n\n鞋子建議穿有跟的舞鞋或是底部較平滑的室內鞋，避免厚底球鞋，以免影響腳步練習。如果沒有舞鞋，第一次來穿一般平底鞋也完全沒問題。',
-    sortOrder: 5,
-    published: true,
-  },
-  {
-    id: 'how-long-to-learn',
-    question: '大概多久能學會？',
-    answer:
-      '一般來說，上了幾堂 LV1 課程後就能掌握基本步伐，跟著音樂跳出基本感覺。\n\n社交舞沒有真正的「學完」，每次跳都會有新的體會。重要的是享受過程，很多學員從第一堂課就開始享受跳舞的樂趣！',
-    sortOrder: 6,
-    published: true,
-  },
-  {
-    id: 'location',
-    question: '課程地點在哪裡？如何前往？',
-    answer:
-      '我們有兩個上課據點：[台南教室](/location/tainan)（中西區，每週日、週二）與[高雄教室](/location/kaohsiung)（三民區，每週四）。\n\n詳細地址、地圖與交通指引請參考[地點頁面](/location)。有任何交通上的問題歡迎直接透過 Instagram 私訊詢問。',
-    sortOrder: 7,
-    published: true,
-  },
-  {
-    id: 'kaohsiung',
-    question: '高雄有開課嗎？',
-    answer:
-      '有的！高雄每週四晚上 19:30 起在三民區大昌二路的 Social hub 固定開課，內容是 Bachata training 與 Kizomba LV1，21:30 之後還有 mini social 可以自由練習。\n\n課卡與台南通用，兩邊都能上。詳情請看[高雄教室頁面](/location/kaohsiung)。',
-    sortOrder: 8,
-    published: true,
-  },
+  
 ];
 
 export function getPublishedFaqs(): Faq[] {
