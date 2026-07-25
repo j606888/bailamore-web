@@ -1,5 +1,9 @@
 // 八月課表的單一資料來源。新增/編輯 track、場次、月曆 highlight 只要改這裡。
 // 目前完全寫死、未接後台；樣式確定後再接回 Prisma（見 src/lib/queries.ts）。
+//
+// 地址不寫在這裡：據點資料集中於 src/data/venues.ts，track 只存 venueSlug。
+
+import type { VenueSlug } from '@/data/venues';
 
 export type ThemeKey = 'tainanSun' | 'tainanTue' | 'kaohsiungThu';
 
@@ -38,7 +42,7 @@ export interface Track {
   id: string; // 錨點 id，例如 'tainan-sun'
   theme: ThemeKey;
   cityEn: string; // 'TAINAN'
-  cityZh: string; // '臺南教室'
+  cityZh: string; // '台南教室'
   sessionLabelEn: string; // 'SUNDAY' （圓章顯示 SUNDAY / SESSIONS）
   dayZh: string; // '週日'
   badge?: string; // 'NEW 新常態班'
@@ -47,7 +51,7 @@ export interface Track {
   datesTitle: string; // '本期場次' / '場次'
   datesNote: string; // '共 6 堂・7月為最後 3 堂'
   dates: SessionDate[];
-  location: string;
+  venueSlug: VenueSlug; // 對應 src/data/venues.ts 的據點
   pricePlanId: string; // 對應 PRICE_PLANS 的 id
   priceSummary: string; // 課表卡上顯示的一行費用摘要（各 track 金額不同）
 }
@@ -88,9 +92,6 @@ export const THEMES: Record<ThemeKey, ThemeStyle> = {
     blob: 'bg-[#c7e36a]',
   },
 };
-
-const TAINAN_LOCATION = '臺南市中西區民族路二段57巷5號（萬昌起義對面・丁宅45號）';
-const KAOHSIUNG_LOCATION = '高雄市三民區大昌二路67號 3樓之2（social hub）';
 
 export interface MonthConfig {
   year: number;
@@ -145,7 +146,7 @@ export const TRACKS: Track[] = [
     id: 'tainan-sun',
     theme: 'tainanSun',
     cityEn: 'TAINAN',
-    cityZh: '臺南教室',
+    cityZh: '台南教室',
     sessionLabelEn: 'SUNDAY',
     dayZh: '週日',
     badge: 'NEW Salsa 老師',
@@ -166,7 +167,7 @@ export const TRACKS: Track[] = [
       { label: '9/20' },
       { label: '9/27' },
     ],
-    location: TAINAN_LOCATION,
+    venueSlug: 'tainan',
     pricePlanId: 'card-plan',
     priceSummary: '課卡制・單堂 $350・6 堂 $2000',
   },
@@ -174,7 +175,7 @@ export const TRACKS: Track[] = [
     id: 'tainan-tue',
     theme: 'tainanTue',
     cityEn: 'TAINAN',
-    cityZh: '臺南教室',
+    cityZh: '台南教室',
     sessionLabelEn: 'TUESDAY',
     dayZh: '週二',
     badge: 'NEW 新常態班',
@@ -192,7 +193,7 @@ export const TRACKS: Track[] = [
       { label: '8/11', note: '第四堂' },
       { label: '8/18', note: '第五堂' },
     ],
-    location: TAINAN_LOCATION,
+    venueSlug: 'tainan',
     pricePlanId: 'tuesday-plan',
     priceSummary: '整期五堂 $2000・單堂 $450',
   },
@@ -216,11 +217,16 @@ export const TRACKS: Track[] = [
       { label: '8/20' },
       { label: '8/27' },
     ],
-    location: KAOHSIUNG_LOCATION,
+    venueSlug: 'kaohsiung',
     pricePlanId: 'card-plan',
     priceSummary: '課卡制・單堂 $350・6 堂 $2000',
   },
 ];
+
+/** 取得某個據點的所有課程 track（據點頁用來列出該城市的課表）。 */
+export function getTracksByVenue(slug: VenueSlug): Track[] {
+  return TRACKS.filter((t) => t.venueSlug === slug);
+}
 
 // ---- 費用方案（與課表共用顏色，方便客人對應）----
 

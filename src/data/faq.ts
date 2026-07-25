@@ -68,8 +68,16 @@ export const FAQS: Faq[] = [
     id: 'location',
     question: '課程地點在哪裡？如何前往？',
     answer:
-      '上課地點在台南市，詳細地址與地圖請參考[地點頁面](/location)。\n\n有任何交通上的問題歡迎直接透過 Instagram 私訊詢問。',
+      '我們有兩個上課據點：[台南教室](/location/tainan)（中西區，每週日、週二）與[高雄教室](/location/kaohsiung)（三民區，每週四）。\n\n詳細地址、地圖與交通指引請參考[地點頁面](/location)。有任何交通上的問題歡迎直接透過 Instagram 私訊詢問。',
     sortOrder: 7,
+    published: true,
+  },
+  {
+    id: 'kaohsiung',
+    question: '高雄有開課嗎？',
+    answer:
+      '有的！高雄每週四晚上 19:30 起在三民區大昌二路的 Social hub 固定開課，內容是 Bachata training 與 Kizomba LV1，21:30 之後還有 mini social 可以自由練習。\n\n課卡與台南通用，兩邊都能上。詳情請看[高雄教室頁面](/location/kaohsiung)。',
+    sortOrder: 8,
     published: true,
   },
 ];

@@ -1,16 +1,17 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { LINKS } from '@/constants/links'
+import { VENUES } from '@/data/venues'
 
 const Footer = () => {
   return (
     <footer className="bg-gray-700 text-gray-300">
       <div className="px-6 py-10 md:max-w-7xl md:mx-auto">
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div className="flex flex-col gap-3">
             <Image src="/Logo.svg" alt="Baila'more" width={120} height={40} className="brightness-0 invert" />
-            <p className="text-sm text-gray-400">台南市的專業拉丁舞教室</p>
+            <p className="text-sm text-gray-400">台南・高雄的專業拉丁舞教室</p>
           </div>
 
           {/* Quick Links */}
@@ -36,7 +37,26 @@ const Footer = () => {
                 <Image src="/icons/line.svg" alt="LINE" width={20} height={20} />
                 LINE
               </a>
-              <p className="text-gray-400 mt-1">台南市北區長北街71號</p>
+            </div>
+          </div>
+
+          {/* 上課據點：地址以 src/data/venues.ts 為單一來源，避免站內地址不一致 */}
+          <div className="flex flex-col gap-3">
+            <h3 className="text-sm font-semibold text-gray-200 uppercase tracking-wider">上課據點</h3>
+            <div className="flex flex-col gap-3 text-sm">
+              {VENUES.map((venue) => (
+                <Link
+                  key={venue.slug}
+                  href={`/location/${venue.slug}`}
+                  className="flex flex-col gap-0.5 hover:text-white transition-colors"
+                >
+                  <span className="font-semibold">
+                    {venue.city}{venue.district}
+                    <span className="ml-1 font-normal text-gray-400">・{venue.shortName}</span>
+                  </span>
+                  <span className="text-gray-400">{venue.addressFull}</span>
+                </Link>
+              ))}
             </div>
           </div>
         </div>

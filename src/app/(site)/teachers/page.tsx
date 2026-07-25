@@ -7,10 +7,11 @@ import SectionHeading from '@/components/SectionHeading';
 
 export const metadata: Metadata = {
   title: '師資介紹',
-  description: "認識 Baila'more 的舞蹈老師團隊。專業拉丁舞教學，陪伴你從零開始學習 Bachata 與 Salsa。",
+  description: "認識 Baila'more 的舞蹈老師團隊。台南與高雄的專業拉丁舞教學，陪伴你從零開始學習 Bachata 與 Salsa。",
+  alternates: { canonical: '/teachers' },
   openGraph: {
     title: "師資介紹 | Baila'more",
-    description: "認識 Baila'more 的舞蹈老師團隊。專業拉丁舞教學，陪伴你從零開始學習 Bachata 與 Salsa。",
+    description: "認識 Baila'more 的舞蹈老師團隊。台南與高雄的專業拉丁舞教學，陪伴你從零開始學習 Bachata 與 Salsa。",
     url: '/teachers',
   },
 };

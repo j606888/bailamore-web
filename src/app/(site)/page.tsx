@@ -3,16 +3,23 @@ import Hero from '@/components/home/Hero';
 import WhoWeAre from '@/components/home/WhoWeAre';
 import Testimonials from '@/components/home/Testimonials';
 import FAQ from '@/components/home/FAQ';
+import JsonLd from '@/components/JsonLd';
 import { getPublishedTestimonials } from '@/data/testimonials';
 import { getPublishedFaqs } from '@/data/faq';
 import { HERO_VIDEO_URL } from '@/data/site';
+import { faqPageJsonLd } from '@/lib/jsonLd';
+
+const HOME_DESCRIPTION =
+  '台南・高雄的 Bachata & Salsa 社交舞教室。台南每週日、週二，高雄每週四定期開課，零基礎歡迎、不需舞伴即可報名。';
 
 export const metadata: Metadata = {
-  title: "Baila'more 拉丁舞教室",
-  description: "台南 Bachata & Salsa 社交舞教室。不需舞伴、零基礎歡迎，每週日於台南定期開課。",
+  // 用 absolute 避開 layout 的 "%s | Baila'more" template，否則品牌名會出現兩次
+  title: { absolute: "Baila'more｜台南・高雄拉丁舞教室 Bachata & Salsa" },
+  description: HOME_DESCRIPTION,
+  alternates: { canonical: '/' },
   openGraph: {
-    title: "Baila'more 拉丁舞教室",
-    description: "台南 Bachata & Salsa 社交舞教室。不需舞伴、零基礎歡迎，每週日於台南定期開課。",
+    title: "Baila'more｜台南・高雄拉丁舞教室 Bachata & Salsa",
+    description: HOME_DESCRIPTION,
     url: '/',
   },
 };
@@ -27,7 +34,8 @@ export default function Home() {
     danceStyle: t.danceStyle,
   }));
 
-  const faqsData = getPublishedFaqs().map((f) => ({
+  const faqs = getPublishedFaqs();
+  const faqsData = faqs.map((f) => ({
     id: f.id,
     question: f.question,
     answer: f.answer,
@@ -35,6 +43,7 @@ export default function Home() {
 
   return (
     <>
+      <JsonLd data={faqPageJsonLd(faqs)} />
       <Hero videoUrl={HERO_VIDEO_URL} />
       <WhoWeAre />
       <Testimonials testimonials={testimonialsData} />

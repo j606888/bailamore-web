@@ -4,7 +4,9 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import IGIcon from '@/components/icons/IGIcon';
+import JsonLd from '@/components/JsonLd';
 import { getPublishedTeacherSlugs, getTeacherBySlug } from '@/data/teachers';
+import { breadcrumbJsonLd, teacherJsonLd } from '@/lib/jsonLd';
 
 // 老師資料為靜態，僅預先產生已存在的頁面
 export const dynamicParams = false;
@@ -24,6 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `${teacher.name}${teacher.title ? `（${teacher.title}）` : ''}`,
     description: desc,
+    alternates: { canonical: `/teachers/${slug}` },
     openGraph: {
       title: `${teacher.name} — 師資介紹 | Baila'more`,
       description: desc,
@@ -42,6 +45,16 @@ export default async function TeacherPage({ params }: { params: Promise<{ slug: 
 
   return (
     <div className="mx-auto px-3 py-6 flex flex-col gap-6 justify-center md:max-w-3xl md:gap-9">
+      <JsonLd
+        data={[
+          teacherJsonLd(teacher),
+          breadcrumbJsonLd([
+            { name: '首頁', path: '/' },
+            { name: '師資介紹', path: '/teachers' },
+            { name: teacher.name, path: `/teachers/${teacher.slug}` },
+          ]),
+        ]}
+      />
       <Link href="/teachers" className='text-sm text-[#4B5563] underline flex items-center gap-1'>
         <Image src="/icons/chevron-left.svg" alt="chevron-left" width={16} height={16} />
         返回教師列表
@@ -52,7 +65,7 @@ export default async function TeacherPage({ params }: { params: Promise<{ slug: 
         </div>
         <div className='flex flex-col gap-1.5 md:items-center'>
           <div className='flex items-baseline gap-1'>
-            <h2 className='text-2xl font-bold md:text-4xl'>{teacher.name}</h2>
+            <h1 className='text-2xl font-bold md:text-4xl'>{teacher.name}</h1>
             {teacher.title && <span className='text-sm text-gray-500 font-bold md:text-xl'>({teacher.title})</span>}
           </div>
           <div className='flex flex-wrap gap-2 md:justify-center'>

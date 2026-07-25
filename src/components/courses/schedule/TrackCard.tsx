@@ -1,11 +1,14 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
+import { getVenue } from '@/data/venues';
 import { getSessionStatus, THEMES, type SessionStatus, type Track } from './data';
 
 export default function TrackCard({ track }: { track: Track }) {
   const theme = THEMES[track.theme];
+  const venue = getVenue(track.venueSlug);
   const weekdayEn = track.sessionLabelEn.slice(0, 3);
   // 頁面是預先產生的靜態 HTML，build 當下的日期會過期；
   // 掛載後再用瀏覽器當下時間重算「已結束」狀態，避免 hydration mismatch。
@@ -133,10 +136,18 @@ export default function TrackCard({ track }: { track: Track }) {
         </a>
       </div>
 
-      {/* 地點 */}
+      {/* 地點：連到該據點頁，順便把權重導過去 */}
       <div className="relative mt-4 flex items-start gap-1.5 text-sm text-[#2d3a5e] md:text-base">
         <span aria-hidden>📍</span>
-        <span className="font-medium">{track.location}</span>
+        <Link
+          href={`/location/${venue.slug}`}
+          className="font-medium underline-offset-2 hover:underline"
+        >
+          {venue.addressFull}（{venue.shortName}）
+          <span className={cn('ml-1 whitespace-nowrap', theme.accentText)}>
+            看地圖 →
+          </span>
+        </Link>
       </div>
     </section>
   );
