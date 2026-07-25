@@ -3,10 +3,9 @@ import Hero from '@/components/home/Hero';
 import WhoWeAre from '@/components/home/WhoWeAre';
 import Testimonials from '@/components/home/Testimonials';
 import FAQ from '@/components/home/FAQ';
-import { getPublishedTestimonials, getPublishedFaqs, getHeroVideoUrl } from '@/lib/queries';
-
-// 首頁影片、學生推薦、FAQ 皆由 DB 提供，存檔後以 revalidatePath('/') 即時更新。
-export const revalidate = 3600;
+import { getPublishedTestimonials } from '@/data/testimonials';
+import { getPublishedFaqs } from '@/data/faq';
+import { HERO_VIDEO_URL } from '@/data/site';
 
 export const metadata: Metadata = {
   title: "Baila'more 拉丁舞教室",
@@ -18,14 +17,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function Home() {
-  const [testimonials, faqs, heroVideoUrl] = await Promise.all([
-    getPublishedTestimonials(),
-    getPublishedFaqs(),
-    getHeroVideoUrl(),
-  ]);
-
-  const testimonialsData = testimonials.map((t) => ({
+export default function Home() {
+  const testimonialsData = getPublishedTestimonials().map((t) => ({
     id: t.id,
     name: t.name,
     title: t.title,
@@ -34,7 +27,7 @@ export default async function Home() {
     danceStyle: t.danceStyle,
   }));
 
-  const faqsData = faqs.map((f) => ({
+  const faqsData = getPublishedFaqs().map((f) => ({
     id: f.id,
     question: f.question,
     answer: f.answer,
@@ -42,7 +35,7 @@ export default async function Home() {
 
   return (
     <>
-      <Hero videoUrl={heroVideoUrl ?? ''} />
+      <Hero videoUrl={HERO_VIDEO_URL} />
       <WhoWeAre />
       <Testimonials testimonials={testimonialsData} />
       <FAQ faqs={faqsData} />

@@ -4,23 +4,21 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import IGIcon from '@/components/icons/IGIcon';
-import { getPublishedTeacherSlugs, getTeacherBySlug } from '@/lib/queries';
+import { getPublishedTeacherSlugs, getTeacherBySlug } from '@/data/teachers';
 
-export const revalidate = 3600;
-// 新增師資後無需重新 build 也能造訪（DB 即時）
-export const dynamicParams = true;
+// 老師資料為靜態，僅預先產生已存在的頁面
+export const dynamicParams = false;
 
 // 影片檔（Vercel Blob 等）用 <video> 播放，其餘視為 YouTube embed
 const isFileVideo = (url: string) => /\.(mp4|mov|webm|m4v)(\?|$)/i.test(url);
 
-export async function generateStaticParams() {
-  const teachers = await getPublishedTeacherSlugs();
-  return teachers.map((t) => ({ slug: t.slug }));
+export function generateStaticParams() {
+  return getPublishedTeacherSlugs();
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const teacher = await getTeacherBySlug(slug);
+  const teacher = getTeacherBySlug(slug);
   if (!teacher) return {};
   const desc = teacher.description[0]?.slice(0, 160) ?? '';
   return {
@@ -36,7 +34,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function TeacherPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const teacher = await getTeacherBySlug(slug);
+  const teacher = getTeacherBySlug(slug);
 
   if (!teacher || !teacher.published) {
     notFound();

@@ -2,11 +2,8 @@ import type { Metadata } from 'next';
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getPublishedTeachers } from '@/lib/queries';
+import { getPublishedTeachers } from '@/data/teachers';
 import SectionHeading from '@/components/SectionHeading';
-
-// 內容由 DB 提供，存檔後以 revalidatePath('/teachers') 即時更新；此處設時間型 ISR 作為保險。
-export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: '師資介紹',
@@ -18,8 +15,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function TeachersPage() {
-  const teachers = await getPublishedTeachers();
+export default function TeachersPage() {
+  const teachers = getPublishedTeachers();
   // 第一位（sortOrder 最小）以橫幅大卡呈現，其餘排成等寬卡片列。
   const [featured, ...rest] = teachers;
 
