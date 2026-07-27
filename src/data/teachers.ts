@@ -60,7 +60,7 @@ export const TEACHERS: Teacher[] = [
     instagram: 'baila.with.char',
     skills: ['Bachata'],
     courses: ['Bachata Lv1'],
-    description: ['（她還有想到要打什麼）'], // TODO: 補上 Charlene 的簡介
+    description: ['（她還沒有想到要打什麼）'], // TODO: 補上 Charlene 的簡介
     videos: [
       'https://ikhr8fc3iglih52q.public.blob.vercel-storage.com/charlene-1.mp4',
       'https://ikhr8fc3iglih52q.public.blob.vercel-storage.com/charlene-2.mp4',
@@ -76,7 +76,11 @@ export const TEACHERS: Teacher[] = [
     skills: ['Bachata', 'Salsa'],
     courses: ['單人 Salsa'],
     description: ['（老師簡介即將更新）'], // TODO: 補上 Nini 的簡介
-    videos: [],
+    videos: [
+      'https://ikhr8fc3iglih52q.public.blob.vercel-storage.com/nini-1.mp4',
+      'https://ikhr8fc3iglih52q.public.blob.vercel-storage.com/nini-2.mp4',
+      'https://ikhr8fc3iglih52q.public.blob.vercel-storage.com/nini-3.mp4',
+    ],
     sortOrder: 3,
     published: true,
   },
