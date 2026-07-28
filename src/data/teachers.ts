@@ -75,7 +75,7 @@ export const TEACHERS: Teacher[] = [
     instagram: 'jessaminni',
     skills: ['Bachata', 'Salsa'],
     courses: ['單人 Salsa'],
-    description: ['（老師簡介即將更新）'], // TODO: 補上 Nini 的簡介
+    description: ['漂亮的 Salsa 老師，但其實她也會跳 Bachata Leader'],
     videos: [
       'https://ikhr8fc3iglih52q.public.blob.vercel-storage.com/nini-1.mp4',
       'https://ikhr8fc3iglih52q.public.blob.vercel-storage.com/nini-2.mp4',
