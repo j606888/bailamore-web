@@ -40,7 +40,7 @@ Next.js 15 App Router site for Baila'more, a Latin dance studio with venues in *
 **UI conventions:**
 - Package manager: **yarn**
 - Styling: Tailwind CSS v4, mobile-first with `md:` breakpoints
-- Primary brand color: teal-600 / `#0f7f75`
+- Primary brand color: teal-600 / `#009689` (Tailwind v4 value — v3's `#0d9488` no longer applies). Logo SVGs in `public/` and `src/app/icon.svg` hardcode this hex; keep them in sync with `teal-600`.
 - Fonts: Poppins (primary `font-poppins`) and Roboto, loaded via `next/font/google` in `layout.tsx`
 - UI primitives: shadcn/ui (`src/components/ui/`) backed by Radix UI
 - Icons: SVGs in `public/icons/`, lucide-react for inline icons

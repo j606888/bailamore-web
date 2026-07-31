@@ -45,7 +45,14 @@ const Navbar = () => {
         <div className="flex justify-between h-16">
           <div className="flex items-center flex-auto">
             <Link href="/" className="flex-shrink-0 flex flex-col items-start">
-              <Image src="/Logo.svg" alt="Logo" width={138} height={38} />
+              <Image
+                src="/bailamore_green.svg"
+                alt="Baila'more 拉丁舞教室"
+                width={160}
+                height={28}
+                priority
+                className="h-5 w-auto md:h-6"
+              />
             </Link>
           </div>
 
