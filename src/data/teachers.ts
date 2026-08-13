@@ -30,8 +30,7 @@ export const TEACHERS: Teacher[] = [
       '舞蹈對 Sean 而言不只是技藝，更是連結人與人之間的橋樑，歡迎一起進入這個充滿熱情與愛的舞蹈世界！',
     ],
     videos: [
-      'https://www.youtube.com/embed/TdRV1NkV4Pg?si=MYwpQG-1ZlcPu1QD',
-      'https://www.youtube.com/embed/AE5NriBseoY?si=5u75-CtAGmvwPtVn',
+      'https://ikhr8fc3iglih52q.public.blob.vercel-storage.com/Sean.mp4',
     ],
     sortOrder: 0,
     published: true,

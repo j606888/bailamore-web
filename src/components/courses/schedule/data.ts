@@ -118,6 +118,7 @@ export const MONTH: MonthConfig = {
     18: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
     20: { theme: 'kaohsiungThu', label: '高雄', trackId: 'kaohsiung-thu' },
     23: { theme: 'tainanSun', label: '台南', trackId: 'tainan-sun' },
+    25: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
     27: { theme: 'kaohsiungThu', label: '高雄', trackId: 'kaohsiung-thu' },
     30: { theme: 'tainanSun', label: '台南', trackId: 'tainan-sun' },
   },
@@ -130,7 +131,7 @@ export const MONTH: MonthConfig = {
     {
       theme: 'tainanTue',
       title: '週二・台南教室（新）',
-      desc: 'Bachata LV1 · 19:30–22:00',
+      desc: 'Bachata 1-1 · 19:30–22:00',
     },
     {
       theme: 'kaohsiungThu',
@@ -138,7 +139,7 @@ export const MONTH: MonthConfig = {
       desc: 'Bachata / Kizomba · 19:30–23:00',
     },
   ],
-  footnote: '★ 週日台南 9 月續開 9/13、9/20、9/27・週二新常態班 8/18 結束',
+  footnote: '★ 週日台南 9 月續開 9/13、9/20、9/27・週二台南第一期 8/18 結束、第二期 8/25 起',
 };
 
 export const TRACKS: Track[] = [
@@ -178,20 +179,21 @@ export const TRACKS: Track[] = [
     cityZh: '台南教室',
     sessionLabelEn: 'TUESDAY',
     dayZh: '週二',
-    badge: 'NEW 新常態班',
-    badgeNote: '每週二・正式課 7/21 起共五堂',
+    badge: 'Bachata 1-2 第二期',
+    badgeNote: '8/25 新一期 Bachata 1-1 開班',
     slots: [
-      { time: '19:30–20:45', title: 'Bachata LV1' },
+      { time: '19:30–20:45', title: 'Bachata 1-1' },
       { time: '20:45–22:00', title: '課後練習 social' },
     ],
     datesTitle: '場次',
-    datesNote: '正式課至 8/18 結束・共 5 堂',
+    datesNote: '第一期 7/21–8/18・第二期 8/25 起，完整場次近期公布',
     dates: [
       { label: '7/21', note: '第一堂' },
       { label: '7/28', note: '第二堂' },
       { label: '8/4', note: '第三堂' },
       { label: '8/11', note: '第四堂' },
       { label: '8/18', note: '第五堂' },
+      { label: '8/25', note: '第二期 第一堂', upcoming: true },
     ],
     venueSlug: 'tainan',
     pricePlanId: 'tuesday-plan',
@@ -205,8 +207,8 @@ export const TRACKS: Track[] = [
     sessionLabelEn: 'THURSDAY',
     dayZh: '週四',
     slots: [
-      { time: '19:30–20:30', title: 'Bachata training' },
-      { time: '20:30–21:30', title: 'Kizomba LV1' },
+      { time: '19:30–20:30', title: 'Kizomba LV1' },
+      { time: '20:30–21:30', title: 'Bachata training' },
       { time: '21:30–23:00', title: 'mini social' },
     ],
     datesTitle: '本期場次',
@@ -276,8 +278,8 @@ export const PRICE_PLANS: PricePlan[] = [
           { name: 'Body movement', theme: 'tainanSun' },
           { name: 'Bachata Lv2', theme: 'tainanSun' },
           { name: '單人 Salsa', theme: 'tainanSun' },
-          { name: 'Bachata training', theme: 'kaohsiungThu' },
           { name: 'Kizomba LV1', theme: 'kaohsiungThu' },
+          { name: 'Bachata training', theme: 'kaohsiungThu' },
         ],
         options: [
           { name: '單堂', price: 350 },
@@ -295,7 +297,7 @@ export const PRICE_PLANS: PricePlan[] = [
       {
         title: '新常態班 5 堂',
         subtitle: '7/21 起連續五堂',
-        courses: [{ name: 'Bachata LV1', theme: 'tainanTue' }],
+        courses: [{ name: 'Bachata 1-1', theme: 'tainanTue' }],
         options: [
           { name: '整期五堂', price: 2000 },
           { name: '單堂報名', price: 450 },
