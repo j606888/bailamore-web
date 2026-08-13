@@ -207,7 +207,7 @@ export const TRACKS: Track[] = [
     sessionLabelEn: 'THURSDAY',
     dayZh: '週四',
     slots: [
-      { time: '19:30–20:30', title: 'Kizomba LV1' },
+      { time: '19:30–20:30', title: 'Kizomba LV1.5' },
       { time: '20:30–21:30', title: 'Bachata training' },
       { time: '21:30–23:00', title: 'mini social' },
     ],
@@ -278,7 +278,7 @@ export const PRICE_PLANS: PricePlan[] = [
           { name: 'Body movement', theme: 'tainanSun' },
           { name: 'Bachata Lv2', theme: 'tainanSun' },
           { name: '單人 Salsa', theme: 'tainanSun' },
-          { name: 'Kizomba LV1', theme: 'kaohsiungThu' },
+          { name: 'Kizomba LV1.5', theme: 'kaohsiungThu' },
           { name: 'Bachata training', theme: 'kaohsiungThu' },
         ],
         options: [
