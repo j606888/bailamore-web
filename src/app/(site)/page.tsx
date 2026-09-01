@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Hero from '@/components/home/Hero';
+import AnnouncementBar from '@/components/home/AnnouncementBar';
 import WhoWeAre from '@/components/home/WhoWeAre';
 import Testimonials from '@/components/home/Testimonials';
 import FAQ from '@/components/home/FAQ';
@@ -45,6 +46,7 @@ export default function Home() {
     <>
       <JsonLd data={faqPageJsonLd(faqs)} />
       <Hero videoUrl={HERO_VIDEO_URL} />
+      <AnnouncementBar />
       <WhoWeAre />
       <Testimonials testimonials={testimonialsData} />
       <FAQ faqs={faqsData} />

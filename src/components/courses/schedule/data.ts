@@ -1,11 +1,11 @@
-// 八月課表的單一資料來源。新增/編輯 track、場次、月曆 highlight 只要改這裡。
+// 九月課表的單一資料來源。新增/編輯 track、場次、月曆 highlight 只要改這裡。
 // 目前完全寫死、未接後台；樣式確定後再接回 Prisma（見 src/lib/queries.ts）。
 //
 // 地址不寫在這裡：據點資料集中於 src/data/venues.ts，track 只存 venueSlug。
 
 import type { VenueSlug } from '@/data/venues';
 
-export type ThemeKey = 'tainanSun' | 'tainanTue' | 'kaohsiungThu';
+export type ThemeKey = 'tainanSun' | 'tainanTue' | 'kaohsiungThu' | 'party';
 
 export type SessionStatus = 'done' | 'active' | 'upcoming';
 
@@ -49,7 +49,7 @@ export interface Track {
   badgeNote?: string; // '每週二・正式課 7/21 起共五堂'
   slots: TimeSlot[];
   datesTitle: string; // '本期場次' / '場次'
-  datesNote: string; // '共 6 堂・7月為最後 3 堂'
+  datesNote?: string; // '9/15 停課'（沒有補充就不顯示）
   dates: SessionDate[];
   venueSlug: VenueSlug; // 對應 src/data/venues.ts 的據點
   pricePlanId: string; // 對應 PRICE_PLANS 的 id
@@ -91,6 +91,15 @@ export const THEMES: Record<ThemeKey, ThemeStyle> = {
     legendDot: 'bg-[#5b8dd9]',
     blob: 'bg-[#c7e36a]',
   },
+  // 活動用（派對／體驗課），目前沒有對應的 track 卡片
+  party: {
+    pageFrom: 'bg-[#ece0f7]',
+    accentText: 'text-[#8b5cd6]',
+    accentBg: 'bg-[#8b5cd6]',
+    highlightCell: 'bg-[#8b5cd6]',
+    legendDot: 'bg-[#8b5cd6]',
+    blob: 'bg-[#d6b8f0]',
+  },
 };
 
 export interface MonthConfig {
@@ -98,48 +107,55 @@ export interface MonthConfig {
   month: number; // 1-12
   titleEn: string;
   titleZh: string;
-  // 日 -> { theme（決定顏色）, label（城市/體驗小字）, trackId（錨點目標）}
-  highlights: Record<number, { theme: ThemeKey; label: string; trackId: string }>;
+  // 日 -> { theme（決定顏色）, label（城市/體驗小字）, trackId（錨點目標，活動類沒有卡片可省略）}
+  highlights: Record<
+    number,
+    { theme: ThemeKey; label: string; trackId?: string }
+  >;
   legend: { theme: ThemeKey; title: string; desc: string }[];
-  footnote: string;
+  footnote?: string;
 }
 
 export const MONTH: MonthConfig = {
   year: 2026,
-  month: 8,
-  titleEn: 'AUGUST',
-  titleZh: '八月',
+  month: 9,
+  titleEn: 'SEPTEMBER',
+  titleZh: '九月',
   highlights: {
-    4: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
-    6: { theme: 'kaohsiungThu', label: '高雄', trackId: 'kaohsiung-thu' },
-    9: { theme: 'tainanSun', label: '台南', trackId: 'tainan-sun' },
-    11: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
-    13: { theme: 'kaohsiungThu', label: '高雄', trackId: 'kaohsiung-thu' },
-    18: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
-    20: { theme: 'kaohsiungThu', label: '高雄', trackId: 'kaohsiung-thu' },
-    23: { theme: 'tainanSun', label: '台南', trackId: 'tainan-sun' },
-    25: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
-    27: { theme: 'kaohsiungThu', label: '高雄', trackId: 'kaohsiung-thu' },
-    30: { theme: 'tainanSun', label: '台南', trackId: 'tainan-sun' },
+    1: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
+    8: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
+    10: { theme: 'kaohsiungThu', label: '高雄', trackId: 'kaohsiung-thu' },
+    13: { theme: 'tainanSun', label: '台南', trackId: 'tainan-sun' },
+    17: { theme: 'kaohsiungThu', label: '高雄', trackId: 'kaohsiung-thu' },
+    19: { theme: 'party', label: 'PARTY' },
+    20: { theme: 'tainanSun', label: '台南', trackId: 'tainan-sun' },
+    22: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
+    24: { theme: 'kaohsiungThu', label: '高雄', trackId: 'kaohsiung-thu' },
+    27: { theme: 'tainanSun', label: '台南', trackId: 'tainan-sun' },
+    29: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
   },
   legend: [
     {
       theme: 'tainanSun',
       title: '週日・台南教室',
-      desc: 'Body movement / Bachata / Salsa · 14:00–18:00',
+      desc: 'Body movement / Bachata Lv2 / Salsa · 14:00–18:00',
     },
     {
       theme: 'tainanTue',
-      title: '週二・台南教室（新）',
-      desc: 'Bachata 1-1 · 19:30–22:00',
+      title: '週二・台南教室',
+      desc: 'Bachata 1-2 / 1-1 · 19:30–23:00',
     },
     {
       theme: 'kaohsiungThu',
       title: '週四・高雄教室',
       desc: 'Bachata / Kizomba · 19:30–23:00',
     },
+    {
+      theme: 'party',
+      title: '9/19（六）LEGENDS PARTY',
+      desc: '當天另有 Salsa 體驗課',
+    },
   ],
-  footnote: '★ 週日台南 9 月續開 9/13、9/20、9/27・週二台南第一期 8/18 結束、第二期 8/25 起',
 };
 
 export const TRACKS: Track[] = [
@@ -159,18 +175,17 @@ export const TRACKS: Track[] = [
       { time: '17:00–18:00', title: 'Pratica' },
     ],
     datesTitle: '本期場次',
-    datesNote: '共 6 堂・橫跨 8–9 月',
     dates: [
-      { label: '8/9' },
-      { label: '8/23' },
-      { label: '8/30' },
-      { label: '9/13' },
-      { label: '9/20' },
-      { label: '9/27' },
+      { label: '8/9', note: '第一堂' },
+      { label: '8/23', note: '第二堂' },
+      { label: '8/30', note: '第三堂' },
+      { label: '9/13', note: '第四堂' },
+      { label: '9/20', note: '第五堂' },
+      { label: '9/27', note: '第六堂' },
     ],
     venueSlug: 'tainan',
     pricePlanId: 'card-plan',
-    priceSummary: '課卡制・單堂 $350・6 堂 $2000',
+    priceSummary: '課卡制・6 堂 $2000・單堂 $350',
   },
   {
     id: 'tainan-tue',
@@ -179,21 +194,21 @@ export const TRACKS: Track[] = [
     cityZh: '台南教室',
     sessionLabelEn: 'TUESDAY',
     dayZh: '週二',
-    badge: 'Bachata 1-2 第二期',
-    badgeNote: '8/25 新一期 Bachata 1-1 開班',
+    badge: 'Bachata 1-1・1-2 開課中',
+    badgeNote: '本期 8/25–9/29 共五堂，9/29 結束',
     slots: [
-      { time: '19:30–20:45', title: 'Bachata 1-1' },
-      { time: '20:45–22:00', title: '課後練習 social' },
+      { time: '19:30–20:45', title: 'Bachata 1-2' },
+      { time: '21:00–22:15', title: 'Bachata 1-1' },
+      { time: '22:15–23:00', title: '練習時間' },
     ],
-    datesTitle: '場次',
-    datesNote: '第一期 7/21–8/18・第二期 8/25 起，完整場次近期公布',
+    datesTitle: '本期場次',
+    datesNote: '9/15 停課',
     dates: [
-      { label: '7/21', note: '第一堂' },
-      { label: '7/28', note: '第二堂' },
-      { label: '8/4', note: '第三堂' },
-      { label: '8/11', note: '第四堂' },
-      { label: '8/18', note: '第五堂' },
-      { label: '8/25', note: '第二期 第一堂', upcoming: true },
+      { label: '8/25', note: '第一堂' },
+      { label: '9/1', note: '第二堂' },
+      { label: '9/8', note: '第三堂' },
+      { label: '9/22', note: '第四堂' },
+      { label: '9/29', note: '第五堂' },
     ],
     venueSlug: 'tainan',
     pricePlanId: 'tuesday-plan',
@@ -211,17 +226,48 @@ export const TRACKS: Track[] = [
       { time: '20:30–21:30', title: 'Bachata training' },
       { time: '21:30–23:00', title: 'mini social' },
     ],
-    datesTitle: '本期場次',
-    datesNote: '共 4 堂・每週四',
+    datesTitle: '九月場次',
+    datesNote: '每週四常態開課・無期數限制，隨時可插班',
     dates: [
-      { label: '8/6' },
-      { label: '8/13' },
-      { label: '8/20' },
-      { label: '8/27' },
+      { label: '9/10' },
+      { label: '9/17' },
+      { label: '9/24' },
     ],
     venueSlug: 'kaohsiung',
     pricePlanId: 'card-plan',
-    priceSummary: '課卡制・單堂 $350・6 堂 $2000',
+    priceSummary: '課卡制・6 堂 $2000・單堂 $350',
+  },
+];
+
+// ---- 籌備中的課程（預告用，還沒有日期／費用）----
+// 課表頁尾的 COMING SOON 卡與首頁公告條共用同一份文字，改這裡兩邊會一起變。
+// 真的開課後把內容搬進 TRACKS，並把這個陣列清空即可。
+
+export interface UpcomingTrack {
+  id: string; // 錨點 id
+  theme: ThemeKey;
+  cityEn: string;
+  cityZh: string;
+  sessionLabelEn: string;
+  dayZh: string;
+  courses: string[]; // 預計開的課程名稱
+  note: string; // 卡片上的說明
+  venueSlug: VenueSlug;
+  bannerText: string; // 首頁公告條的一行字
+}
+
+export const UPCOMING_TRACKS: UpcomingTrack[] = [
+  {
+    id: 'kaohsiung-tue',
+    theme: 'kaohsiungThu',
+    cityEn: 'KAOHSIUNG',
+    cityZh: '高雄教室',
+    sessionLabelEn: 'TUESDAY',
+    dayZh: '週二',
+    courses: ['Bachata Lv1', 'Salsa Lv1'],
+    note: '高雄週二的 Bachata、Salsa Lv1 新手班籌備中，開課時間與費用還在規劃。想上的話先來訊告訴我們，開班時第一時間通知你。另外也正在籌備教師訓練計劃，歡迎一起詢問。',
+    venueSlug: 'kaohsiung',
+    bannerText: '高雄週二 Bachata・Salsa Lv1 新手班籌備中，教師訓練計劃同步規劃中',
   },
 ];
 
@@ -282,8 +328,8 @@ export const PRICE_PLANS: PricePlan[] = [
           { name: 'Bachata training', theme: 'kaohsiungThu' },
         ],
         options: [
-          { name: '單堂', price: 350 },
           { name: '6 堂課程', price: 2000 },
+          { name: '單堂', price: 350 },
         ],
       },
     ],
@@ -296,8 +342,11 @@ export const PRICE_PLANS: PricePlan[] = [
     tiers: [
       {
         title: '新常態班 5 堂',
-        subtitle: '7/21 起連續五堂',
-        courses: [{ name: 'Bachata 1-1', theme: 'tainanTue' }],
+        subtitle: '第二期 8/25–9/29 共五堂（9/15 停課）',
+        courses: [
+          { name: 'Bachata 1-2', theme: 'tainanTue' },
+          { name: 'Bachata 1-1', theme: 'tainanTue' },
+        ],
         options: [
           { name: '整期五堂', price: 2000 },
           { name: '單堂報名', price: 450 },

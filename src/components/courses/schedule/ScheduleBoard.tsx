@@ -1,6 +1,7 @@
 import MonthOverview from './MonthOverview';
 import TrackCard from './TrackCard';
-import { TRACKS } from './data';
+import UpcomingTrackCard from './UpcomingTrackCard';
+import { TRACKS, UPCOMING_TRACKS } from './data';
 
 export default function ScheduleBoard() {
   return (
@@ -9,6 +10,9 @@ export default function ScheduleBoard() {
         <MonthOverview />
         {TRACKS.map((track) => (
           <TrackCard key={track.id} track={track} />
+        ))}
+        {UPCOMING_TRACKS.map((track) => (
+          <UpcomingTrackCard key={track.id} track={track} />
         ))}
       </div>
     </div>

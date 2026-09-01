@@ -105,7 +105,9 @@ export default function TrackCard({ track }: { track: Track }) {
       <div className="relative mt-6">
         <div className="flex items-baseline gap-2">
           <p className="font-bold text-[#2d3a5e]">{track.datesTitle}</p>
-          <p className="text-xs text-gray-500 md:text-sm">{track.datesNote}</p>
+          {track.datesNote && (
+            <p className="text-xs text-gray-500 md:text-sm">{track.datesNote}</p>
+          )}
         </div>
         <div className="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-6">
           {track.dates.map((d) => (
@@ -171,7 +173,7 @@ function DateChip({
   return (
     <div
       className={cn(
-        'overflow-hidden rounded-xl text-center shadow-sm',
+        'flex h-full flex-col overflow-hidden rounded-xl text-center shadow-sm',
         (isDone || isUpcoming) && 'opacity-70'
       )}
     >
@@ -183,7 +185,7 @@ function DateChip({
       >
         {weekdayEn}
       </div>
-      <div className="flex flex-col bg-white px-1 py-2">
+      <div className="flex flex-1 flex-col justify-center bg-white px-1 py-2">
         <span
           className={cn(
             'font-poppins text-base font-bold leading-tight text-[#2d3a5e] md:text-lg',

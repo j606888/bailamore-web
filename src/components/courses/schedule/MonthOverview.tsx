@@ -68,18 +68,32 @@ export default function MonthOverview() {
               );
             }
             const theme = THEMES[hl.theme];
-            return (
-              <a
-                key={day}
-                href={`#${hl.trackId}`}
-                className={`flex aspect-square flex-col items-center justify-center rounded-xl text-white shadow-sm transition-transform hover:scale-[1.04] ${theme.highlightCell}`}
-              >
+            const cellClass = `flex aspect-square flex-col items-center justify-center rounded-xl text-white shadow-sm ${theme.highlightCell}`;
+            const content = (
+              <>
                 <span className="text-base font-bold leading-tight md:text-xl">
                   {day}
                 </span>
                 <span className="text-[10px] leading-tight md:text-xs">
                   {hl.label}
                 </span>
+              </>
+            );
+            // 活動（派對等）沒有對應的 track 卡片，就不做成錨點連結
+            if (!hl.trackId) {
+              return (
+                <div key={day} className={cellClass}>
+                  {content}
+                </div>
+              );
+            }
+            return (
+              <a
+                key={day}
+                href={`#${hl.trackId}`}
+                className={`${cellClass} transition-transform hover:scale-[1.04]`}
+              >
+                {content}
               </a>
             );
           })}
@@ -102,7 +116,9 @@ export default function MonthOverview() {
             </div>
           );
         })}
-        <p className="mt-1 text-xs text-gray-500 md:text-sm">{footnote}</p>
+        {footnote && (
+          <p className="mt-1 text-xs text-gray-500 md:text-sm">{footnote}</p>
+        )}
       </div>
     </section>
   );
