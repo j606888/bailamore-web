@@ -25,29 +25,23 @@ export default function MonthOverview({
   return (
     <section className="w-full">
       {/* 頁首 */}
-      <div className="flex items-start justify-between">
-        <div className="flex flex-col">
-          <p className="font-poppins text-sm font-bold tracking-[0.2em] text-[#c47b5a] md:text-base">
-            BAILA&apos;MORE
-          </p>
-          <p className="font-poppins text-xs font-medium tracking-[0.3em] text-gray-500 md:text-sm">
-            2026 SCHEDULE
-          </p>
-          <h2 className="mt-1 flex items-end gap-2 font-poppins font-bold leading-none text-[#2d3a5e]">
-            {/* 手機用 text-5xl：60px 的 SEPTEMBER 在 390px 寬的手機會撐出水平捲動 */}
-            <span
-              className="text-5xl md:text-7xl"
-              style={{ textShadow: '3px 3px 0 rgba(212,121,110,0.45)' }}
-            >
-              {titleEn}
-            </span>
-            <span className="pb-1 text-2xl md:text-3xl">{titleZh}</span>
-          </h2>
-        </div>
-        {/* 手機上 SEPTEMBER 就佔滿整行，這行會被擠成直書，所以只在桌機顯示 */}
-        <p className="mt-1 hidden text-sm font-medium tracking-widest text-gray-700 md:block md:text-base">
-          {titleZh}課程總覽
+      <div className="flex flex-col">
+        <p className="font-poppins text-sm font-bold tracking-[0.2em] text-[#c47b5a] md:text-base">
+          BAILA&apos;MORE
         </p>
+        <p className="font-poppins text-xs font-medium tracking-[0.3em] text-gray-500 md:text-sm">
+          2026 SCHEDULE
+        </p>
+        <h2 className="mt-1 flex items-end gap-2 font-poppins font-bold leading-none text-[#2d3a5e]">
+          {/* 手機用 text-5xl：60px 的 SEPTEMBER 在 390px 寬的手機會撐出水平捲動 */}
+          <span
+            className="text-5xl md:text-7xl"
+            style={{ textShadow: '3px 3px 0 rgba(212,121,110,0.45)' }}
+          >
+            {titleEn}
+          </span>
+          <span className="pb-1 text-2xl md:text-3xl">{titleZh}</span>
+        </h2>
       </div>
 
       {/* 月曆 */}

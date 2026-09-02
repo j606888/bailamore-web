@@ -277,7 +277,7 @@ export const UPCOMING_TRACKS: UpcomingTrack[] = [
     sessionLabelEn: 'TUESDAY',
     dayZh: '週二',
     courses: ['Bachata Lv1', 'Salsa Lv1'],
-    note: '高雄週二的 Bachata、Salsa Lv1 新手班籌備中，開課時間與費用還在規劃。想上的話先來訊告訴我們，開班時第一時間通知你。另外也正在籌備教師訓練計劃，歡迎一起詢問。',
+    note: '高雄週二的 Bachata、Salsa Lv1 新手班籌備中，開課時間與費用即將推出。想上的話先來訊告訴我們，開班時第一時間通知你。另外也正在籌備教師訓練計劃，歡迎一起詢問。',
     venueSlug: 'kaohsiung',
     bannerText: '高雄週二 Bachata・Salsa Lv1 新手班籌備中，教師訓練計劃同步規劃中',
   },
