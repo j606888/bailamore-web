@@ -107,10 +107,11 @@ export interface MonthConfig {
   month: number; // 1-12
   titleEn: string;
   titleZh: string;
-  // 日 -> { theme（決定顏色）, label（城市/體驗小字）, trackId（錨點目標，活動類沒有卡片可省略）}
+  // 日 -> { theme（決定顏色）, label（城市/體驗小字）, trackId（錨點目標，活動類沒有卡片可省略）,
+  //         cellBg（特殊場次可覆寫方塊底色，例如體驗課要比常態課深一階）}
   highlights: Record<
     number,
-    { theme: ThemeKey; label: string; trackId?: string }
+    { theme: ThemeKey; label: string; trackId?: string; cellBg?: string }
   >;
   legend: { theme: ThemeKey; title: string; desc: string }[];
   footnote?: string;
@@ -126,7 +127,12 @@ export const MONTH: MonthConfig = {
     8: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
     10: { theme: 'kaohsiungThu', label: '高雄', trackId: 'kaohsiung-thu' },
     13: { theme: 'tainanSun', label: '台南', trackId: 'tainan-sun' },
-    17: { theme: 'kaohsiungThu', label: '高雄', trackId: 'kaohsiung-thu' },
+    17: {
+      theme: 'kaohsiungThu',
+      label: '體驗課',
+      trackId: 'kaohsiung-thu',
+      cellBg: 'bg-[#3f6cbb]', // 體驗課：比常態的 #5b8dd9 深一階，一眼看得出不一樣
+    },
     19: { theme: 'party', label: 'PARTY' },
     20: { theme: 'tainanSun', label: '台南', trackId: 'tainan-sun' },
     22: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
@@ -148,7 +154,7 @@ export const MONTH: MonthConfig = {
     {
       theme: 'kaohsiungThu',
       title: '週四・高雄教室',
-      desc: 'Bachata / Kizomba · 19:30–23:00',
+      desc: 'Kizomba / Bachata · 19:30–23:00（9/17 新手體驗課、9/24 Kizomba Lv1 新一期）',
     },
     {
       theme: 'party',
@@ -221,17 +227,19 @@ export const TRACKS: Track[] = [
     cityZh: '高雄教室',
     sessionLabelEn: 'THURSDAY',
     dayZh: '週四',
+    badge: 'Kizomba Lv1 新一期 9/24 開課',
+    badgeNote: '9/17 先開新手體驗課，零基礎、沒有舞伴都可以來',
     slots: [
-      { time: '19:30–20:30', title: 'Kizomba LV1.5' },
+      { time: '19:30–20:30', title: 'Kizomba Lv1.5 → Lv1' },
       { time: '20:30–21:30', title: 'Bachata training' },
       { time: '21:30–23:00', title: 'mini social' },
     ],
     datesTitle: '九月場次',
     datesNote: '每週四常態開課・無期數限制，隨時可插班',
     dates: [
-      { label: '9/10' },
-      { label: '9/17' },
-      { label: '9/24' },
+      { label: '9/10', note: 'Lv1.5 最後一堂' },
+      { label: '9/17', note: '新手體驗課' },
+      { label: '9/24', note: 'Lv1 第一堂' },
     ],
     venueSlug: 'kaohsiung',
     pricePlanId: 'card-plan',
@@ -324,7 +332,7 @@ export const PRICE_PLANS: PricePlan[] = [
           { name: 'Body movement', theme: 'tainanSun' },
           { name: 'Bachata Lv2', theme: 'tainanSun' },
           { name: '單人 Salsa', theme: 'tainanSun' },
-          { name: 'Kizomba LV1.5', theme: 'kaohsiungThu' },
+          { name: 'Kizomba', theme: 'kaohsiungThu' },
           { name: 'Bachata training', theme: 'kaohsiungThu' },
         ],
         options: [

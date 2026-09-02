@@ -68,7 +68,7 @@ export default function MonthOverview() {
               );
             }
             const theme = THEMES[hl.theme];
-            const cellClass = `flex aspect-square flex-col items-center justify-center rounded-xl text-white shadow-sm ${theme.highlightCell}`;
+            const cellClass = `flex aspect-square flex-col items-center justify-center rounded-xl text-white shadow-sm ${hl.cellBg ?? theme.highlightCell}`;
             const content = (
               <>
                 <span className="text-base font-bold leading-tight md:text-xl">
