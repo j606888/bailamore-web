@@ -45,6 +45,7 @@ export interface Track {
   cityZh: string; // '台南教室'
   sessionLabelEn: string; // 'SUNDAY' （圓章顯示 SUNDAY / SESSIONS）
   dayZh: string; // '週日'
+  tabLabel: string; // 課表 tab 上的短標籤，例如 '週日・台南'（與 PRICE_PLANS 的 chip 用字一致）
   badge?: string; // 'NEW 新常態班'
   badgeNote?: string; // '每週二・正式課 7/21 起共五堂'
   slots: TimeSlot[];
@@ -174,6 +175,7 @@ export const TRACKS: Track[] = [
     dayZh: '週日',
     badge: 'NEW Salsa 老師',
     badgeNote: '單人 Salsa 由 Nini 老師授課',
+    tabLabel: '週日・台南',
     slots: [
       { time: '14:00–15:00', title: 'Body movement' },
       { time: '15:00–16:00', title: 'Bachata Lv2' },
@@ -202,6 +204,7 @@ export const TRACKS: Track[] = [
     dayZh: '週二',
     badge: 'Bachata 1-1・1-2 開課中',
     badgeNote: '本期 8/25–9/29 共五堂，9/29 結束',
+    tabLabel: '週二・台南',
     slots: [
       { time: '19:30–20:45', title: 'Bachata 1-2' },
       { time: '21:00–22:15', title: 'Bachata 1-1' },
@@ -229,6 +232,7 @@ export const TRACKS: Track[] = [
     dayZh: '週四',
     badge: 'Kizomba Lv1 新一期 9/24 開課',
     badgeNote: '9/17 先開新手體驗課，零基礎、沒有舞伴都可以來',
+    tabLabel: '週四・高雄',
     slots: [
       { time: '19:30–20:30', title: 'Kizomba Lv1.5 → Lv1' },
       { time: '20:30–21:30', title: 'Bachata training' },

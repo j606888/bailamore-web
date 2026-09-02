@@ -1,8 +1,16 @@
+'use client';
+
 import { MONTH, THEMES } from './data';
 
 const WEEKDAYS = ['日', '一', '二', '三', '四', '五', '六'];
 
-export default function MonthOverview() {
+// onSelectTrack：由 ScheduleBoard 傳入，讓月曆格子改成「切到該課表 tab 再捲過去」。
+// 沒帶這個 prop 時（或 JS 還沒載入）維持原本的 #anchor 連結行為。
+export default function MonthOverview({
+  onSelectTrack,
+}: {
+  onSelectTrack?: (trackId: string) => void;
+}) {
   const { year, month, titleEn, titleZh, highlights, legend, footnote } = MONTH;
 
   const firstWeekday = new Date(year, month - 1, 1).getDay(); // 0 = 週日
@@ -26,8 +34,9 @@ export default function MonthOverview() {
             2026 SCHEDULE
           </p>
           <h2 className="mt-1 flex items-end gap-2 font-poppins font-bold leading-none text-[#2d3a5e]">
+            {/* 手機用 text-5xl：60px 的 SEPTEMBER 在 390px 寬的手機會撐出水平捲動 */}
             <span
-              className="text-6xl md:text-7xl"
+              className="text-5xl md:text-7xl"
               style={{ textShadow: '3px 3px 0 rgba(212,121,110,0.45)' }}
             >
               {titleEn}
@@ -35,7 +44,8 @@ export default function MonthOverview() {
             <span className="pb-1 text-2xl md:text-3xl">{titleZh}</span>
           </h2>
         </div>
-        <p className="mt-1 text-sm font-medium tracking-widest text-gray-700 md:text-base">
+        {/* 手機上 SEPTEMBER 就佔滿整行，這行會被擠成直書，所以只在桌機顯示 */}
+        <p className="mt-1 hidden text-sm font-medium tracking-widest text-gray-700 md:block md:text-base">
           {titleZh}課程總覽
         </p>
       </div>
@@ -87,11 +97,20 @@ export default function MonthOverview() {
                 </div>
               );
             }
+            const trackId = hl.trackId;
             return (
               <a
                 key={day}
-                href={`#${hl.trackId}`}
+                href={`#${trackId}`}
                 className={`${cellClass} transition-transform hover:scale-[1.04]`}
+                onClick={
+                  onSelectTrack
+                    ? (e) => {
+                        e.preventDefault();
+                        onSelectTrack(trackId);
+                      }
+                    : undefined
+                }
               >
                 {content}
               </a>
