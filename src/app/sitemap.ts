@@ -9,6 +9,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: { path: string; priority: number }[] = [
     { path: '/', priority: 1 },
     { path: '/courses', priority: 0.9 },
+    // 報名頁是轉換的落地頁（IG bio 也指這裡），優先度與課程頁同級
+    { path: '/enroll', priority: 0.9 },
     { path: '/location', priority: 0.8 },
     { path: '/teachers', priority: 0.7 },
   ];

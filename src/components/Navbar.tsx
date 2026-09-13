@@ -9,6 +9,7 @@ import { Button } from './ui/button';
 
 const NAV_LINKS = [
   { name: '課程資訊', href: '/courses' },
+  { name: '課程報名', href: LINKS.ENROLL },
   { name: '師資介紹', href: '/teachers' },
   { name: '教室資訊', href: '/location' },
   // { name: '活動', href: '/events', disabled: true },
@@ -86,7 +87,7 @@ const Navbar = () => {
       </div>
       <div
         className={`${isMenuOpen
-          ? 'max-h-[300px] opacity-100'
+          ? 'max-h-[360px] opacity-100'
           : 'max-h-0 opacity-0'
           } overflow-hidden transition-all duration-300 ease-in md:hidden`}
       >

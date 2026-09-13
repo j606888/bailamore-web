@@ -5,4 +5,6 @@ export const LINKS = {
   INSTAGRAM: 'https://www.instagram.com/baila_moredancestudio',
   COURSES: '/courses',
   PRICING: '/courses?tab=pricing',
+  // 報名頁。IG bio 請指向這裡，取代原本的連結面板。
+  ENROLL: '/enroll',
 } as const; 

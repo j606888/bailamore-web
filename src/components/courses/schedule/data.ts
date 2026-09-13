@@ -20,6 +20,20 @@ export interface SessionDate {
   upcoming?: boolean; // 下一期（尚未開放/預告）場次，顯示為淡色
 }
 
+/**
+ * '9/24' + 年份 → 這一天是否已經過去。
+ * 當天仍算進行中，隔天才算過期（課表場次與報名頁活動共用同一套判斷）。
+ * 無法解析的 label 一律當成「還沒過」，寧可多顯示也不要誤藏。
+ */
+export function isPast(label: string, year: number, now: Date): boolean {
+  const [month, day] = label.split('/').map(Number);
+  if (!month || !day) return false;
+
+  const target = new Date(year, month - 1, day);
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  return target < today;
+}
+
 // 場次是否已結束由「真實日期」決定，不寫死。
 // label 只有月/日，年份一律取 MONTH.year（目前課表不跨年）。
 export function getSessionStatus(
@@ -28,14 +42,7 @@ export function getSessionStatus(
 ): SessionStatus {
   if (date.upcoming) return 'upcoming';
 
-  const [month, day] = date.label.split('/').map(Number);
-  if (!month || !day) return 'active';
-
-  const sessionDay = new Date(MONTH.year, month - 1, day);
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-  // 當天仍算進行中，隔天才標記為已結束
-  return sessionDay < today ? 'done' : 'active';
+  return isPast(date.label, MONTH.year, now) ? 'done' : 'active';
 }
 
 export interface Track {
@@ -286,6 +293,139 @@ export const UPCOMING_TRACKS: UpcomingTrack[] = [
 /** 取得某個據點的所有課程 track（據點頁用來列出該城市的課表）。 */
 export function getTracksByVenue(slug: VenueSlug): Track[] {
   return TRACKS.filter((t) => t.venueSlug === slug);
+}
+
+// ---- 報名活動（報名頁 /enroll 的三個區塊）----
+//
+// 一場活動一筆。體驗課、新開的課程、客座 Workshop／Party 都放這裡，
+// 跟課表共用同一份 THEMES 與 MONTH.year，兩邊的顏色與年份不會走鐘。
+//
+// 維護規則：
+// - 表單還沒開放就把 enrollUrl 留成空字串 ''，那一場整張卡不會顯示（日期可以先寫進去佔位）。
+// - 辦完的活動不用手動刪，程式會用今天的日期自動隱藏（跨天活動要等最後一天過完）。
+// - venueSlug 不確定就不要填，卡片上就不顯示地點；亂填地址會跟據點頁的地址打架。
+// - 跨年的場次一定要填 year，否則排序會把一月排到十月前面。
+
+export type EventKind = 'trial' | 'course' | 'workshop';
+
+/** 外借場地。不是我們自己的據點，所以刻意不進 src/data/venues.ts（那裡是 NAP 單一來源）。 */
+export interface ExternalVenue {
+  name: string;
+  addressFull: string;
+  mapLink: string;
+}
+
+export interface EnrollEvent {
+  id: string; // 錨點 id 與 JSON-LD @id，例如 'tainan-salsa-trial-0924'
+  kind: EventKind;
+  theme: ThemeKey; // 只用來上小面積的舞種／活動色（日期章上緣與 chip）
+  danceStyle: string; // 'Salsa'
+  title: string;
+  note?: string; // 卡片上的補充說明
+  year?: number; // 預設 MONTH.year；跨年場次才要填
+  dateLabel: string; // '9/24'
+  endDateLabel?: string; // 跨天活動的最後一天
+  weekdayEn: string; // 'THU'（日期章上緣）
+  startTime?: string; // '19:30'
+  endTime?: string; // '21:00'
+  venueSlug?: VenueSlug; // 我們自己的據點
+  externalVenue?: ExternalVenue; // 外借場地（與 venueSlug 二擇一）
+  price?: number; // 有數字才輸出 JSON-LD 的 offers
+  priceNote?: string; // 卡片上顯示的費用文字，例如 '單堂 $350'
+  enrollUrl: string; // 空字串 = 報名未開放 → 整張卡不顯示
+}
+
+export const EVENTS: EnrollEvent[] = [
+  {
+    id: 'tainan-salsa-trial-0924',
+    kind: 'trial',
+    theme: 'tainanSun',
+    danceStyle: 'Salsa',
+    title: '台南 Salsa 體驗課',
+    note: '零基礎、沒有舞伴都可以來，單堂就能參加。',
+    dateLabel: '9/24',
+    weekdayEn: 'THU',
+    venueSlug: 'tainan',
+    // TODO: 上課時間與費用確定後補 startTime / endTime / priceNote
+    enrollUrl: 'https://forms.gle/icAqBNGFgdR62k7X7',
+  },
+  {
+    id: 'tainan-salsa-lv1-1001',
+    kind: 'course',
+    theme: 'tainanSun',
+    danceStyle: 'Salsa',
+    title: '台南 Salsa Lv1 新開課程',
+    note: '10/1 開課，從最基礎的重心與步伐開始帶。',
+    dateLabel: '10/1',
+    weekdayEn: 'THU',
+    venueSlug: 'tainan',
+    // TODO: 上課時間、堂數與費用確定後補 startTime / endTime / priceNote
+    enrollUrl: 'https://forms.gle/tbKtBbttVaqrarhj8',
+  },
+  {
+    id: 'anniversary-1003',
+    kind: 'workshop',
+    theme: 'party',
+    danceStyle: 'Bachata',
+    title: "Baila'more 二週年 Workshop / Party",
+    note: 'Workshop 14:00–17:30（Body Movement／Partner Work），Party 19:30–23:00 有表演環節；10/4 專題課程另行公告。詳細票種與價格以活動頁為準。',
+    dateLabel: '10/3',
+    weekdayEn: 'SAT',
+    startTime: '14:00',
+    endTime: '23:00',
+    // 場地是外借的文創園區，不是我們的教室。全站一律寫「台南」不寫「臺南」。
+    externalVenue: {
+      name: '台南文化創意產業園區',
+      addressFull: '701 台南市東區北門路二段 16 號 2F',
+      mapLink: 'https://maps.app.goo.gl/WbUDUafaSmBdhyUo8',
+    },
+    price: 1500,
+    priceNote: 'Workshop 單堂 $750・Full Pass $1500 起',
+    enrollUrl: 'https://sd-event.vercel.app/e/c3gsydpy',
+  },
+];
+
+/** 活動的年份。沒特別填就跟著課表的年份走。 */
+export function getEventYear(event: EnrollEvent): number {
+  return event.year ?? MONTH.year;
+}
+
+/** 排序用的數字鍵：20261003。跨年場次靠 year 才不會排錯。 */
+function eventSortKey(event: EnrollEvent): number {
+  const [month, day] = event.dateLabel.split('/').map(Number);
+  return getEventYear(event) * 10000 + (month ?? 0) * 100 + (day ?? 0);
+}
+
+/**
+ * 某一類還能報名的活動，依日期排序。
+ * 排除兩種：報名還沒開放（enrollUrl 空的，點不下去的卡沒有意義）、已經辦完的。
+ */
+export function getUpcomingEvents(
+  kind: EventKind,
+  now: Date = new Date()
+): EnrollEvent[] {
+  return EVENTS.filter((event) => {
+    if (event.kind !== kind) return false;
+    if (!event.enrollUrl) return false;
+    const lastDay = event.endDateLabel ?? event.dateLabel;
+    return !isPast(lastDay, getEventYear(event), now);
+  }).sort((a, b) => eventSortKey(a) - eventSortKey(b));
+}
+
+/**
+ * 結構化資料用的開始時間：'10/3' + 2026 + '14:00' → '2026-10-03T14:00:00+08:00'。
+ * 沒有時間就只到日期。放在這裡而不是 jsonLd.ts，因為它處理的是本檔特有的 dateLabel 格式。
+ */
+export function eventDateIso(
+  label: string,
+  year: number,
+  time?: string
+): string | null {
+  const [month, day] = label.split('/').map(Number);
+  if (!month || !day) return null;
+
+  const date = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  return time ? `${date}T${time}:00+08:00` : date;
 }
 
 // ---- 費用方案（與課表共用顏色，方便客人對應）----

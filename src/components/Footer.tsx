@@ -19,6 +19,7 @@ const Footer = () => {
             <h3 className="text-sm font-semibold text-gray-200 uppercase tracking-wider">快速連結</h3>
             <nav className="flex flex-col gap-2 text-sm">
               <Link href="/courses" className="hover:text-white transition-colors">課程資訊</Link>
+              <Link href={LINKS.ENROLL} className="hover:text-white transition-colors">課程報名</Link>
               <Link href="/teachers" className="hover:text-white transition-colors">師資介紹</Link>
               <Link href="/location" className="hover:text-white transition-colors">教室資訊</Link>
               <Link href={LINKS.PRICING} className="hover:text-white transition-colors">課程費用</Link>

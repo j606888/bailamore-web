@@ -18,21 +18,31 @@ const Hero = ({ videoUrl }: { videoUrl: string }) => {
           <br className="md:hidden" />
           Bachata，說不定你會愛上。
         </p>
-        <div className="flex flex-wrap gap-4">
-          <Link href={LINKS.INSTAGRAM_DM} target="_blank" rel="noopener noreferrer">
-            <Button size="lg" className="hover:cursor-pointer">
-              <IGIcon className="w-6 h-6" color="#ffffff" />
-              IG 私訊報名
-            </Button>
-          </Link>
-          <Link href="/courses?tab=pricing">
-            <Button
-              className="hover:cursor-pointer"
-              size="lg"
-              variant="outline"
-            >
-              了解費用
-            </Button>
+        {/* 主按鈕指向報名頁（現在開放哪些場次一目了然），IG 私訊降為次要。
+            「了解費用」改成文字連結，避免三顆按鈕在手機上擠成三行。 */}
+        <div className="flex flex-col items-center gap-3 md:items-start">
+          <div className="flex flex-wrap justify-center gap-4 md:justify-start">
+            <Link href={LINKS.ENROLL}>
+              <Button size="lg" className="hover:cursor-pointer">
+                立即報名
+              </Button>
+            </Link>
+            <Link href={LINKS.INSTAGRAM_DM} target="_blank" rel="noopener noreferrer">
+              <Button
+                className="hover:cursor-pointer"
+                size="lg"
+                variant="outline"
+              >
+                <IGIcon className="w-6 h-6" color="#009689" />
+                IG 私訊詢問
+              </Button>
+            </Link>
+          </div>
+          <Link
+            href={LINKS.PRICING}
+            className="text-sm font-medium text-teal-600 underline-offset-2 hover:underline md:text-base"
+          >
+            了解費用 →
           </Link>
         </div>
       </div>

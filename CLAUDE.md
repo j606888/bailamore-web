@@ -19,6 +19,7 @@ Next.js 15 App Router site for Baila'more, a Latin dance studio with venues in *
 **Pages (`src/app/`):**
 - `/` — home page composed of Hero, WhoWeAre, Testimonials, FAQ
 - `/courses?tab=schedule|introduction|pricing` — tab-based layout; tab state is synced with URL query param via `useSearchParams`
+- `/enroll` — course signup page; the landing page the Instagram bio points to. Three sections: 體驗課 → 常態課程 → Workshop・Party
 - `/teachers` — static teacher card grid
 - `/teachers/[slug]` — teacher detail, statically generated (`dynamicParams = false`)
 - `/location` — both-venue overview; `/location/tainan` and `/location/kaohsiung` are the per-city landing pages (they carry the city keywords for search)
@@ -26,6 +27,7 @@ Next.js 15 App Router site for Baila'more, a Latin dance studio with venues in *
 **Key data locations:**
 - Venues/addresses: `src/data/venues.ts` — **single source of truth for every address on the site**. Never hardcode an address elsewhere; inconsistent NAP hurts local search ranking. Always write 台南市 (not 臺南市).
 - Course dates, tracks, pricing: `src/components/courses/schedule/data.ts` (`TRACKS`, `MONTH`, `PRICE_PLANS`). A track's venue is `venueSlug`, resolved via `getVenue()`.
+- Signup links (trial classes, newly opened courses, guest workshops): `EVENTS` in the same `schedule/data.ts` — one entry per event, rendered by `/enroll`. Rules: leave `enrollUrl: ''` while the form isn't open and the whole card stays hidden; finished events hide themselves by date (`getUpcomingEvents()`), so never delete them by hand; omit `venueSlug` rather than guessing; a rented third-party venue goes in `externalVenue` on the event, never in `venues.ts`; a cross-year event must set `year` explicitly or it sorts wrong.
 - Teacher data: `src/data/teachers.ts`
 - FAQ: `src/data/faq.ts` · Testimonials: `src/data/testimonials.ts`
 - Site identity (URL, name, default description): `src/constants/site.ts`
@@ -34,7 +36,7 @@ Next.js 15 App Router site for Baila'more, a Latin dance studio with venues in *
 
 **SEO:**
 - `src/app/sitemap.ts` and `src/app/robots.ts` generate `/sitemap.xml` and `/robots.txt`.
-- `src/lib/jsonLd.ts` builds schema.org structured data; render it with `<JsonLd data={...} />` (`src/components/JsonLd.tsx`). Organization is in the root layout; each venue page carries a `LocalBusiness`, the home page a `FAQPage`, teacher pages a `Person`.
+- `src/lib/jsonLd.ts` builds schema.org structured data; render it with `<JsonLd data={...} />` (`src/components/JsonLd.tsx`). Organization is in the root layout; each venue page carries a `LocalBusiness`, the home page a `FAQPage`, teacher pages a `Person`, `/enroll` an `Event` per signup-open event (`eventJsonLd()` returns `null` when the event has no location or no form yet).
 - Every page sets `alternates.canonical`. Keep both cities represented in site-wide copy (root description, Footer, WhoWeAre).
 
 **UI conventions:**

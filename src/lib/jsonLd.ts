@@ -5,10 +5,15 @@
 
 import { SERVICE_AREAS, SITE_NAME, SITE_URL } from '@/constants/site';
 import { LINKS } from '@/constants/links';
-import type { Venue } from '@/data/venues';
+import { getVenue, type Venue } from '@/data/venues';
 import type { Faq } from '@/data/faq';
 import type { Teacher } from '@/data/teachers';
-import type { Track } from '@/components/courses/schedule/data';
+import {
+  eventDateIso,
+  getEventYear,
+  type EnrollEvent,
+  type Track,
+} from '@/components/courses/schedule/data';
 
 /** JSON-LD 是自由格式的物件，值可以是巢狀物件／陣列。 */
 export type JsonLd = Record<string, unknown>;
@@ -145,6 +150,83 @@ export function teacherJsonLd(teacher: Teacher): JsonLd {
     worksFor: { '@id': ORGANIZATION_ID },
     ...(teacher.instagram && {
       sameAs: [`https://www.instagram.com/${teacher.instagram}`],
+    }),
+  };
+}
+
+const KIND_DESCRIPTION: Record<EnrollEvent['kind'], string> = {
+  trial: '單堂體驗課，零基礎、沒有舞伴都可以報名。',
+  course: '常態課程新一期，零基礎、沒有舞伴都可以報名。',
+  workshop: '客座 Workshop／派對活動。',
+};
+
+/**
+ * 單場報名活動（體驗課 / 新開課程 / Workshop）的 Event。
+ *
+ * 為什麼要有這個：這些是有明確日期、地點與報名連結的活動，正是 Google 活動搜尋會吃的資料，
+ * 也是 AI 回答「最近有沒有體驗課」時最容易照抄的一段。
+ *
+ * 兩種情況回傳 null 不輸出：
+ * 1. 沒有地點（venueSlug 與 externalVenue 都沒填）—— Event 需要 location，猜一個地址比不放更糟。
+ * 2. 還沒開放報名（enrollUrl 是空的）—— 那一場在頁面上也不會顯示，
+ *    只有結構化資料宣告了看不到的活動反而是錯誤訊號。
+ */
+export function eventJsonLd(event: EnrollEvent): JsonLd | null {
+  if (!event.enrollUrl) return null;
+  if (!event.venueSlug && !event.externalVenue) return null;
+
+  const year = getEventYear(event);
+  const startDate = eventDateIso(event.dateLabel, year, event.startTime);
+  if (!startDate) return null;
+
+  const endDate = eventDateIso(
+    event.endDateLabel ?? event.dateLabel,
+    year,
+    event.endDateLabel ? undefined : event.endTime
+  );
+
+  // 自己的據點：用 @id 指回據點頁已宣告的 LocalBusiness，不重複寫地址。
+  // 外借場地：內嵌 Place，這個地址不屬於我們的 NAP，所以不能掛 LocalBusiness。
+  const location = event.venueSlug
+    ? { '@id': `${SITE_URL}/location/${event.venueSlug}#localbusiness` }
+    : {
+        '@type': 'Place',
+        name: event.externalVenue!.name,
+        address: event.externalVenue!.addressFull,
+        hasMap: event.externalVenue!.mapLink,
+      };
+
+  const venue = event.venueSlug ? getVenue(event.venueSlug) : null;
+  const where = venue
+    ? `在${venue.addressFull}（${venue.shortName}）舉行。`
+    : `在${event.externalVenue!.name}舉行。`;
+
+  const url = `${SITE_URL}/enroll#${event.id}`;
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': ['Event', 'EducationEvent'],
+    '@id': url,
+    name: event.title,
+    description: `${event.danceStyle} ${KIND_DESCRIPTION[event.kind]}${where}`,
+    url,
+    startDate,
+    ...(endDate && endDate !== startDate && { endDate }),
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    eventStatus: 'https://schema.org/EventScheduled',
+    inLanguage: 'zh-TW',
+    location,
+    organizer: { '@id': ORGANIZATION_ID },
+    about: [event.danceStyle, '拉丁舞', '社交舞'],
+    ...(event.price !== undefined && {
+      offers: {
+        '@type': 'Offer',
+        category: 'Paid',
+        price: event.price,
+        priceCurrency: 'TWD',
+        availability: 'https://schema.org/InStock',
+        url: event.enrollUrl,
+      },
     }),
   };
 }
