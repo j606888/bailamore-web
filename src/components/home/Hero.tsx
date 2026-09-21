@@ -2,11 +2,13 @@ import IGIcon from "@/components/icons/IGIcon";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { LINKS } from "@/constants/links";
+import FeaturedEventPill from "./FeaturedEventPill";
 
 const Hero = ({ videoUrl }: { videoUrl: string }) => {
   return (
     <div className="px-5 py-10 flex flex-col items-center justify-center gap-6 md:flex-row md:gap-6 md:max-w-7xl md:mx-auto">
       <div className="flex flex-col items-center justify-center gap-4 md:w-[420px] md:items-start md:flex-shrink-0">
+        <FeaturedEventPill />
         <h1 className="font-poppins text-2xl font-bold mb-1 md:text-5xl">
           第一次跳舞，
           <br className="hidden md:block" />
@@ -16,7 +18,7 @@ const Hero = ({ videoUrl }: { videoUrl: string }) => {
         <p className="text-base max-w-2xl text-center md:text-left md:text-md">
           沒舞伴、沒經驗都沒關係，來試一次
           <br className="md:hidden" />
-          Bachata，說不定你會愛上。
+          Bachata 或 Salsa，說不定你會愛上。
         </p>
         {/* 主按鈕指向報名頁（現在開放哪些場次一目了然），IG 私訊降為次要。
             「了解費用」改成文字連結，避免三顆按鈕在手機上擠成三行。 */}

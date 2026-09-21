@@ -139,6 +139,8 @@ export const MONTH: MonthConfig = {
     19: { theme: 'party', label: 'PARTY' },
     20: { theme: 'tainanSun', label: '台南', trackId: 'tainan-sun' },
     22: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
+    // 體驗課沒有 track 卡，方塊比週日常態課深一階以示區別
+    24: { theme: 'tainanSun', label: '體驗', cellBg: 'bg-[#c4665c]' },
     27: { theme: 'tainanSun', label: '台南', trackId: 'tainan-sun' },
     29: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
   },
@@ -157,6 +159,11 @@ export const MONTH: MonthConfig = {
       theme: 'kaohsiungThu',
       title: '週四・高雄教室',
       desc: 'Kizomba / Bachata · 19:30–23:00（10/1 新手體驗課、10/8 Kizomba Lv1 新一期）',
+    },
+    {
+      theme: 'tainanSun',
+      title: '9/24（四）台南 Salsa 體驗課',
+      desc: '零基礎、沒有舞伴都可以來，到「課程報名」頁填表',
     },
     {
       theme: 'party',
@@ -327,6 +334,7 @@ export interface EnrollEvent {
   price?: number; // 有數字才輸出 JSON-LD 的 offers
   priceNote?: string; // 卡片上顯示的費用文字，例如 '單堂 $350'
   enrollUrl: string; // 空字串 = 報名未開放 → 整張卡不顯示
+  bannerText?: string; // 有填就是「主打活動」：辦完之前首頁公告條與 Hero 會改推這一場
 }
 
 export const EVENTS: EnrollEvent[] = [
@@ -342,6 +350,7 @@ export const EVENTS: EnrollEvent[] = [
     venueSlug: 'tainan',
     // TODO: 上課時間與費用確定後補 startTime / endTime / priceNote
     enrollUrl: 'https://forms.gle/icAqBNGFgdR62k7X7',
+    bannerText: '9/24（四）台南 Salsa 體驗課開放報名，零基礎、沒有舞伴都可以來',
   },
   {
     id: 'tainan-salsa-lv1-1001',
@@ -398,12 +407,27 @@ export function getUpcomingEvents(
   kind: EventKind,
   now: Date = new Date()
 ): EnrollEvent[] {
-  return EVENTS.filter((event) => {
-    if (event.kind !== kind) return false;
-    if (!event.enrollUrl) return false;
-    const lastDay = event.endDateLabel ?? event.dateLabel;
-    return !isPast(lastDay, getEventYear(event), now);
-  }).sort((a, b) => eventSortKey(a) - eventSortKey(b));
+  return EVENTS.filter((event) => event.kind === kind && isOpen(event, now)).sort(
+    (a, b) => eventSortKey(a) - eventSortKey(b)
+  );
+}
+
+/**
+ * 現在要主打的活動（有填 bannerText、還能報名、日期最近的那一場）。
+ * 沒有的話回傳 null，首頁就退回 UPCOMING_TRACKS 的預告。
+ */
+export function getFeaturedEvent(now: Date = new Date()): EnrollEvent | null {
+  const featured = EVENTS.filter(
+    (event) => event.bannerText && isOpen(event, now)
+  ).sort((a, b) => eventSortKey(a) - eventSortKey(b));
+  return featured[0] ?? null;
+}
+
+/** 報名表已開放、而且還沒辦完（跨天活動要等最後一天過完）。 */
+function isOpen(event: EnrollEvent, now: Date): boolean {
+  if (!event.enrollUrl) return false;
+  const lastDay = event.endDateLabel ?? event.dateLabel;
+  return !isPast(lastDay, getEventYear(event), now);
 }
 
 /**
