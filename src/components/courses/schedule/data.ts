@@ -5,7 +5,12 @@
 
 import type { VenueSlug } from '@/data/venues';
 
-export type ThemeKey = 'tainanSun' | 'tainanTue' | 'kaohsiungThu' | 'party';
+export type ThemeKey =
+  | 'tainanSun'
+  | 'tainanTue'
+  | 'tainanThu'
+  | 'kaohsiungThu'
+  | 'party';
 
 export type SessionStatus = 'done' | 'active' | 'upcoming';
 
@@ -91,6 +96,14 @@ export const THEMES: Record<ThemeKey, ThemeStyle> = {
     legendDot: 'bg-[#e0a23c]',
     blob: 'bg-[#f0c878]',
   },
+  tainanThu: {
+    pageFrom: 'bg-[#dcefd9]',
+    accentText: 'text-[#3f8a4f]',
+    accentBg: 'bg-[#4f9d5f]',
+    highlightCell: 'bg-[#5aa86a]',
+    legendDot: 'bg-[#5aa86a]',
+    blob: 'bg-[#f2c6a0]',
+  },
   kaohsiungThu: {
     pageFrom: 'bg-[#cfe0f5]',
     accentText: 'text-[#4d7fc4]',
@@ -127,48 +140,43 @@ export interface MonthConfig {
 
 export const MONTH: MonthConfig = {
   year: 2026,
-  month: 9,
-  titleEn: 'SEPTEMBER',
-  titleZh: '九月',
+  month: 10,
+  titleEn: 'OCTOBER',
+  titleZh: '十月',
+  // 台南週日十月課表還沒確定，確定後再補日子與圖例
   highlights: {
-    1: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
-    8: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
-    10: { theme: 'kaohsiungThu', label: '高雄', trackId: 'kaohsiung-thu' },
-    13: { theme: 'tainanSun', label: '台南', trackId: 'tainan-sun' },
-    17: { theme: 'kaohsiungThu', label: '高雄', trackId: 'kaohsiung-thu' },
-    19: { theme: 'party', label: 'PARTY' },
-    20: { theme: 'tainanSun', label: '台南', trackId: 'tainan-sun' },
-    22: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
-    // 體驗課沒有 track 卡，方塊比週日常態課深一階以示區別
-    24: { theme: 'tainanSun', label: '體驗', cellBg: 'bg-[#c4665c]' },
-    27: { theme: 'tainanSun', label: '台南', trackId: 'tainan-sun' },
-    29: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
+    // 週四台南 Salsa 與高雄體驗課同一天：一格只能放一個顏色／連結，標「台南・高雄」、連到高雄課卡
+    1: { theme: 'kaohsiungThu', label: '台南・高雄', trackId: 'kaohsiung-thu' },
+    3: { theme: 'party', label: 'PARTY' },
+    6: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
+    8: { theme: 'tainanThu', label: '台南', trackId: 'tainan-thu' },
+    13: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
+    15: { theme: 'kaohsiungThu', label: '台南・高雄', trackId: 'kaohsiung-thu' },
+    20: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
+    22: { theme: 'kaohsiungThu', label: '台南・高雄', trackId: 'kaohsiung-thu' },
+    27: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
+    29: { theme: 'tainanThu', label: '台南', trackId: 'tainan-thu' },
   },
   legend: [
     {
-      theme: 'tainanSun',
-      title: '週日・台南教室',
-      desc: 'Body movement / Bachata Lv2 / Salsa · 14:00–18:00',
-    },
-    {
       theme: 'tainanTue',
       title: '週二・台南教室',
-      desc: 'Bachata 1-2 / 1-1 · 19:30–23:00',
+      desc: 'Bachata 1-3 / 1-2 · 19:30–22:30（10/6–11/3 共五堂）',
+    },
+    {
+      theme: 'tainanThu',
+      title: '週四・台南教室',
+      desc: 'Salsa 1-1 · 19:15–21:45（10/1–10/29 共五堂）',
     },
     {
       theme: 'kaohsiungThu',
       title: '週四・高雄教室',
-      desc: 'Kizomba / Bachata · 19:30–23:00（10/1 新手體驗課、10/8 Kizomba Lv1 新一期）',
-    },
-    {
-      theme: 'tainanSun',
-      title: '9/24（四）台南 Salsa 體驗課',
-      desc: '零基礎、沒有舞伴都可以來，到「課程報名」頁填表',
+      desc: '百元體驗課 19:30–20:30（10/1 Kizomba、10/15 Salsa、10/22 Bachata）・Bachata training 20:30–21:30・mini social 至 23:00',
     },
     {
       theme: 'party',
-      title: '9/19（六）LEGENDS PARTY',
-      desc: '當天另有 Salsa 體驗課',
+      title: "10/3（六）Baila'more 二週年 Workshop / Party",
+      desc: 'Workshop 14:00–17:30・Party 19:30–23:00，地點在台南文化創意產業園區，到「課程報名」頁買票',
     },
   ],
 };
@@ -210,25 +218,51 @@ export const TRACKS: Track[] = [
     cityZh: '台南教室',
     sessionLabelEn: 'TUESDAY',
     dayZh: '週二',
-    badge: 'Bachata 1-1・1-2 開課中',
-    badgeNote: '本期 8/25–9/29 共五堂，9/29 結束',
+    badge: 'Bachata 1-3・1-2 新一期 10/6 開課',
+    badgeNote: '本期 10/6–11/3 連續五週，每堂課後接練習時間',
     tabLabel: '週二・台南',
     slots: [
-      { time: '19:30–20:45', title: 'Bachata 1-2' },
-      { time: '21:00–22:15', title: 'Bachata 1-1' },
-      { time: '22:15–23:00', title: '練習時間' },
+      { time: '19:30–20:30', title: 'Bachata 1-3' },
+      { time: '20:30–21:00', title: '練習時間' },
+      { time: '21:00–22:00', title: 'Bachata 1-2' },
+      { time: '22:00–22:30', title: '練習時間' },
     ],
     datesTitle: '本期場次',
-    datesNote: '9/15 停課',
     dates: [
-      { label: '8/25', note: '第一堂' },
-      { label: '9/1', note: '第二堂' },
-      { label: '9/8', note: '第三堂' },
-      { label: '9/22', note: '第四堂' },
-      { label: '9/29', note: '第五堂' },
+      { label: '10/6', note: '第一堂' },
+      { label: '10/13', note: '第二堂' },
+      { label: '10/20', note: '第三堂' },
+      { label: '10/27', note: '第四堂' },
+      { label: '11/3', note: '第五堂' },
     ],
     venueSlug: 'tainan',
     pricePlanId: 'tuesday-plan',
+    priceSummary: '整期五堂 $1600・單堂 $400',
+  },
+  {
+    id: 'tainan-thu',
+    theme: 'tainanThu',
+    cityEn: 'TAINAN',
+    cityZh: '台南教室',
+    sessionLabelEn: 'THURSDAY',
+    dayZh: '週四',
+    badge: 'NEW Salsa 1-1 開課',
+    badgeNote: '本期 10/1–10/29 連續五週，課後接練習時間',
+    tabLabel: '週四・台南',
+    slots: [
+      { time: '19:15–20:30', title: 'Salsa 1-1' },
+      { time: '20:30–21:45', title: '練習時間' },
+    ],
+    datesTitle: '本期場次',
+    dates: [
+      { label: '10/1', note: '第一堂' },
+      { label: '10/8', note: '第二堂' },
+      { label: '10/15', note: '第三堂' },
+      { label: '10/22', note: '第四堂' },
+      { label: '10/29', note: '第五堂' },
+    ],
+    venueSlug: 'tainan',
+    pricePlanId: 'thursday-salsa-plan',
     priceSummary: '整期五堂 $2000・單堂 $450',
   },
   {
@@ -238,20 +272,20 @@ export const TRACKS: Track[] = [
     cityZh: '高雄教室',
     sessionLabelEn: 'THURSDAY',
     dayZh: '週四',
-    badge: 'Kizomba Lv1 新一期 10/8 開課',
-    badgeNote: '10/1 先開新手體驗課，零基礎、沒有舞伴都可以來',
+    badge: '十月百元體驗課 × Bachata training',
+    badgeNote: '每場體驗課後接 Bachata training，零基礎、沒有舞伴都可以來',
     tabLabel: '週四・高雄',
     slots: [
-      { time: '19:30–20:30', title: 'Kizomba Lv1.5 → Lv1' },
+      { time: '19:30–20:30', title: '百元體驗課（Kizomba / Salsa / Bachata）' },
       { time: '20:30–21:30', title: 'Bachata training' },
       { time: '21:30–23:00', title: 'mini social' },
     ],
-    datesTitle: '近期場次',
-    datesNote: '每週四常態開課・無期數限制，隨時可插班',
+    datesTitle: '十月場次',
+    datesNote: '10/8、10/29 停課',
     dates: [
-      { label: '9/17', note: 'Lv1.5 最後一堂' },
-      { label: '10/1', note: '新手體驗課' },
-      { label: '10/8', note: 'Lv1 第一堂' },
+      { label: '10/1', note: 'Kizomba 體驗課' },
+      { label: '10/15', note: 'Salsa 體驗課' },
+      { label: '10/22', note: 'Bachata 體驗課' },
     ],
     venueSlug: 'kaohsiung',
     pricePlanId: 'card-plan',
@@ -337,6 +371,9 @@ export interface EnrollEvent {
   bannerText?: string; // 有填就是「主打活動」：辦完之前首頁公告條與 Hero 會改推這一場
 }
 
+const KAOHSIUNG_TRIAL_FORM =
+  'https://docs.google.com/forms/d/e/1FAIpQLSegflVSfuc2llsPhdfoWaKh57dSTafoa1WwLG-PyivXiyXXQg/viewform';
+
 export const EVENTS: EnrollEvent[] = [
   {
     id: 'tainan-salsa-trial-0924',
@@ -355,15 +392,87 @@ export const EVENTS: EnrollEvent[] = [
   {
     id: 'tainan-salsa-lv1-1001',
     kind: 'course',
-    theme: 'tainanSun',
+    theme: 'tainanThu',
     danceStyle: 'Salsa',
-    title: '台南 Salsa Lv1 新開課程',
-    note: '10/1 開課，從最基礎的重心與步伐開始帶。',
+    title: '台南週四 Salsa 1-1',
+    note: '10/1–10/29 連續五週，19:15–20:30 上課，20:30–21:45 練習時間。',
+    dateLabel: '10/1',
+    endDateLabel: '10/29',
+    weekdayEn: 'THU',
+    startTime: '19:15',
+    endTime: '21:45',
+    venueSlug: 'tainan',
+    price: 2000,
+    priceNote: '整期五堂 $2000・單堂 $450',
+    enrollUrl: 'https://forms.gle/Yf1afY8bg8qaAfJ28',
+  },
+  {
+    id: 'tainan-bachata-tue-1006',
+    kind: 'course',
+    theme: 'tainanTue',
+    danceStyle: 'Bachata',
+    title: '台南週二 Bachata 1-3・1-2',
+    note: '10/6–11/3 連續五週，19:30 Bachata 1-3、21:00 Bachata 1-2，每堂課後接練習時間。',
+    dateLabel: '10/6',
+    endDateLabel: '11/3',
+    weekdayEn: 'TUE',
+    startTime: '19:30',
+    endTime: '22:30',
+    venueSlug: 'tainan',
+    price: 1600,
+    priceNote: '整期五堂 $1600・單堂 $400',
+    enrollUrl: 'https://forms.gle/LYF74guiYbcggBCD9',
+  },
+  {
+    id: 'kaohsiung-kizomba-trial-1001',
+    kind: 'trial',
+    theme: 'kaohsiungThu',
+    danceStyle: 'Kizomba',
+    title: '高雄 Kizomba 百元體驗課',
+    note: '零基礎、沒有舞伴都可以來，課後接 Bachata training 與 mini social。',
     dateLabel: '10/1',
     weekdayEn: 'THU',
-    venueSlug: 'tainan',
-    // TODO: 上課時間、堂數與費用確定後補 startTime / endTime / priceNote
-    enrollUrl: 'https://forms.gle/tbKtBbttVaqrarhj8',
+    startTime: '19:30',
+    endTime: '20:30',
+    venueSlug: 'kaohsiung',
+    price: 100,
+    priceNote: '體驗價 $100',
+    // 三場共用同一張表單，填表時再選場次
+    enrollUrl: KAOHSIUNG_TRIAL_FORM,
+  },
+  {
+    id: 'kaohsiung-salsa-trial-1015',
+    kind: 'trial',
+    theme: 'kaohsiungThu',
+    danceStyle: 'Salsa',
+    title: '高雄 Salsa 百元體驗課',
+    note: '零基礎、沒有舞伴都可以來，課後接 Bachata training 與 mini social。',
+    dateLabel: '10/15',
+    weekdayEn: 'THU',
+    startTime: '19:30',
+    endTime: '20:30',
+    venueSlug: 'kaohsiung',
+    price: 100,
+    priceNote: '體驗價 $100',
+    // 三場共用同一張表單，填表時再選場次
+    enrollUrl: KAOHSIUNG_TRIAL_FORM,
+  },
+  {
+    id: 'kaohsiung-bachata-trial-1022',
+    kind: 'trial',
+    theme: 'kaohsiungThu',
+    danceStyle: 'Bachata',
+    title: '高雄 Bachata 百元體驗課',
+    note: '零基礎、沒有舞伴都可以來，課後接 Bachata training 與 mini social。',
+    dateLabel: '10/22',
+    weekdayEn: 'THU',
+    startTime: '19:30',
+    endTime: '20:30',
+    venueSlug: 'kaohsiung',
+    price: 100,
+    priceNote: '體驗價 $100',
+    // 三場共用同一張表單，填表時再選場次
+    enrollUrl: KAOHSIUNG_TRIAL_FORM,
   },
   {
     id: 'anniversary-1003',
@@ -507,22 +616,39 @@ export const PRICE_PLANS: PricePlan[] = [
   },
   {
     id: 'tuesday-plan',
-    name: '週二・新常態班（台南）',
+    name: '週二・Bachata 1-2、1-3（台南）',
     chips: [{ label: '週二・台南', theme: 'tainanTue' }],
     tiers: [
       {
-        title: '新常態班 5 堂',
-        subtitle: '第二期 8/25–9/29 共五堂（9/15 停課）',
+        title: 'Bachata 1-2、1-3 5 堂',
+        subtitle: '10/6–11/3 連續五週，含課後練習時間',
         courses: [
           { name: 'Bachata 1-2', theme: 'tainanTue' },
-          { name: 'Bachata 1-1', theme: 'tainanTue' },
+          { name: 'Bachata 1-3', theme: 'tainanTue' },
         ],
+        options: [
+          { name: '整期五堂', price: 1600 },
+          { name: '單堂報名', price: 400 },
+        ],
+      },
+    ],
+    note: '*週二 Bachata 為獨立方案，與課卡不通用。',
+  },
+  {
+    id: 'thursday-salsa-plan',
+    name: '週四・Salsa 1-1（台南）',
+    chips: [{ label: '週四・台南', theme: 'tainanThu' }],
+    tiers: [
+      {
+        title: 'Salsa 1-1 5 堂',
+        subtitle: '10/1–10/29 連續五週，含課後練習時間',
+        courses: [{ name: 'Salsa 1-1', theme: 'tainanThu' }],
         options: [
           { name: '整期五堂', price: 2000 },
           { name: '單堂報名', price: 450 },
         ],
       },
     ],
-    note: '*新常態班為獨立方案，與課卡不通用。',
+    note: '*Salsa 1-1 為獨立方案，與課卡、週二 Bachata 不通用。',
   },
 ];

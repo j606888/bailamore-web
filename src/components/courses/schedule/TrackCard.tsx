@@ -89,7 +89,7 @@ export default function TrackCard({ track }: { track: Track }) {
           >
             <span
               className={cn(
-                'font-poppins text-base font-bold tabular-nums md:text-xl',
+                'shrink-0 whitespace-nowrap font-poppins text-base font-bold tabular-nums md:text-xl',
                 theme.accentText
               )}
             >
