@@ -12,6 +12,7 @@ const NAV_LINKS = [
   { name: '課程報名', href: LINKS.ENROLL },
   { name: '師資介紹', href: '/teachers' },
   { name: '教室資訊', href: '/location' },
+  { name: '兩年回顧', href: '/journey' },
   // { name: '活動', href: '/events', disabled: true },
   // { name: '課程紀錄', href: '/record', disabled: true },
 ];

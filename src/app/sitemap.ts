@@ -13,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/enroll', priority: 0.9 },
     { path: '/location', priority: 0.8 },
     { path: '/teachers', priority: 0.7 },
+    { path: '/journey', priority: 0.6 },
   ];
 
   // 據點頁是城市關鍵字（台南／高雄）的落地頁，優先度拉高
