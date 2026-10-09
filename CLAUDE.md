@@ -21,6 +21,8 @@ Next.js 15 App Router site for Baila'more, a Latin dance studio with venues in *
 - `/courses?tab=schedule|introduction|pricing` — tab-based layout; tab state is synced with URL query param via `useSearchParams`
 - `/enroll` — course signup page; the landing page the Instagram bio points to. Three sections: 體驗課 → 常態課程 → Workshop・Party
 - `/journey` — two-year recap: one player that is IG-stories on mobile and a projector mode on desktop (fullscreen loops; used at the anniversary party), plus a server-rendered event list linking back via `#slug`
+- `/story` — brand story (name meaning, logotype I/O/R); links to `/merch`
+- `/merch` — two-year anniversary merch, one card per product, grouped by story chapter
 - `/teachers` — static teacher card grid
 - `/teachers/[slug]` — teacher detail, statically generated (`dynamicParams = false`)
 - `/location` — both-venue overview; `/location/tainan` and `/location/kaohsiung` are the per-city landing pages (they carry the city keywords for search)
@@ -31,6 +33,7 @@ Next.js 15 App Router site for Baila'more, a Latin dance studio with venues in *
 - Signup links (trial classes, newly opened courses, guest workshops): `EVENTS` in the same `schedule/data.ts` — one entry per event, rendered by `/enroll`. Rules: leave `enrollUrl: ''` while the form isn't open and the whole card stays hidden; finished events hide themselves by date (`getUpcomingEvents()`), so never delete them by hand; omit `venueSlug` rather than guessing; a rented third-party venue goes in `externalVenue` on the event, never in `venues.ts`; a cross-year event must set `year` explicitly or it sorts wrong.
 - Teacher data: `src/data/teachers.ts`
 - Recap events: `src/data/journey.ts`. Media lives in Vercel Blob under `journey/<slug>/`: every event has `cover.jpg`, and `media` lists the files to play in order (photos `.jpg`, clips `.mp4`). Swap a file by re-uploading to the same path; adding or removing files means updating `media`.
+- Brand story copy: `src/data/story.ts` · Merch: `src/data/merch.ts` (`MERCH_CHAPTERS`). Leave a product's `imageUrl: ''` for the photo placeholder and `buyUrl: ''` for a disabled「即將開賣」button; fill them in when ready.
 - FAQ: `src/data/faq.ts` · Testimonials: `src/data/testimonials.ts`
 - Site identity (URL, name, default description): `src/constants/site.ts`
 - External links (Instagram DM / LINE): `src/constants/links.ts`
