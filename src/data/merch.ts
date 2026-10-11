@@ -192,7 +192,7 @@ export const MERCH_CHAPTERS: MerchChapter[] = [
           '所以，穿上它吧。\n跳出你的風格，\n找到你的節奏，\n然後大方地為自己驕傲，\n也別忘了為身邊的人喝采。',
           'RRRRRR!\nR級讚賞，送給每一個值得被喝采的你。',
         ],
-        imageUrl: '',
+        imageUrl: '/merch/r-socks.jpg',
         buyUrl: '',
       },
     ],
