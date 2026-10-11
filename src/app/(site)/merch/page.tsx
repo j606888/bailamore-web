@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { MERCH_CHAPTERS, MERCH_CLOSING, type MerchItem } from '@/data/merch';
 
 const DESCRIPTION =
-  "Baila'more 兩週年周邊：不焦慮、狂漲粉、粉口愛、不焦橘、這樣紫、VAMOS 束口袋、R級讚賞襪。把跳舞教會我們的事，做成可以穿、可以戴、可以帶著走的東西。";
+  "Baila'more 兩週年周邊：不焦綠、狂漲粉、粉口愛、不焦橘、這樣紫、VAMOS 束口袋、R級讚賞襪。把跳舞教會我們的事，做成可以穿、可以戴、可以帶著走的東西。";
 
 export const metadata: Metadata = {
   title: '周邊商品',

@@ -32,13 +32,13 @@ export const MERCH_CHAPTERS: MerchChapter[] = [
     items: [
       {
         slug: 'no-anxiety',
-        name: '不焦慮',
+        name: '不焦綠',
         lines: [
           '第一次跳不會怎樣。\n跳錯不會怎樣。\n記不起來也不會怎樣。',
           '舞池不是考場。',
           '我們希望你可以帶著一點不完美進來，\n然後在音樂裡慢慢找到自己的節奏。',
         ],
-        imageUrl: '',
+        imageUrl: '/merch/no-anxiety.jpg',
         buyUrl: '',
       },
       {
@@ -49,7 +49,7 @@ export const MERCH_CHAPTERS: MerchChapter[] = [
           '於是我們開始發現：\n原來跳舞不只是學會一個舞步，\n它也讓我們的世界越來越大。',
           '狂漲粉。\n漲的不只是社群上的粉絲，\n也是一起跳舞的人。',
         ],
-        imageUrl: '',
+        imageUrl: '/merch/more-fans.jpg',
         buyUrl: '',
       },
       {
@@ -61,7 +61,7 @@ export const MERCH_CHAPTERS: MerchChapter[] = [
           "但某種程度上，它也是 Baila'more 最真實的樣子：\n我們可以談愛、談連結、談自我，\n但最後還是要回到舞池裡，\n跳到滿頭大汗。",
           'For bailar.',
         ],
-        imageUrl: '',
+        imageUrl: '/merch/humidity-control.jpg',
         buyUrl: '',
       },
     ],
@@ -88,7 +88,7 @@ export const MERCH_CHAPTERS: MerchChapter[] = [
           '因為你不需要變成誰，\n才值得被喜歡。',
           '你本來就粉口愛。',
         ],
-        imageUrl: '',
+        imageUrl: '/merch/pink.jpg',
         buyUrl: '',
       },
       {
@@ -103,7 +103,7 @@ export const MERCH_CHAPTERS: MerchChapter[] = [
           '沒有必要拿別人的進度，\n衡量自己的速度。',
           '所以：\n不焦橘。\n你的時區沒有錯。',
         ],
-        imageUrl: '',
+        imageUrl: '/merch/orange.jpg',
         buyUrl: '',
       },
       {
@@ -168,7 +168,7 @@ export const MERCH_CHAPTERS: MerchChapter[] = [
           '黑色承載所有色彩，\nLogo 承載所有故事。',
           '而我們希望你帶著它，\n去不同的城市、不同的舞會、不同的舞池，\n遇見更多喜歡跳舞的人。',
         ],
-        imageUrl: '',
+        imageUrl: '/merch/drawstring-bag.jpg',
         buyUrl: '',
       },
     ],
