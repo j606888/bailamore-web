@@ -21,7 +21,7 @@ export const TEACHERS: Teacher[] = [
     name: 'Sean',
     title: "Baila'more創辦人",
     imageUrl: '/teachers/Sean.jpg',
-    instagram: 'baila_moredancestudio',
+    instagram: 'bailamore_studio',
     skills: ['Bachata', 'Salsa', 'Zouk'],
     courses: ['Bachata Lv1', 'Bachata Lv2', 'Bachata 進階'],
     description: [
