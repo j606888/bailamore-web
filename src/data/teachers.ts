@@ -11,7 +11,7 @@ export interface Teacher {
   courses: string[]; // 授課項目
   description: string[]; // 多段簡介
   videos: string[]; // YouTube embed 連結，或 Vercel Blob 影片檔
-  sortOrder: number; // 列表排序（小的在前，第一位為首頁大卡）
+  sortOrder: number; // 列表排序（小的在前，前兩位是師資頁的主打大卡）
   published: boolean;
 }
 
@@ -43,13 +43,13 @@ export const TEACHERS: Teacher[] = [
     imageUrl: '/teachers/dingding.jpg',
     instagram: 'damn.dingding',
     skills: ['Bachata', 'Salsa', 'Zouk'],
-    courses: ['Bachata Lv1'],
+    courses: ['Bachata Lv1', 'Salsa Lv1'],
     description: ['嗨嗨，我是丁丁，我超愛跳 Salsa'], // TODO: 補上丁丁的簡介
     videos: [
       'https://ikhr8fc3iglih52q.public.blob.vercel-storage.com/ding-1.mp4',
       'https://ikhr8fc3iglih52q.public.blob.vercel-storage.com/ding-2.mp4',
     ],
-    sortOrder: 1,
+    sortOrder: 2,
     published: true,
   },
   {
@@ -64,7 +64,7 @@ export const TEACHERS: Teacher[] = [
       'https://ikhr8fc3iglih52q.public.blob.vercel-storage.com/charlene-1.mp4',
       'https://ikhr8fc3iglih52q.public.blob.vercel-storage.com/charlene-2.mp4',
     ],
-    sortOrder: 2,
+    sortOrder: 3,
     published: true,
   },
   {
@@ -80,7 +80,19 @@ export const TEACHERS: Teacher[] = [
       'https://ikhr8fc3iglih52q.public.blob.vercel-storage.com/nini-2.mp4',
       'https://ikhr8fc3iglih52q.public.blob.vercel-storage.com/nini-3.mp4',
     ],
-    sortOrder: 3,
+    sortOrder: 1,
+    published: true,
+  },
+  {
+    slug: 'nora',
+    name: 'Nora',
+    imageUrl: '/teachers/placeholder.svg', // TODO: 換成 Nora 的照片
+    instagram: 'nora_chou0829',
+    skills: ['Salsa'],
+    courses: ['Salsa Lv1'],
+    description: ['Nora 的老師介紹即將上線。'], // TODO: 補上 Nora 的簡介
+    videos: [],
+    sortOrder: 4,
     published: true,
   },
 ];
