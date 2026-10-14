@@ -65,7 +65,7 @@ export const VENUES: Venue[] = [
       'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d239.85183938333768!2d120.21063370455558!3d22.994232091187936!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e768c1cdb6a8b%3A0x63cdd79f783bce5c!2z6JCs5piM6LW3576p!5e0!3m2!1szh-TW!2stw!4v1782357028566!5m2!1szh-TW!2stw',
     mapLink: mapLink('萬昌起義 台南市中西區民族路二段57巷'),
     navNote: '導航請搜尋地標「萬昌起義」（一間酒吧），教室在它對面的住宅區。',
-    trackIds: ['tainan-sun', 'tainan-tue'],
+    trackIds: ['tainan-tue', 'tainan-thu'],
   },
   {
     slug: 'kaohsiung',

@@ -1,4 +1,4 @@
-// 九月課表的單一資料來源。新增/編輯 track、場次、月曆 highlight 只要改這裡。
+// 課表的單一資料來源。新增/編輯 track、場次、月曆 highlight 只要改這裡。
 // 目前完全寫死、未接後台；樣式確定後再接回 Prisma（見 src/lib/queries.ts）。
 //
 // 地址不寫在這裡：據點資料集中於 src/data/venues.ts，track 只存 venueSlug。
@@ -143,7 +143,7 @@ export const MONTH: MonthConfig = {
   month: 10,
   titleEn: 'OCTOBER',
   titleZh: '十月',
-  // 台南週日十月課表還沒確定，確定後再補日子與圖例
+  // 台南週日十月沒有開班；恢復時從 git 歷史把 tainan-sun track 加回 TRACKS
   highlights: {
     // 週四台南 Salsa 與高雄體驗課同一天：一格只能放一個顏色／連結，標「台南・高雄」、連到高雄課卡
     1: { theme: 'kaohsiungThu', label: '台南・高雄', trackId: 'kaohsiung-thu' },
@@ -182,35 +182,6 @@ export const MONTH: MonthConfig = {
 };
 
 export const TRACKS: Track[] = [
-  {
-    id: 'tainan-sun',
-    theme: 'tainanSun',
-    cityEn: 'TAINAN',
-    cityZh: '台南教室',
-    sessionLabelEn: 'SUNDAY',
-    dayZh: '週日',
-    badge: 'NEW Salsa 老師',
-    badgeNote: '單人 Salsa 由 Nini 老師授課',
-    tabLabel: '週日・台南',
-    slots: [
-      { time: '14:00–15:00', title: 'Body movement' },
-      { time: '15:00–16:00', title: 'Bachata Lv2' },
-      { time: '16:00–17:00', title: '單人 Salsa（By Nini）' },
-      { time: '17:00–18:00', title: 'Pratica' },
-    ],
-    datesTitle: '本期場次',
-    dates: [
-      { label: '8/9', note: '第一堂' },
-      { label: '8/23', note: '第二堂' },
-      { label: '8/30', note: '第三堂' },
-      { label: '9/13', note: '第四堂' },
-      { label: '9/20', note: '第五堂' },
-      { label: '9/27', note: '第六堂' },
-    ],
-    venueSlug: 'tainan',
-    pricePlanId: 'card-plan',
-    priceSummary: '課卡制・6 堂 $2000・單堂 $350',
-  },
   {
     id: 'tainan-tue',
     theme: 'tainanTue',
@@ -289,7 +260,7 @@ export const TRACKS: Track[] = [
     ],
     venueSlug: 'kaohsiung',
     pricePlanId: 'card-plan',
-    priceSummary: '課卡制・6 堂 $2000・單堂 $350',
+    priceSummary: '課卡制・6 堂 $2000・單堂 $400',
   },
 ];
 
@@ -366,7 +337,7 @@ export interface EnrollEvent {
   venueSlug?: VenueSlug; // 我們自己的據點
   externalVenue?: ExternalVenue; // 外借場地（與 venueSlug 二擇一）
   price?: number; // 有數字才輸出 JSON-LD 的 offers
-  priceNote?: string; // 卡片上顯示的費用文字，例如 '單堂 $350'
+  priceNote?: string; // 卡片上顯示的費用文字，例如 '單堂 $400'
   enrollUrl: string; // 空字串 = 報名未開放 → 整張卡不顯示
   bannerText?: string; // 有填就是「主打活動」：辦完之前首頁公告條與 Hero 會改推這一場
 }
@@ -608,7 +579,7 @@ export const PRICE_PLANS: PricePlan[] = [
         ],
         options: [
           { name: '6 堂課程', price: 2000 },
-          { name: '單堂', price: 350 },
+          { name: '單堂', price: 400 },
         ],
       },
     ],
