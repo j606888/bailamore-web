@@ -58,7 +58,7 @@ const BuyButton = ({ item }: { item: MerchItem }) =>
     </Button>
   ) : (
     <Button disabled className="w-full">
-      即將開賣
+      缺貨中
     </Button>
   );
 

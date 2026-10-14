@@ -1,9 +1,9 @@
 // /merch 周邊商品（來源：Google Doc「Baila'more｜品牌故事」第三章以後）。
 // 每個字串是一段；段內的 \n 是原文的短句換行，頁面用 whitespace-pre-line 保留。
 //
-// 商品照與購買連結還沒好：
+// 商品照與購買連結：
 // - imageUrl 留 '' → 顯示「商品照即將上線」的灰底 placeholder
-// - buyUrl 留 '' → 購買按鈕顯示為停用的「即將開賣」
+// - buyUrl 留 '' → 購買按鈕顯示為停用的「缺貨中」
 
 export type MerchItem = {
   slug: string;
@@ -89,7 +89,7 @@ export const MERCH_CHAPTERS: MerchChapter[] = [
           '你本來就粉口愛。',
         ],
         imageUrl: '/merch/pink.jpg',
-        buyUrl: '',
+        buyUrl: 'https://reurl.cc/vGxlzL',
       },
       {
         slug: 'orange',
@@ -104,7 +104,7 @@ export const MERCH_CHAPTERS: MerchChapter[] = [
           '所以：\n不焦橘。\n你的時區沒有錯。',
         ],
         imageUrl: '/merch/orange.jpg',
-        buyUrl: '',
+        buyUrl: 'https://reurl.cc/vGxlzL',
       },
       {
         slug: 'purple',
@@ -118,7 +118,7 @@ export const MERCH_CHAPTERS: MerchChapter[] = [
           '然後告訴你：我們就喜歡你這樣紫。',
         ],
         imageUrl: '',
-        buyUrl: '',
+        buyUrl: 'https://reurl.cc/vGxlzL',
       },
     ],
   },
