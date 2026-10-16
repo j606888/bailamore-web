@@ -105,8 +105,9 @@ export const VENUES: Venue[] = [
     streetAddress: '仁智街304之3號3樓',
     postalCode: '800',
     addressFull: '800 高雄市新興區仁智街 304 之 3 號 3 樓',
-    // TODO: 座標還沒確認，先不填（地圖用地址定位）；確認後補 geo 並把 mapEmbedSrc 換成 mapEmbed(lat, lng)
-    mapEmbedSrc: `https://maps.google.com/maps?q=${encodeURIComponent('高雄市新興區仁智街304之3號')}&hl=zh-TW&z=17&output=embed`,
+    // 座標取自 Google 地圖上「24 steps」商家位置放置的圖釘
+    geo: { lat: 22.6230093, lng: 120.3021045 },
+    mapEmbedSrc: mapEmbed(22.6230093, 120.3021045),
     mapLink: 'https://maps.app.goo.gl/2QFtsTbWmrsPPp6D9',
     navNote: '教室在 3 樓，導航搜尋「24 steps」（Google 地圖上的名稱中間有空格）或直接輸入地址即可。',
     trackIds: ['kaohsiung-tue'],
