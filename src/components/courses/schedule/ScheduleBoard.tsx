@@ -2,10 +2,10 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
-import MonthOverview from './MonthOverview';
+import MonthCarousel from './MonthCarousel';
 import TrackCard from './TrackCard';
 import UpcomingTrackCard from './UpcomingTrackCard';
-import { THEMES, TRACKS, UPCOMING_TRACKS } from './data';
+import { MONTHS, THEMES, TRACKS, UPCOMING_TRACKS } from './data';
 
 export default function ScheduleBoard() {
   // 三張課表卡改成 tab，一次只顯示一張（手機要滑很久才看得到最後一張）。
@@ -46,7 +46,10 @@ export default function ScheduleBoard() {
   return (
     <div className="bg-white">
       <div className="mx-auto flex max-w-2xl flex-col gap-8 px-4 py-8 md:gap-10 md:px-6 md:py-12">
-        <MonthOverview onSelectTrack={(trackId) => selectTrack(trackId, true)} />
+        <MonthCarousel
+          months={MONTHS}
+          onSelectTrack={(trackId) => selectTrack(trackId, true)}
+        />
 
         <div className="flex flex-col gap-4">
           {/* 課表 tab：顏色沿用各 track 的主題色，跟下方卡片對得起來 */}

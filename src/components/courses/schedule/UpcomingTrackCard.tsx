@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import IGIcon from '@/components/icons/IGIcon';
 import { cn } from '@/lib/utils';
-import { getVenue } from '@/data/venues';
+import { getVenue, venuePath } from '@/data/venues';
 import { LINKS } from '@/constants/links';
 import { THEMES, type UpcomingTrack } from './data';
 
@@ -89,7 +89,7 @@ export default function UpcomingTrackCard({ track }: { track: UpcomingTrack }) {
       <div className="mt-4 flex items-start gap-1.5 text-sm text-[#2d3a5e] md:text-base">
         <span aria-hidden>📍</span>
         <Link
-          href={`/location/${venue.slug}`}
+          href={venuePath(venue)}
           className="font-medium underline-offset-2 hover:underline"
         >
           {venue.addressFull}（{venue.shortName}）

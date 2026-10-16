@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { getVenue } from '@/data/venues';
+import { getVenue, venuePath } from '@/data/venues';
 import { LINKS } from '@/constants/links';
 import { getSessionStatus, THEMES, type SessionStatus, type Track } from './data';
 
@@ -152,7 +152,7 @@ export default function TrackCard({ track }: { track: Track }) {
       <div className="relative mt-4 flex items-start gap-1.5 text-sm text-[#2d3a5e] md:text-base">
         <span aria-hidden>📍</span>
         <Link
-          href={`/location/${venue.slug}`}
+          href={venuePath(venue)}
           className="font-medium underline-offset-2 hover:underline"
         >
           {venue.addressFull}（{venue.shortName}）

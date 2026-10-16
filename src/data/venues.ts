@@ -3,11 +3,18 @@
 // 地址原本散落在三個地方（Footer、/location 頁、schedule/data.ts）且互相衝突，
 // 對本地 SEO（Google 需要一致的 NAP：名稱／地址／電話）是直接扣分項，故集中於此。
 // 全站一律使用「台南市」而非「臺南市」——Google 會把兩者視為不同字串。
+//
+// 「城市」與「教室」是兩件事：一個城市可以有好幾間教室（高雄有 Social hub 與 24steps），
+// 但據點頁一個城市只有一頁（/location/tainan、/location/kaohsiung），
+// 同城市的教室都列在那一頁、各自用 #<venue.slug> 當錨點。
 
-export type VenueSlug = 'tainan' | 'kaohsiung';
+export type CitySlug = 'tainan' | 'kaohsiung';
+export type VenueSlug = 'tainan' | 'kaohsiung-social-hub' | 'kaohsiung-24steps';
 
 export interface Venue {
   slug: VenueSlug;
+  /** 所屬城市，決定據點頁網址 /location/<citySlug> */
+  citySlug: CitySlug;
   /** 城市，同時作為 PostalAddress.addressRegion */
   city: string; // '台南市'
   /** 行政區，同時作為 PostalAddress.addressLocality */
@@ -49,6 +56,7 @@ function mapLink(query: string): string {
 export const VENUES: Venue[] = [
   {
     slug: 'tainan',
+    citySlug: 'tainan',
     city: '台南市',
     district: '中西區',
     cityEn: 'TAINAN',
@@ -68,7 +76,8 @@ export const VENUES: Venue[] = [
     trackIds: ['tainan-tue', 'tainan-thu'],
   },
   {
-    slug: 'kaohsiung',
+    slug: 'kaohsiung-social-hub',
+    citySlug: 'kaohsiung',
     city: '高雄市',
     district: '三民區',
     cityEn: 'KAOHSIUNG',
@@ -85,7 +94,29 @@ export const VENUES: Venue[] = [
     navNote: '教室在 Social hub 的 3 樓之 2，導航直接搜尋「Social hub」即可。',
     trackIds: ['kaohsiung-thu'],
   },
+  {
+    slug: 'kaohsiung-24steps',
+    citySlug: 'kaohsiung',
+    city: '高雄市',
+    district: '新興區',
+    cityEn: 'KAOHSIUNG',
+    name: "Baila'more 高雄教室・24steps",
+    shortName: '24steps',
+    streetAddress: '仁智街304之3號3樓',
+    postalCode: '800',
+    addressFull: '800 高雄市新興區仁智街 304 之 3 號 3 樓',
+    // TODO: 座標還沒確認，先不填（地圖用地址定位）；確認後補 geo 並把 mapEmbedSrc 換成 mapEmbed(lat, lng)
+    mapEmbedSrc: `https://maps.google.com/maps?q=${encodeURIComponent('高雄市新興區仁智街304之3號')}&hl=zh-TW&z=17&output=embed`,
+    mapLink: 'https://maps.app.goo.gl/2QFtsTbWmrsPPp6D9',
+    navNote: '教室在 3 樓，導航搜尋「24steps」或直接輸入地址即可。',
+    trackIds: ['kaohsiung-tue'],
+  },
 ];
+
+/** 據點頁網址：同城市的教室共用一頁，用錨點區分。 */
+export function venuePath(venue: Venue): string {
+  return `/location/${venue.citySlug}#${venue.slug}`;
+}
 
 export function getVenue(slug: VenueSlug): Venue {
   const venue = VENUES.find((v) => v.slug === slug);
@@ -93,6 +124,11 @@ export function getVenue(slug: VenueSlug): Venue {
   return venue;
 }
 
-export function getVenueSlugs(): { slug: VenueSlug }[] {
-  return VENUES.map((v) => ({ slug: v.slug }));
+export function getVenuesByCity(citySlug: CitySlug): Venue[] {
+  return VENUES.filter((v) => v.citySlug === citySlug);
+}
+
+/** 有據點頁的城市（sitemap 用）。 */
+export function getCitySlugs(): CitySlug[] {
+  return [...new Set(VENUES.map((v) => v.citySlug))];
 }

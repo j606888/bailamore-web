@@ -39,7 +39,7 @@ export default function TainanLocationPage() {
         ]}
       />
       <VenueDetail
-        venue={venue}
+        venues={[venue]}
         tracks={tracks}
         eyebrow="台南據點・丁宅"
         title="台南教室位置"

@@ -80,15 +80,20 @@ function openingHours(tracks: Track[]): JsonLd[] {
   });
 }
 
-/** 單一據點的 LocalBusiness。這是「高雄 Bachata」這類本地查詢真正吃的訊號。 */
+/** 教室的 LocalBusiness @id。同城市的教室共用一個據點頁，用 slug 區分。 */
+function localBusinessId(venue: Venue): string {
+  return `${SITE_URL}/location/${venue.citySlug}#localbusiness-${venue.slug}`;
+}
+
+/** 單一教室的 LocalBusiness。這是「高雄 Bachata」這類本地查詢真正吃的訊號。 */
 export function venueJsonLd(venue: Venue, tracks: Track[]): JsonLd {
-  const url = `${SITE_URL}/location/${venue.slug}`;
+  const url = `${SITE_URL}/location/${venue.citySlug}`;
   const courses = [...new Set(tracks.flatMap((t) => t.slots.map((s) => s.title)))];
 
   return {
     '@context': 'https://schema.org',
     '@type': ['LocalBusiness', 'SportsActivityLocation'],
-    '@id': `${url}#localbusiness`,
+    '@id': localBusinessId(venue),
     name: venue.name,
     url,
     parentOrganization: { '@id': ORGANIZATION_ID },
@@ -187,8 +192,9 @@ export function eventJsonLd(event: EnrollEvent): JsonLd | null {
 
   // 自己的據點：用 @id 指回據點頁已宣告的 LocalBusiness，不重複寫地址。
   // 外借場地：內嵌 Place，這個地址不屬於我們的 NAP，所以不能掛 LocalBusiness。
-  const location = event.venueSlug
-    ? { '@id': `${SITE_URL}/location/${event.venueSlug}#localbusiness` }
+  const venue = event.venueSlug ? getVenue(event.venueSlug) : null;
+  const location = venue
+    ? { '@id': localBusinessId(venue) }
     : {
         '@type': 'Place',
         name: event.externalVenue!.name,
@@ -196,7 +202,6 @@ export function eventJsonLd(event: EnrollEvent): JsonLd | null {
         hasMap: event.externalVenue!.mapLink,
       };
 
-  const venue = event.venueSlug ? getVenue(event.venueSlug) : null;
   const where = venue
     ? `在${venue.addressFull}（${venue.shortName}）舉行。`
     : `在${event.externalVenue!.name}舉行。`;

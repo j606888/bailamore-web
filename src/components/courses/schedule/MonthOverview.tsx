@@ -1,17 +1,20 @@
 'use client';
 
-import { MONTH, THEMES } from './data';
+import { THEMES, type MonthConfig } from './data';
 
 const WEEKDAYS = ['日', '一', '二', '三', '四', '五', '六'];
 
+// 品牌抬頭（BAILA'MORE / 2026 SCHEDULE）不在這裡，它固定在 MonthCarousel 上方、不隨月份切換。
 // onSelectTrack：由 ScheduleBoard 傳入，讓月曆格子改成「切到該課表 tab 再捲過去」。
 // 沒帶這個 prop 時（或 JS 還沒載入）維持原本的 #anchor 連結行為。
 export default function MonthOverview({
+  config,
   onSelectTrack,
 }: {
+  config: MonthConfig;
   onSelectTrack?: (trackId: string) => void;
 }) {
-  const { year, month, titleEn, titleZh, highlights, legend, footnote } = MONTH;
+  const { year, month, titleEn, titleZh, highlights, legend, footnote } = config;
 
   const firstWeekday = new Date(year, month - 1, 1).getDay(); // 0 = 週日
   const daysInMonth = new Date(year, month, 0).getDate();
@@ -25,27 +28,21 @@ export default function MonthOverview({
   return (
     <section className="w-full">
       {/* 頁首 */}
-      <div className="flex flex-col">
-        <p className="font-poppins text-sm font-bold tracking-[0.2em] text-[#c47b5a] md:text-base">
-          BAILA&apos;MORE
-        </p>
-        <p className="font-poppins text-xs font-medium tracking-[0.3em] text-gray-500 md:text-sm">
-          2026 SCHEDULE
-        </p>
-        <h2 className="mt-1 flex items-end gap-2 font-poppins font-bold leading-none text-[#2d3a5e]">
-          {/* 手機用 text-5xl：60px 的 SEPTEMBER 在 390px 寬的手機會撐出水平捲動 */}
-          <span
-            className="text-5xl md:text-7xl"
-            style={{ textShadow: '3px 3px 0 rgba(212,121,110,0.45)' }}
-          >
-            {titleEn}
-          </span>
-          <span className="pb-1 text-2xl md:text-3xl">{titleZh}</span>
-        </h2>
-      </div>
+      <h2 className="flex items-end gap-2 font-poppins font-bold leading-none text-[#2d3a5e]">
+        {/* clamp：NOVEMBER / SEPTEMBER 用固定 60px 在 390px 寬的手機會撐出水平捲動 */}
+        <span
+          className="text-[clamp(2.25rem,11.5vw,3.75rem)] md:text-7xl"
+          style={{ textShadow: '3px 3px 0 rgba(212,121,110,0.45)' }}
+        >
+          {titleEn}
+        </span>
+        <span className="pb-1 text-2xl md:text-3xl">{titleZh}</span>
+      </h2>
 
       {/* 月曆 */}
-      <div className="mt-5 rounded-2xl bg-white p-3 shadow-sm ring-1 ring-gray-200 md:p-5">
+      {/* ring-inset：這張卡在輪播裡的寬度等於捲動容器寬度，
+          外擴的 ring 會被 overflow 裁掉（左右兩側的線會不見），所以畫在框內。 */}
+      <div className="mt-5 rounded-2xl bg-white p-3 shadow-sm ring-1 ring-inset ring-gray-200 md:p-5">
         <div className="grid grid-cols-7 gap-1 md:gap-2">
           {WEEKDAYS.map((w, i) => (
             <div
@@ -78,7 +75,9 @@ export default function MonthOverview({
                 <span className="text-base font-bold leading-tight md:text-xl">
                   {day}
                 </span>
-                <span className="text-[10px] leading-tight md:text-xs">
+                {/* whitespace-pre-line：label 裡的 \n 是刻意的斷行位置。
+                    手機格子只有約 42px 寬，「台南・高雄」一行塞不下會被裁掉。 */}
+                <span className="whitespace-pre-line text-center text-[10px] leading-tight md:text-xs">
                   {hl.label}
                 </span>
               </>

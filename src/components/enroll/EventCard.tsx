@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { getVenue } from '@/data/venues';
+import { getVenue, venuePath } from '@/data/venues';
 import { THEMES, type EnrollEvent } from '@/components/courses/schedule/data';
 
 // 報名頁的配色規則（跟課表卡刻意不同）：卡片一律白底，THEMES 的顏色只出現在
@@ -26,7 +26,7 @@ export default function EventCard({ event }: { event: EnrollEvent }) {
     meta.push(
       <Link
         key="venue"
-        href={`/location/${venue.slug}`}
+        href={venuePath(venue)}
         className="font-medium text-teal-600 underline-offset-2 hover:underline"
       >
         {venue.city}

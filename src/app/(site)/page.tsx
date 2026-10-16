@@ -11,7 +11,7 @@ import { HERO_VIDEO_URL } from '@/data/site';
 import { faqPageJsonLd } from '@/lib/jsonLd';
 
 const HOME_DESCRIPTION =
-  '台南・高雄的 Bachata & Salsa 社交舞教室。台南每週日、週二，高雄每週四定期開課，零基礎歡迎、不需舞伴即可報名。';
+  '台南・高雄的 Bachata & Salsa 社交舞教室。台南每週日、週二，高雄每週二、週四定期開課，零基礎歡迎、不需舞伴即可報名。';
 
 export const metadata: Metadata = {
   // 用 absolute 避開 layout 的 "%s | Baila'more" template，否則品牌名會出現兩次

@@ -3,17 +3,17 @@ import React from 'react';
 import Link from 'next/link';
 import SectionHeading from '@/components/SectionHeading';
 import { getTracksByVenue } from '@/components/courses/schedule/data';
-import { VENUES, type Venue } from '@/data/venues';
+import { VENUES, venuePath, type Venue } from '@/data/venues';
 
 export const metadata: Metadata = {
   title: '上課地點・台南與高雄教室',
   description:
-    "Baila'more 有兩個上課據點：台南教室（中西區・每週日、週二）與高雄教室（三民區・每週四）。兩地共用同一張課卡，零基礎、無舞伴都可以報名。",
+    "Baila'more 在台南與高雄共有三間教室：台南中西區（每週日、週二）、高雄新興區 24steps（每週二）與高雄三民區 Social hub（每週四）。兩地共用同一張課卡，零基礎、無舞伴都可以報名。",
   alternates: { canonical: '/location' },
   openGraph: {
     title: "上課地點・台南與高雄教室 | Baila'more",
     description:
-      "Baila'more 台南（中西區・週日/週二）與高雄（三民區・週四）兩個據點的地址與交通資訊。",
+      "Baila'more 台南（中西區・週日/週二）與高雄（新興區・週二／三民區・週四）各教室的地址與交通資訊。",
     url: '/location',
   },
 };
@@ -26,12 +26,12 @@ export default function LocationPage() {
         size="lg"
         eyebrow="台南・高雄"
         title="上課地點"
-        subtitle="兩個據點，同一張課卡"
+        subtitle="兩座城市，同一張課卡"
         className="py-2 md:py-4"
       />
 
       <p className="w-full text-base leading-relaxed text-gray-700">
-        Baila’more 目前在台南與高雄各有一個固定據點。台南教室每週日與週二開課，高雄教室每週四開課，兩地共用同一張課卡，可以互相跑班。點下方卡片看該據點的完整地址、交通指引與課程時段。
+        Baila’more 目前在台南有一間教室、高雄有兩間。台南教室每週日與週二開課，高雄週二在新興區的 24steps、週四在三民區的 Social hub 開課，兩地共用同一張課卡，可以互相跑班。點下方卡片看該據點的完整地址、交通指引與課程時段。
       </p>
 
       <div className="grid w-full gap-4 md:grid-cols-2">
@@ -50,7 +50,7 @@ function VenueCard({ venue }: { venue: Venue }) {
 
   return (
     <Link
-      href={`/location/${venue.slug}`}
+      href={venuePath(venue)}
       className="flex flex-col gap-3 rounded-xl border border-gray-200 px-5 py-5 transition-colors hover:border-teal-600 hover:bg-slate-50"
     >
       <div className="flex flex-col leading-none">

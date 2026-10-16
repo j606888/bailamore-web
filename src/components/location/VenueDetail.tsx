@@ -4,14 +4,16 @@ import IGIcon from '@/components/icons/IGIcon';
 import SectionHeading from '@/components/SectionHeading';
 import { Button } from '@/components/ui/button';
 import { LINKS } from '@/constants/links';
-import type { Venue } from '@/data/venues';
+import { getVenue, type Venue } from '@/data/venues';
 import { PRICE_PLANS, type Track } from '@/components/courses/schedule/data';
 
-// 台南／高雄兩個據點頁共用的版面。
+// 台南／高雄兩個據點頁共用的版面。一個城市可能有好幾間教室（高雄：Social hub、24steps），
+// 每間教室各一組「地址 + 地圖」，用 venue.slug 當錨點（venuePath() 連到這裡）。
 // 順序固定為：標題 → 場地照片 → 找路內容 → 地址地圖 → 課表 → 小須知 → 報名，
 // 讓「地點在哪」最快被看到，說明性的文字往後放。
 type Props = {
-  venue: Venue;
+  /** 這個城市的教室，至少一間 */
+  venues: Venue[];
   tracks: Track[];
   eyebrow: string;
   title: string;
@@ -27,7 +29,7 @@ type Props = {
 };
 
 export default function VenueDetail({
-  venue,
+  venues,
   tracks,
   eyebrow,
   title,
@@ -37,6 +39,9 @@ export default function VenueDetail({
   children,
   notes,
 }: Props) {
+  const city = venues[0].city;
+  const multiple = venues.length > 1;
+
   return (
     <div className="mx-auto flex flex-col items-center justify-center gap-8 px-3 py-6 md:max-w-4xl md:px-6">
       <SectionHeading
@@ -72,50 +77,70 @@ export default function VenueDetail({
 
       {children}
 
-      {/* 地址 + 地圖 */}
-      <section className="flex w-full flex-col gap-4 md:flex-row md:items-stretch">
-        <div className="flex w-full flex-col gap-4 md:w-1/2">
-          <div className="flex flex-col gap-1 rounded-lg border border-gray-200 px-4 py-4">
-            <h2 className="text-lg font-bold md:text-xl">地址</h2>
-            <address className="not-italic text-sm text-gray-900">
-              {venue.addressFull}
-            </address>
-            {venue.navNote && (
-              <p className="mt-2 text-sm text-gray-600">{venue.navNote}</p>
-            )}
-            {venue.addressNote && (
-              <p className="mt-2 text-xs text-gray-500">※ {venue.addressNote}</p>
-            )}
-            <a
-              href={venue.mapLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-3 text-sm font-medium text-teal-600 underline-offset-2 hover:underline"
-            >
-              用 Google 地圖導航 →
-            </a>
-          </div>
-        </div>
+      {/* 地址 + 地圖（每間教室一組） */}
+      {venues.map((venue) => (
+        <section
+          key={venue.slug}
+          id={venue.slug}
+          className="flex w-full scroll-mt-20 flex-col gap-3"
+        >
+          {multiple && (
+            <h2 className="text-xl font-bold md:text-2xl">
+              {venue.shortName}
+              <span className="ml-2 text-base font-normal text-gray-500">
+                {venue.district}・
+                {tracks
+                  .filter((t) => t.venueSlug === venue.slug)
+                  .map((t) => `每${t.dayZh}`)
+                  .join('、')}
+              </span>
+            </h2>
+          )}
+          <div className="flex w-full flex-col gap-4 md:flex-row md:items-stretch">
+            <div className="flex w-full flex-col gap-4 md:w-1/2">
+              <div className="flex flex-col gap-1 rounded-lg border border-gray-200 px-4 py-4">
+                <h3 className="text-lg font-bold md:text-xl">地址</h3>
+                <address className="not-italic text-sm text-gray-900">
+                  {venue.addressFull}
+                </address>
+                {venue.navNote && (
+                  <p className="mt-2 text-sm text-gray-600">{venue.navNote}</p>
+                )}
+                {venue.addressNote && (
+                  <p className="mt-2 text-xs text-gray-500">※ {venue.addressNote}</p>
+                )}
+                <a
+                  href={venue.mapLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 text-sm font-medium text-teal-600 underline-offset-2 hover:underline"
+                >
+                  用 Google 地圖導航 →
+                </a>
+              </div>
+            </div>
 
-        <div className="w-full md:w-1/2">
-          <iframe
-            title={`${venue.name}位置地圖`}
-            src={venue.mapEmbedSrc}
-            width="100%"
-            height="100%"
-            className="min-h-[280px] w-full rounded-lg border border-gray-200"
-            style={{ border: 0 }}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
-        </div>
-      </section>
+            <div className="w-full md:w-1/2">
+              <iframe
+                title={`${venue.name}位置地圖`}
+                src={venue.mapEmbedSrc}
+                width="100%"
+                height="100%"
+                className="min-h-[280px] w-full rounded-lg border border-gray-200"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
+          </div>
+        </section>
+      ))}
 
       {/* 該據點的課表 */}
       <section className="flex w-full flex-col gap-4">
         <h2 className="text-xl font-bold md:text-2xl">
-          {venue.city}的固定課程
+          {city}的固定課程
         </h2>
         <div className="flex flex-col gap-4">
           {tracks.map((track) => (
@@ -152,7 +177,7 @@ export default function VenueDetail({
 
       {/* 報名 CTA */}
       <section className="flex w-full flex-col items-center gap-3 rounded-xl bg-slate-50 px-4 py-8 text-center">
-        <h2 className="text-xl font-bold md:text-2xl">想來{venue.city}上課？</h2>
+        <h2 className="text-xl font-bold md:text-2xl">想來{city}上課？</h2>
         <p className="max-w-md text-sm text-gray-600 md:text-base">
           不需舞伴、零基礎都可以報名。直接 Instagram 私訊我們，或在上課時間到教室現場體驗。
         </p>
@@ -180,12 +205,14 @@ export default function VenueDetail({
 
 function TrackSummary({ track }: { track: Track }) {
   const plan = PRICE_PLANS.find((p) => p.id === track.pricePlanId);
+  const venue = getVenue(track.venueSlug);
 
   return (
     <div className="flex flex-col gap-3 rounded-xl border border-gray-200 px-4 py-4">
       <div className="flex flex-wrap items-baseline gap-2">
         <h3 className="text-lg font-bold text-gray-900">
           每{track.dayZh}・{track.cityZh}
+          <span className="ml-1 font-normal text-gray-500">・{venue.shortName}</span>
         </h3>
         {track.badge && (
           <span className="rounded-full bg-teal-600 px-2.5 py-0.5 text-xs font-bold text-white">

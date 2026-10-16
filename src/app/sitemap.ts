@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { SITE_URL } from '@/constants/site';
 import { getPublishedTeacherSlugs } from '@/data/teachers';
-import { getVenueSlugs } from '@/data/venues';
+import { getCitySlugs } from '@/data/venues';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
@@ -19,7 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   // 據點頁是城市關鍵字（台南／高雄）的落地頁，優先度拉高
-  const venueRoutes = getVenueSlugs().map(({ slug }) => ({
+  const venueRoutes = getCitySlugs().map((slug) => ({
     path: `/location/${slug}`,
     priority: 0.9,
   }));

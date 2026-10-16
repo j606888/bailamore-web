@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { LINKS } from '@/constants/links'
-import { VENUES } from '@/data/venues'
+import { VENUES, venuePath } from '@/data/venues'
 
 const Footer = () => {
   return (
@@ -48,7 +48,7 @@ const Footer = () => {
               {VENUES.map((venue) => (
                 <Link
                   key={venue.slug}
-                  href={`/location/${venue.slug}`}
+                  href={venuePath(venue)}
                   className="flex flex-col gap-0.5 hover:text-white transition-colors"
                 >
                   <span className="font-semibold">

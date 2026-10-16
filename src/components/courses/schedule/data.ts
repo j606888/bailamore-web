@@ -3,12 +3,13 @@
 //
 // 地址不寫在這裡：據點資料集中於 src/data/venues.ts，track 只存 venueSlug。
 
-import type { VenueSlug } from '@/data/venues';
+import { getVenue, type CitySlug, type VenueSlug } from '@/data/venues';
 
 export type ThemeKey =
   | 'tainanSun'
   | 'tainanTue'
   | 'tainanThu'
+  | 'kaohsiungTue'
   | 'kaohsiungThu'
   | 'party';
 
@@ -40,7 +41,7 @@ export function isPast(label: string, year: number, now: Date): boolean {
 }
 
 // 場次是否已結束由「真實日期」決定，不寫死。
-// label 只有月/日，年份一律取 MONTH.year（目前課表不跨年）。
+// label 只有月/日，年份一律取 MONTH.year（目前課表不跨年；跨年時要改成場次自帶年份）。
 export function getSessionStatus(
   date: SessionDate,
   now: Date = new Date()
@@ -104,6 +105,14 @@ export const THEMES: Record<ThemeKey, ThemeStyle> = {
     legendDot: 'bg-[#5aa86a]',
     blob: 'bg-[#f2c6a0]',
   },
+  kaohsiungTue: {
+    pageFrom: 'bg-[#d3eeee]',
+    accentText: 'text-[#22858a]',
+    accentBg: 'bg-[#2f9da2]',
+    highlightCell: 'bg-[#2f9da2]',
+    legendDot: 'bg-[#2f9da2]',
+    blob: 'bg-[#f5b8c8]',
+  },
   kaohsiungThu: {
     pageFrom: 'bg-[#cfe0f5]',
     accentText: 'text-[#4d7fc4]',
@@ -138,48 +147,99 @@ export interface MonthConfig {
   footnote?: string;
 }
 
-export const MONTH: MonthConfig = {
-  year: 2026,
-  month: 10,
-  titleEn: 'OCTOBER',
-  titleZh: '十月',
-  // 台南週日十月沒有開班；恢復時從 git 歷史把 tainan-sun track 加回 TRACKS
-  highlights: {
-    // 週四台南 Salsa 與高雄體驗課同一天：一格只能放一個顏色／連結，標「台南・高雄」、連到高雄課卡
-    1: { theme: 'kaohsiungThu', label: '台南・高雄', trackId: 'kaohsiung-thu' },
-    3: { theme: 'party', label: 'PARTY' },
-    6: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
-    8: { theme: 'tainanThu', label: '台南', trackId: 'tainan-thu' },
-    13: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
-    15: { theme: 'kaohsiungThu', label: '台南・高雄', trackId: 'kaohsiung-thu' },
-    20: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
-    22: { theme: 'kaohsiungThu', label: '台南・高雄', trackId: 'kaohsiung-thu' },
-    27: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
-    29: { theme: 'tainanThu', label: '台南', trackId: 'tainan-thu' },
+// 陣列順序就是月曆在 /courses 課表 tab 的顯示順序（由近到遠），左右滑動切換。
+// 新的月份 push 到後面，過期的月份從前面拿掉。
+// 同一天台南、高雄都有課時，一格只能放一個顏色／連結：標「台南\n高雄」（\n 是刻意的斷行）、連到高雄課卡。
+export const MONTHS: MonthConfig[] = [
+  {
+    year: 2026,
+    month: 10,
+    titleEn: 'OCTOBER',
+    titleZh: '十月',
+    // 台南週日十月沒有開班；恢復時從 git 歷史把 tainan-sun track 加回 TRACKS
+    highlights: {
+      1: { theme: 'kaohsiungThu', label: '台南\n高雄', trackId: 'kaohsiung-thu' },
+      3: { theme: 'party', label: 'PARTY' },
+      6: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
+      8: { theme: 'tainanThu', label: '台南', trackId: 'tainan-thu' },
+      13: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
+      15: { theme: 'kaohsiungThu', label: '台南\n高雄', trackId: 'kaohsiung-thu' },
+      20: { theme: 'tainanTue', label: '台南', trackId: 'tainan-tue' },
+      // ★ 對應 footnote：這天高雄的課改在 24steps
+      22: { theme: 'kaohsiungThu', label: '台南\n高雄★', trackId: 'kaohsiung-thu' },
+      27: { theme: 'kaohsiungTue', label: '台南\n高雄', trackId: 'kaohsiung-tue' },
+      29: { theme: 'kaohsiungThu', label: '台南\n高雄', trackId: 'kaohsiung-thu' },
+    },
+    legend: [
+      {
+        theme: 'tainanTue',
+        title: '週二・台南教室',
+        desc: 'Bachata 1-3 / 1-2 · 19:30–22:30（10/6–11/3 共五堂）',
+      },
+      {
+        theme: 'tainanThu',
+        title: '週四・台南教室',
+        desc: 'Salsa 1-1 · 19:15–21:45（10/1–10/29 共五堂）',
+      },
+      {
+        theme: 'kaohsiungTue',
+        title: '週二・高雄 24steps',
+        desc: '10/27 起 · 19:30 Salsa LV1（新開）・20:30 Kizomba 體驗課',
+      },
+      {
+        theme: 'kaohsiungThu',
+        title: '週四・高雄 Social hub',
+        desc: '10/22 Bachata 體驗課★・10/29 Bachata LV1 新開 · 19:30–20:30・20:30–21:30 Bachata training・mini social 至 23:00',
+      },
+      {
+        theme: 'party',
+        title: "10/3（六）Baila'more 二週年 Workshop / Party",
+        desc: 'Workshop 14:00–17:30・Party 19:30–23:00，地點在台南文化創意產業園區',
+      },
+    ],
+    footnote:
+      '★ 10/22（四）高雄的課改在 24steps（新興區仁智街），不是 Social hub；其他週四都在 Social hub。',
   },
-  legend: [
-    {
-      theme: 'tainanTue',
-      title: '週二・台南教室',
-      desc: 'Bachata 1-3 / 1-2 · 19:30–22:30（10/6–11/3 共五堂）',
+  {
+    year: 2026,
+    month: 11,
+    titleEn: 'NOVEMBER',
+    titleZh: '十一月',
+    // 台南十一月的新一期還沒定，先只放 11/3 週二 Bachata 第五堂（本期最後一堂）
+    highlights: {
+      3: { theme: 'kaohsiungTue', label: '台南\n高雄', trackId: 'kaohsiung-tue' },
+      5: { theme: 'kaohsiungThu', label: '高雄', trackId: 'kaohsiung-thu' },
+      10: { theme: 'kaohsiungTue', label: '高雄', trackId: 'kaohsiung-tue' },
+      12: { theme: 'kaohsiungThu', label: '高雄', trackId: 'kaohsiung-thu' },
+      17: { theme: 'kaohsiungTue', label: '高雄', trackId: 'kaohsiung-tue' },
+      19: { theme: 'kaohsiungThu', label: '高雄', trackId: 'kaohsiung-thu' },
+      24: { theme: 'kaohsiungTue', label: '高雄', trackId: 'kaohsiung-tue' },
+      26: { theme: 'kaohsiungThu', label: '高雄', trackId: 'kaohsiung-thu' },
     },
-    {
-      theme: 'tainanThu',
-      title: '週四・台南教室',
-      desc: 'Salsa 1-1 · 19:15–21:45（10/1–10/29 共五堂）',
-    },
-    {
-      theme: 'kaohsiungThu',
-      title: '週四・高雄教室',
-      desc: '百元體驗課 19:30–20:30（10/1 Kizomba、10/15 Salsa、10/22 Bachata）・Bachata training 20:30–21:30・mini social 至 23:00',
-    },
-    {
-      theme: 'party',
-      title: "10/3（六）Baila'more 二週年 Workshop / Party",
-      desc: 'Workshop 14:00–17:30・Party 19:30–23:00，地點在台南文化創意產業園區，到「課程報名」頁買票',
-    },
-  ],
-};
+    legend: [
+      {
+        theme: 'kaohsiungTue',
+        title: '每週二・高雄 24steps',
+        desc: '19:30–20:30 Salsa LV1・20:30–21:30 Kizomba LV1',
+      },
+      {
+        theme: 'kaohsiungThu',
+        title: '每週四・高雄 Social hub',
+        desc: '19:30–20:30 Bachata LV1・20:30–21:30 Bachata training・mini social 至 23:00',
+      },
+      {
+        theme: 'tainanTue',
+        title: '週二・台南教室',
+        desc: '11/3 Bachata 1-3 / 1-2 第五堂（本期最後一堂）',
+      },
+    ],
+    // TODO: 台南十一月課程確定後補上
+    footnote: '台南十一月的課程還在安排中；實際場次以 Instagram 公告為準。',
+  },
+];
+
+/** 目前月份（getSessionStatus 用它補上場次 label 缺少的年份）。 */
+export const MONTH: MonthConfig = MONTHS[0];
 
 export const TRACKS: Track[] = [
   {
@@ -237,28 +297,59 @@ export const TRACKS: Track[] = [
     priceSummary: '整期五堂 $2000・單堂 $450',
   },
   {
+    id: 'kaohsiung-tue',
+    theme: 'kaohsiungTue',
+    cityEn: 'KAOHSIUNG',
+    cityZh: '高雄教室',
+    sessionLabelEn: 'TUESDAY',
+    dayZh: '週二',
+    badge: 'NEW 10/27 開課',
+    badgeNote: '10/27 Salsa LV1 新開＋Kizomba 體驗課，11 月起每週二 Salsa LV1・Kizomba LV1',
+    tabLabel: '週二・高雄',
+    slots: [
+      { time: '19:30–20:30', title: 'Salsa LV1' },
+      { time: '20:30–21:30', title: 'Kizomba LV1' },
+    ],
+    datesTitle: '場次',
+    datesNote: '10/27 的 Kizomba 是體驗課',
+    dates: [
+      { label: '10/27', note: '開課・Kizomba 體驗' },
+      { label: '11/3' },
+      { label: '11/10' },
+      { label: '11/17' },
+      { label: '11/24' },
+    ],
+    venueSlug: 'kaohsiung-24steps',
+    pricePlanId: 'card-plan',
+    priceSummary: '課卡制・6 堂 $2000・單堂 $400',
+  },
+  {
     id: 'kaohsiung-thu',
     theme: 'kaohsiungThu',
     cityEn: 'KAOHSIUNG',
     cityZh: '高雄教室',
     sessionLabelEn: 'THURSDAY',
     dayZh: '週四',
-    badge: '十月百元體驗課 × Bachata training',
-    badgeNote: '每場體驗課後接 Bachata training，零基礎、沒有舞伴都可以來',
+    badge: 'NEW Bachata LV1 10/29 開課',
+    badgeNote: '10/22 先上 Bachata 體驗課，10/29 起每週四 Bachata LV1，課後接 Bachata training 與 mini social',
     tabLabel: '週四・高雄',
     slots: [
-      { time: '19:30–20:30', title: '百元體驗課（Kizomba / Salsa / Bachata）' },
+      { time: '19:30–20:30', title: 'Bachata LV1' },
       { time: '20:30–21:30', title: 'Bachata training' },
       { time: '21:30–23:00', title: 'mini social' },
     ],
-    datesTitle: '十月場次',
-    datesNote: '10/8、10/29 停課',
+    datesTitle: '場次',
+    // 10/22 這一場不在 Social hub，卡片下方的地址只顯示 track 的固定場地，所以這裡一定要寫
+    datesNote: '★ 10/22 改在 24steps 上課（當晚沒有 mini social）',
     dates: [
-      { label: '10/1', note: 'Kizomba 體驗課' },
-      { label: '10/15', note: 'Salsa 體驗課' },
-      { label: '10/22', note: 'Bachata 體驗課' },
+      { label: '10/22', note: '體驗課★24steps' },
+      { label: '10/29', note: 'LV1 開課' },
+      { label: '11/5' },
+      { label: '11/12' },
+      { label: '11/19' },
+      { label: '11/26' },
     ],
-    venueSlug: 'kaohsiung',
+    venueSlug: 'kaohsiung-social-hub',
     pricePlanId: 'card-plan',
     priceSummary: '課卡制・6 堂 $2000・單堂 $400',
   },
@@ -281,24 +372,17 @@ export interface UpcomingTrack {
   bannerText: string; // 首頁公告條的一行字
 }
 
-export const UPCOMING_TRACKS: UpcomingTrack[] = [
-  {
-    id: 'kaohsiung-tue',
-    theme: 'kaohsiungThu',
-    cityEn: 'KAOHSIUNG',
-    cityZh: '高雄教室',
-    sessionLabelEn: 'TUESDAY',
-    dayZh: '週二',
-    courses: ['Bachata Lv1', 'Salsa Lv1'],
-    note: '高雄週二的 Bachata、Salsa Lv1 新手班籌備中，開課時間與費用即將推出。想上的話先來訊告訴我們，開班時第一時間通知你。另外也正在籌備教師訓練計劃，歡迎一起詢問。',
-    venueSlug: 'kaohsiung',
-    bannerText: '高雄週二 Bachata・Salsa Lv1 新手班籌備中，教師訓練計劃同步規劃中',
-  },
-];
+// 高雄週二已於 10/27 正式開課（見 TRACKS 的 kaohsiung-tue），目前沒有籌備中的課程。
+export const UPCOMING_TRACKS: UpcomingTrack[] = [];
 
-/** 取得某個據點的所有課程 track（據點頁用來列出該城市的課表）。 */
+/** 取得某間教室的所有課程 track。 */
 export function getTracksByVenue(slug: VenueSlug): Track[] {
   return TRACKS.filter((t) => t.venueSlug === slug);
+}
+
+/** 取得某個城市（可能有好幾間教室）的所有課程 track（據點頁用來列出該城市的課表）。 */
+export function getTracksByCity(citySlug: CitySlug): Track[] {
+  return TRACKS.filter((t) => getVenue(t.venueSlug).citySlug === citySlug);
 }
 
 // ---- 報名活動（報名頁 /enroll 的三個區塊）----
@@ -358,7 +442,6 @@ export const EVENTS: EnrollEvent[] = [
     venueSlug: 'tainan',
     // TODO: 上課時間與費用確定後補 startTime / endTime / priceNote
     enrollUrl: 'https://forms.gle/icAqBNGFgdR62k7X7',
-    bannerText: '9/24（四）台南 Salsa 體驗課開放報名，零基礎、沒有舞伴都可以來',
   },
   {
     id: 'tainan-salsa-lv1-1001',
@@ -405,10 +488,10 @@ export const EVENTS: EnrollEvent[] = [
     weekdayEn: 'THU',
     startTime: '19:30',
     endTime: '20:30',
-    venueSlug: 'kaohsiung',
+    venueSlug: 'kaohsiung-social-hub',
     price: 100,
     priceNote: '體驗價 $100',
-    // 三場共用同一張表單，填表時再選場次
+    // 高雄體驗課共用同一張表單，填表時再選場次
     enrollUrl: KAOHSIUNG_TRIAL_FORM,
   },
   {
@@ -422,7 +505,7 @@ export const EVENTS: EnrollEvent[] = [
     weekdayEn: 'THU',
     startTime: '19:30',
     endTime: '20:30',
-    venueSlug: 'kaohsiung',
+    venueSlug: 'kaohsiung-social-hub',
     price: 100,
     priceNote: '體驗價 $100',
     // 三場共用同一張表單，填表時再選場次
@@ -434,16 +517,35 @@ export const EVENTS: EnrollEvent[] = [
     theme: 'kaohsiungThu',
     danceStyle: 'Bachata',
     title: '高雄 Bachata 百元體驗課',
-    note: '零基礎、沒有舞伴都可以來，課後接 Bachata training 與 mini social。',
+    note: '⚠️ 這一場改在 24steps（新興區），不是 Social hub。零基礎、沒有舞伴都可以來，課後接 Bachata training；10/29 起每週四 Bachata LV1 在 Social hub 開課。',
     dateLabel: '10/22',
     weekdayEn: 'THU',
     startTime: '19:30',
     endTime: '20:30',
-    venueSlug: 'kaohsiung',
+    venueSlug: 'kaohsiung-24steps',
     price: 100,
     priceNote: '體驗價 $100',
-    // 三場共用同一張表單，填表時再選場次
+    // 高雄體驗課共用同一張表單，填表時再選場次
     enrollUrl: KAOHSIUNG_TRIAL_FORM,
+    bannerText: '10/22（四）高雄 Bachata 體驗課開放報名（本場改在 24steps），零基礎、沒有舞伴都可以來',
+  },
+  {
+    id: 'kaohsiung-kizomba-trial-1027',
+    kind: 'trial',
+    theme: 'kaohsiungTue',
+    danceStyle: 'Kizomba',
+    title: '高雄 Kizomba 百元體驗課',
+    note: '零基礎、沒有舞伴都可以來。同一晚 19:30 Salsa LV1 新開，可以連著上；11 月起每週二 Kizomba LV1。',
+    dateLabel: '10/27',
+    weekdayEn: 'TUE',
+    startTime: '20:30',
+    endTime: '21:30',
+    venueSlug: 'kaohsiung-24steps',
+    price: 100,
+    priceNote: '體驗價 $100',
+    // 高雄體驗課共用同一張表單，填表時再選場次
+    enrollUrl: KAOHSIUNG_TRIAL_FORM,
+    bannerText: '10/27（二）高雄 24steps Kizomba 體驗課開放報名，同晚 Salsa LV1 新開',
   },
   {
     id: 'anniversary-1003',
@@ -564,17 +666,20 @@ export const PRICE_PLANS: PricePlan[] = [
     name: '課卡方案',
     chips: [
       { label: '週日・台南', theme: 'tainanSun' },
+      { label: '週二・高雄', theme: 'kaohsiungTue' },
       { label: '週四・高雄', theme: 'kaohsiungThu' },
     ],
     tiers: [
       {
-        title: 'Lv2 統一課卡',
-        subtitle: '單一課卡，適用所有課程',
+        title: '統一課卡',
+        subtitle: '單一課卡，Lv1、Lv2 同價，適用所有課卡課程',
         courses: [
           { name: 'Body movement', theme: 'tainanSun' },
           { name: 'Bachata Lv2', theme: 'tainanSun' },
           { name: '單人 Salsa', theme: 'tainanSun' },
-          { name: 'Kizomba', theme: 'kaohsiungThu' },
+          { name: 'Salsa LV1', theme: 'kaohsiungTue' },
+          { name: 'Kizomba LV1', theme: 'kaohsiungTue' },
+          { name: 'Bachata LV1', theme: 'kaohsiungThu' },
           { name: 'Bachata training', theme: 'kaohsiungThu' },
         ],
         options: [
@@ -583,7 +688,7 @@ export const PRICE_PLANS: PricePlan[] = [
         ],
       },
     ],
-    note: '*課卡一律 Lv2 統一價，可插班，未使用完畢可用於下一期；週日台南與週四高雄共用同一張課卡。',
+    note: '*課卡不分 Lv1、Lv2 一律統一價，可插班，未使用完畢可用於下一期；週日台南與高雄週二、週四共用同一張課卡。正式課不用填表，直接到教室上課即可。',
   },
   {
     id: 'tuesday-plan',
