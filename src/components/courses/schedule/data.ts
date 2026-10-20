@@ -168,7 +168,8 @@ export const MONTHS: MonthConfig[] = [
       // ★ 對應 footnote：這天高雄的課改在 24steps
       22: { theme: 'kaohsiungThu', label: '台南\n高雄★', trackId: 'kaohsiung-thu' },
       27: { theme: 'kaohsiungTue', label: '台南\n高雄', trackId: 'kaohsiung-tue' },
-      29: { theme: 'kaohsiungThu', label: '台南\n高雄', trackId: 'kaohsiung-thu' },
+      // 高雄 10/29 停課（老師還在國外），Bachata LV1 延到 11/5 開課；台南週四照常
+      29: { theme: 'tainanThu', label: '台南', trackId: 'tainan-thu' },
     },
     legend: [
       {
@@ -189,7 +190,7 @@ export const MONTHS: MonthConfig[] = [
       {
         theme: 'kaohsiungThu',
         title: '週四・高雄 Social hub',
-        desc: '10/22 Bachata 體驗課★・10/29 Bachata LV1 新開 · 19:30–20:30・20:30–21:30 Bachata training・mini social 至 23:00',
+        desc: '10/22 Bachata 體驗課★・10/29 停課・11/5 Bachata LV1 新開 · 19:30–20:30・20:30–21:30 Bachata training・mini social 至 23:00',
       },
       {
         theme: 'party',
@@ -330,8 +331,8 @@ export const TRACKS: Track[] = [
     cityZh: '高雄教室',
     sessionLabelEn: 'THURSDAY',
     dayZh: '週四',
-    badge: 'NEW Bachata LV1 10/29 開課',
-    badgeNote: '10/22 先上 Bachata 體驗課，10/29 起每週四 Bachata LV1，課後接 Bachata training 與 mini social',
+    badge: 'NEW Bachata LV1 11/5 開課',
+    badgeNote: '10/22 先上 Bachata 體驗課，10/29 停課一次，11/5 起每週四 Bachata LV1，課後接 Bachata training 與 mini social',
     tabLabel: '週四・高雄',
     slots: [
       { time: '19:30–20:30', title: 'Bachata LV1' },
@@ -340,11 +341,10 @@ export const TRACKS: Track[] = [
     ],
     datesTitle: '場次',
     // 10/22 這一場不在 Social hub，卡片下方的地址只顯示 track 的固定場地，所以這裡一定要寫
-    datesNote: '★ 10/22 改在 24steps 上課（當晚沒有 mini social）',
+    datesNote: '★ 10/22 改在 24steps 上課（當晚沒有 mini social）・10/29 停課',
     dates: [
       { label: '10/22', note: '體驗課★24steps' },
-      { label: '10/29', note: 'LV1 開課' },
-      { label: '11/5' },
+      { label: '11/5', note: 'LV1 開課' },
       { label: '11/12' },
       { label: '11/19' },
       { label: '11/26' },
@@ -517,7 +517,7 @@ export const EVENTS: EnrollEvent[] = [
     theme: 'kaohsiungThu',
     danceStyle: 'Bachata',
     title: '高雄 Bachata 百元體驗課',
-    note: '⚠️ 這一場改在 24steps（新興區），不是 Social hub。零基礎、沒有舞伴都可以來，課後接 Bachata training；10/29 起每週四 Bachata LV1 在 Social hub 開課。',
+    note: '⚠️ 這一場改在 24steps（新興區），不是 Social hub。零基礎、沒有舞伴都可以來，課後接 Bachata training；10/29 停課，11/5 起每週四 Bachata LV1 在 Social hub 開課。',
     dateLabel: '10/22',
     weekdayEn: 'THU',
     startTime: '19:30',

@@ -105,7 +105,7 @@ export default function TrackCard({ track }: { track: Track }) {
       {/* 場次 strip */}
       <div className="relative mt-6">
         <div className="flex items-baseline gap-2">
-          <p className="font-bold text-[#2d3a5e]">{track.datesTitle}</p>
+          <p className="shrink-0 font-bold text-[#2d3a5e]">{track.datesTitle}</p>
           {track.datesNote && (
             <p className="text-xs text-gray-500 md:text-sm">{track.datesNote}</p>
           )}
