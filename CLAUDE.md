@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-yarn dev        # start dev server at localhost:3000
+yarn dev        # start dev server at localhost:3100
 yarn build      # production build
 yarn lint       # ESLint
 ```
