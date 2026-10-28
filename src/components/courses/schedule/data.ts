@@ -206,16 +206,19 @@ export const MONTHS: MonthConfig[] = [
     month: 11,
     titleEn: 'NOVEMBER',
     titleZh: '十一月',
-    // 台南十一月的新一期還沒定，先只放 11/3 週二 Bachata 第五堂（本期最後一堂）
+    // 台南週二、週四的新一期還沒定；週二先只放 11/3 Bachata 第五堂（本期最後一堂）
     highlights: {
       3: { theme: 'kaohsiungTue', label: '台南\n高雄', trackId: 'kaohsiung-tue' },
       5: { theme: 'kaohsiungThu', label: '高雄', trackId: 'kaohsiung-thu' },
+      8: { theme: 'tainanSun', label: '台南', trackId: 'tainan-sun' },
       10: { theme: 'kaohsiungTue', label: '高雄', trackId: 'kaohsiung-tue' },
       12: { theme: 'kaohsiungThu', label: '高雄', trackId: 'kaohsiung-thu' },
+      15: { theme: 'tainanSun', label: '台南', trackId: 'tainan-sun' },
       17: { theme: 'kaohsiungTue', label: '高雄', trackId: 'kaohsiung-tue' },
       19: { theme: 'kaohsiungThu', label: '高雄', trackId: 'kaohsiung-thu' },
       24: { theme: 'kaohsiungTue', label: '高雄', trackId: 'kaohsiung-tue' },
       26: { theme: 'kaohsiungThu', label: '高雄', trackId: 'kaohsiung-thu' },
+      29: { theme: 'tainanSun', label: '台南', trackId: 'tainan-sun' },
     },
     legend: [
       {
@@ -229,13 +232,18 @@ export const MONTHS: MonthConfig[] = [
         desc: '19:30–20:30 Bachata LV1・20:30–21:30 Bachata training・mini social 至 23:00',
       },
       {
+        theme: 'tainanSun',
+        title: '週日・台南教室',
+        desc: 'Body Movement・單人 Salsa · 14:00–16:00（11/8、11/15、11/29）',
+      },
+      {
         theme: 'tainanTue',
         title: '週二・台南教室',
         desc: '11/3 Bachata 1-3 / 1-2 第五堂（本期最後一堂）',
       },
     ],
-    // TODO: 台南十一月課程確定後補上
-    footnote: '台南十一月的課程還在安排中；實際場次以 Instagram 公告為準。',
+    // TODO: 台南週二、週四十一月課程確定後補上
+    footnote: '台南週二、週四十一月的新一期還在安排中；實際場次以 Instagram 公告為準。',
   },
 ];
 
@@ -243,6 +251,29 @@ export const MONTHS: MonthConfig[] = [
 export const MONTH: MonthConfig = MONTHS[0];
 
 export const TRACKS: Track[] = [
+  {
+    id: 'tainan-sun',
+    theme: 'tainanSun',
+    cityEn: 'TAINAN',
+    cityZh: '台南教室',
+    sessionLabelEn: 'SUNDAY',
+    dayZh: '週日',
+    tabLabel: '週日・台南',
+    slots: [
+      { time: '14:00–15:00', title: 'Body Movement' },
+      { time: '15:00–16:00', title: '單人 Salsa' },
+    ],
+    datesTitle: '本期場次',
+    datesNote: '11/22 停課',
+    dates: [
+      { label: '11/8' },
+      { label: '11/15' },
+      { label: '11/29' },
+    ],
+    venueSlug: 'tainan',
+    pricePlanId: 'card-plan',
+    priceSummary: '課卡制・6 堂 $2000・單堂 $400',
+  },
   {
     id: 'tainan-tue',
     theme: 'tainanTue',
@@ -674,8 +705,7 @@ export const PRICE_PLANS: PricePlan[] = [
         title: '統一課卡',
         subtitle: '單一課卡，Lv1、Lv2 同價，適用所有課卡課程',
         courses: [
-          { name: 'Body movement', theme: 'tainanSun' },
-          { name: 'Bachata Lv2', theme: 'tainanSun' },
+          { name: 'Body Movement', theme: 'tainanSun' },
           { name: '單人 Salsa', theme: 'tainanSun' },
           { name: 'Salsa LV1', theme: 'kaohsiungTue' },
           { name: 'Kizomba LV1', theme: 'kaohsiungTue' },
