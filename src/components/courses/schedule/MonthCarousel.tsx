@@ -61,30 +61,64 @@ export default function MonthCarousel({
     };
   }, [syncScrollState]);
 
-  // 預設停在「今天所在的那個月」。
+  // 寬度變了（轉向、網址列收合、字型載入後重排）就把捲動位置對回目前的月份。
+  // scrollLeft 是 px，寬度一變舊的 px 會落在兩個月中間；Safari 不一定會自己重新 snap。
+  const activeIndexRef = useRef(0);
+  activeIndexRef.current = activeIndex;
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller || typeof ResizeObserver === 'undefined') return;
+    let lastWidth = scroller.clientWidth;
+    const observer = new ResizeObserver(() => {
+      if (scroller.clientWidth === lastWidth) return;
+      lastWidth = scroller.clientWidth;
+      scroller.scrollTo({ left: activeIndexRef.current * getStep(), behavior: 'instant' });
+    });
+    observer.observe(scroller);
+    return () => observer.disconnect();
+  }, []);
+
+  // 預設停在「今天之後第一個還有課的月份」：10/30 時十月已經沒課了，就直接看十一月。
   // 預渲染的 HTML 一律從第一個月開始（build 當下的日期會過期，不能寫進 HTML，
-  // 跟 TrackCard 用 useEffect 重算「已結束」場次是同一個理由），
-  // 掛載後才用瀏覽器當下日期跳過去；找不到當月就維持第一個月。
+  // 跟 TrackCard 用 useEffect 重算「已結束」場次是同一個理由），掛載後才用瀏覽器當下日期跳過去。
   // 依賴用「有哪幾個月」的字串而不是 months 陣列本身：切換城市會換一份新陣列，
-  // 但使用者正在看的月份要留著，不能跳回當月。
+  // 但使用者正在看的月份要留著，不能跳回預設月。
   const monthKeys = months.map((m) => `${m.year}-${m.month}`).join(',');
   useEffect(() => {
     const scroller = scrollerRef.current;
     if (!scroller) return;
-    const now = new Date();
-    const index = months.findIndex(
-      (m) => m.year === now.getFullYear() && m.month === now.getMonth() + 1
-    );
+    const index = firstUpcomingMonth(months, new Date());
     if (index <= 0) return;
     scroller.scrollTo({ left: index * getStep(), behavior: 'instant' });
     setActiveIndex(index);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monthKeys]);
 
+  // 按月份分頁時：先關掉 scroll-snap 再平滑捲動，捲完才打開。
+  // iOS Safari 在 snap-mandatory 容器上做程式捲動，常常停在兩個月中間（畫面被截成兩半）。
+  const snapTimerRef = useRef<number | null>(null);
   const scrollToIndex = (index: number) => {
     const scroller = scrollerRef.current;
     if (!scroller) return;
-    scroller.scrollTo({ left: index * getStep(), behavior: 'smooth' });
+    const left = index * getStep();
+    scroller.style.scrollSnapType = 'none';
+    scroller.scrollTo({ left, behavior: 'smooth' });
+    setActiveIndex(index);
+
+    const restore = () => {
+      if (snapTimerRef.current !== null) window.clearTimeout(snapTimerRef.current);
+      snapTimerRef.current = null;
+      scroller.removeEventListener('scrollend', restore);
+      // 平滑捲動被打斷時直接落到正確位置，再把 snap 交回 CSS
+      if (Math.abs(scroller.scrollLeft - left) > 1) {
+        scroller.scrollTo({ left, behavior: 'instant' });
+      }
+      scroller.style.scrollSnapType = '';
+    };
+    scroller.addEventListener('scrollend', restore, { once: true });
+    // 不支援 scrollend 的瀏覽器（Safari 18.2 以前）靠計時器收尾
+    if (snapTimerRef.current !== null) window.clearTimeout(snapTimerRef.current);
+    snapTimerRef.current = window.setTimeout(restore, 700);
   };
 
   const showControls = months.length > 1;
@@ -142,7 +176,7 @@ export default function MonthCarousel({
         {months.map((month) => (
           <div
             key={`${month.year}-${month.month}`}
-            className="w-full shrink-0 snap-start"
+            className="w-full min-w-0 shrink-0 snap-start snap-always"
           >
             <MonthOverview config={month} onSelectTrack={onSelectTrack} />
           </div>
@@ -150,4 +184,15 @@ export default function MonthCarousel({
       </div>
     </section>
   );
+}
+
+/** 今天（含）之後第一個還有課的月份；都沒有就回最後一個月。 */
+function firstUpcomingMonth(months: MonthView[], now: Date): number {
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const index = months.findIndex((m) =>
+    Object.keys(m.highlights).some(
+      (day) => new Date(m.year, m.month - 1, Number(day)) >= today
+    )
+  );
+  return index === -1 ? months.length - 1 : index;
 }

@@ -5,7 +5,16 @@ import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { getVenue, venuePath } from '@/data/venues';
 import { LINKS } from '@/constants/links';
-import { getSessionStatus, THEMES, type SessionStatus, type Track } from './data';
+import EventCard from '@/components/enroll/EventCard';
+import {
+  getOpenEvent,
+  getSessionStatus,
+  THEMES,
+  type SessionStatus,
+  type Track,
+} from './data';
+
+const EPOCH = new Date(0);
 
 export default function TrackCard({ track }: { track: Track }) {
   const theme = THEMES[track.theme];
@@ -15,6 +24,10 @@ export default function TrackCard({ track }: { track: Track }) {
   // 掛載後再用瀏覽器當下時間重算「已結束」狀態，避免 hydration mismatch。
   const [now, setNow] = useState<Date | null>(null);
   useEffect(() => setNow(new Date()), []);
+  // 拆出來的小卡（例如週二的體驗課）：辦完就不顯示，SSR 時先全部印出來
+  const events = (track.eventIds ?? [])
+    .map((id) => getOpenEvent(id, now ?? EPOCH))
+    .filter((event) => event !== null);
 
   return (
     <section
@@ -35,9 +48,13 @@ export default function TrackCard({ track }: { track: Track }) {
 
       {/* 標頭：城市 + 圓章 */}
       <div className="relative flex items-start justify-between gap-3">
-        <div className="flex flex-col leading-none">
+        <div className="flex min-w-0 flex-col leading-none">
+          {/* clamp：KAOHSIUNG 在 320px 寬的手機用固定 36px 會把右邊圓章擠出卡片 */}
           <span
-            className={cn('font-poppins text-4xl font-bold md:text-6xl', theme.accentText)}
+            className={cn(
+              'font-poppins text-[clamp(1.75rem,10vw,2.25rem)] font-bold md:text-6xl',
+              theme.accentText
+            )}
             style={{ textShadow: '3px 3px 0 rgba(45,58,94,0.18)' }}
           >
             {track.cityEn}
@@ -48,7 +65,7 @@ export default function TrackCard({ track }: { track: Track }) {
         </div>
         <div
           className={cn(
-            'flex aspect-square w-20 flex-col items-center justify-center rounded-full text-center text-white md:w-28',
+            'flex aspect-square w-20 shrink-0 flex-col items-center justify-center rounded-full text-center text-white md:w-28',
             theme.accentBg
           )}
         >
@@ -121,7 +138,7 @@ export default function TrackCard({ track }: { track: Track }) {
             />
           ))}
         </div>
-        {track.notes && (
+        {track.notes && track.notes.length > 0 && (
           <ul className="mt-3 flex list-disc flex-col gap-1 pl-5 text-xs leading-relaxed text-gray-600 md:text-sm">
             {track.notes.map((note) => (
               <li key={note}>{note}</li>
@@ -129,6 +146,19 @@ export default function TrackCard({ track }: { track: Track }) {
           </ul>
         )}
       </div>
+
+      {events.length > 0 && (
+        <div className="relative mt-6 flex flex-col gap-3">
+          {events.map((event) => (
+            <EventCard
+              key={event.id}
+              event={event}
+              anchorId={`${track.id}-${event.id}`}
+              compact
+            />
+          ))}
+        </div>
+      )}
 
       {/* 費用摘要 */}
       <div className="relative mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl bg-white/70 px-4 py-3">
@@ -144,16 +174,43 @@ export default function TrackCard({ track }: { track: Track }) {
         >
           查看費用 →
         </a>
-        <Link
-          href={LINKS.ENROLL}
-          className={cn(
-            'text-sm font-medium underline-offset-2 hover:underline',
-            theme.accentText
-          )}
-        >
-          線上報名 →
-        </Link>
+        {!track.walkIn && (
+          <Link
+            href={LINKS.ENROLL}
+            className={cn(
+              'text-sm font-medium underline-offset-2 hover:underline',
+              theme.accentText
+            )}
+          >
+            線上報名 →
+          </Link>
+        )}
       </div>
+
+      {/* 課卡制、不收線上報名的課：直接告訴人怎麼來 */}
+      {track.walkIn && (
+        <p className="relative mt-3 text-sm leading-relaxed text-[#2d3a5e]">
+          不需線上報名：直接到現場，或私訊粉專詢問（
+          <a
+            href={LINKS.INSTAGRAM_DM}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium text-teal-700 underline underline-offset-2"
+          >
+            IG
+          </a>
+          ／
+          <a
+            href={LINKS.LINE}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium text-teal-700 underline underline-offset-2"
+          >
+            LINE
+          </a>
+          ）。
+        </p>
+      )}
 
       {/* 地點：連到該據點頁，順便把權重導過去 */}
       <div className="relative mt-4 flex items-start gap-1.5 text-sm text-[#2d3a5e] md:text-base">

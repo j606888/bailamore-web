@@ -4,11 +4,11 @@ import Link from "next/link";
 import { LINKS } from "@/constants/links";
 import FeaturedEventPill from "./FeaturedEventPill";
 
-const Hero = ({ videoUrl }: { videoUrl: string }) => {
+const Hero = ({ videoUrl, renderedAt }: { videoUrl: string; renderedAt: number }) => {
   return (
     <div className="px-5 py-10 flex flex-col items-center justify-center gap-6 md:flex-row md:gap-6 md:max-w-7xl md:mx-auto">
       <div className="flex flex-col items-center justify-center gap-4 md:w-[420px] md:items-start md:flex-shrink-0">
-        <FeaturedEventPill />
+        <FeaturedEventPill renderedAt={renderedAt} />
         <h1 className="font-poppins text-2xl font-bold mb-1 md:text-5xl">
           第一次跳舞，
           <br className="hidden md:block" />

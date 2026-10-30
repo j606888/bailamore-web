@@ -2,11 +2,12 @@
 
 import Link from 'next/link';
 import { LINKS } from '@/constants/links';
-import { useFeaturedEvent } from './useFeaturedEvent';
+import { useFeaturedEvents } from './useFeaturedEvent';
 
 // Hero 標題上方的小膠囊：手機上公告條被影片推到很下面，這裡確保第一屏就看得到主打活動。
-export default function FeaturedEventPill() {
-  const featured = useFeaturedEvent();
+// 只放日期最近的那一場，其他主打交給下方的公告條。
+export default function FeaturedEventPill({ renderedAt }: { renderedAt: number }) {
+  const featured = useFeaturedEvents(renderedAt)[0];
   if (!featured) return null;
 
   return (

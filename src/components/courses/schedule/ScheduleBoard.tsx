@@ -25,6 +25,17 @@ function isCitySlug(value: string | null): value is CitySlug {
   return CITIES.some((c) => c.slug === value);
 }
 
+// 課卡 tab 依星期排，週日放最後（跟全站文案「週二、週四、週日」一致）
+const WEEKDAY_ORDER = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
+
+function tracksInCity(citySlug: CitySlug) {
+  return [...getTracksByCity(citySlug)].sort(
+    (a, b) =>
+      WEEKDAY_ORDER.indexOf(a.sessionLabelEn.toUpperCase()) -
+      WEEKDAY_ORDER.indexOf(b.sessionLabelEn.toUpperCase())
+  );
+}
+
 export default function ScheduleBoard() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -35,7 +46,7 @@ export default function ScheduleBoard() {
   const [city, setCity] = useState<CitySlug>(
     isCitySlug(cityFromUrl) ? cityFromUrl : CITIES[0].slug
   );
-  const cityTracks = useMemo(() => getTracksByCity(city), [city]);
+  const cityTracks = useMemo(() => tracksInCity(city), [city]);
   const cityMonths = useMemo(
     () => MONTHS.map((m) => getMonthForCity(m, city)),
     [city]
@@ -44,8 +55,8 @@ export default function ScheduleBoard() {
 
   // 一個城市記一個目前展開的課卡：切回來時還停在剛剛看的那一張。
   const [activeByCity, setActiveByCity] = useState<Record<CitySlug, string>>({
-    tainan: getTracksByCity('tainan')[0]?.id ?? '',
-    kaohsiung: getTracksByCity('kaohsiung')[0]?.id ?? '',
+    tainan: tracksInCity('tainan')[0]?.id ?? '',
+    kaohsiung: tracksInCity('kaohsiung')[0]?.id ?? '',
   });
   const activeTrackId = activeByCity[city];
 

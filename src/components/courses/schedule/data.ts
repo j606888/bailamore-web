@@ -66,6 +66,12 @@ export interface Track {
   datesNote?: string; // '9/15 停課'（沒有補充就不顯示）
   dates: SessionDate[];
   notes?: string[]; // 場次下方的補充說明（一行一點），用在一期裡有不同安排的 track
+  // 課卡裡要拆成獨立小卡的報名活動（EVENTS 的 id）：時間、價格、報名連結都從 EVENTS 讀，不重複寫。
+  // 活動辦完就自動不顯示。
+  eventIds?: string[];
+  // 不用填表、直接來上的課（台南週日、高雄）：「線上報名 →」改成「直接到現場，或私訊粉專詢問」。
+  // 台南週二 Lv1 雖然也用課卡，但要先填報名表，不要設這個。
+  walkIn?: boolean;
   venueSlug: VenueSlug; // 對應 src/data/venues.ts 的據點
   pricePlanId: string; // 對應 PRICE_PLANS 的 id
   priceSummary: string; // 課表卡上顯示的一行費用摘要（各 track 金額不同）
@@ -264,7 +270,11 @@ export const MONTHS: MonthConfig[] = [
       29: [{ theme: 'tainanSun', trackId: 'tainan-sun' }],
     },
     legend: [
-      { theme: 'tainanTue', title: '週二', desc: 'Bachata Lv2・Lv1 新手班・體驗課' },
+      {
+        theme: 'tainanTue',
+        title: '週二',
+        desc: '11/3 1-3／1-2 最後一堂・體驗課・Lv2・Lv1 新手班',
+      },
       { theme: 'tainanThu', title: '週四', desc: 'Salsa 1-2' },
       { theme: 'tainanSun', title: '週日', desc: 'Body Movement・單人 Salsa' },
       { theme: 'party', title: '11/7（六）', desc: '亡靈節 Party', citySlug: 'tainan' },
@@ -324,9 +334,14 @@ export const TRACKS: Track[] = [
       { label: '11/15' },
       { label: '11/29' },
     ],
+    notes: [
+      'Body Movement 與單人 Salsa 可以分開上，只上其中一堂也可以；兩堂都能用課卡。',
+      '課卡效期半年。',
+    ],
+    walkIn: true,
     venueSlug: 'tainan',
     pricePlanId: 'card-plan',
-    priceSummary: '課卡制・6 堂 $2000・單堂 $400',
+    priceSummary: '課卡 6 堂 $2000・單堂 $400',
   },
   {
     id: 'tainan-tue',
@@ -336,7 +351,7 @@ export const TRACKS: Track[] = [
     sessionLabelEn: 'TUESDAY',
     dayZh: '週二',
     badge: 'Bachata Lv2・Lv1 新手班 11/24 開課',
-    badgeNote: '11/3 為 1-3／1-2 本期最後一堂；11/10、11/17 進度班＋新手體驗課；11/24–12/29 Lv2 共六堂，同晚 21:00 Lv1 新手班開課',
+    badgeNote: '11/10、11/17 先來體驗課',
     tabLabel: '週二・台南',
     // 時段寫 11/24 起的新一期；11/3 與 11/10、11/17 的特殊安排見 notes
     slots: [
@@ -345,28 +360,19 @@ export const TRACKS: Track[] = [
       { time: '21:00–22:00', title: 'Bachata Lv1 新手班' },
     ],
     datesTitle: '場次',
-    datesNote: '11/24 起為 Lv2／Lv1 新一期，11/3 與 11/10、11/17 的安排見下方說明',
+    // 十二月的場次先不列（格子太多沒人看）；十二月初再補
     dates: [
-      { label: '11/3', note: '1-3／1-2 最後一堂' },
-      { label: '11/10', note: '進度班・體驗課' },
-      { label: '11/17', note: '進度班・體驗課' },
-      { label: '11/24', note: 'Lv2 第一堂・Lv1 開課' },
-      { label: '12/1', note: 'Lv2 第二堂' },
-      { label: '12/8', note: 'Lv2 第三堂' },
-      { label: '12/15', note: 'Lv2 第四堂' },
-      { label: '12/22', note: 'Lv2 第五堂' },
-      { label: '12/29', note: 'Lv2 第六堂' },
+      { label: '11/3', note: '舊班最後一堂' },
+      { label: '11/10', note: '體驗課' },
+      { label: '11/17', note: '體驗課' },
+      { label: '11/24', note: '新班開課' },
     ],
-    notes: [
-      '11/3（二）第三期最後一堂：19:30 Bachata 1-3、21:00 Bachata 1-2，各接練習時間。',
-      '11/10、11/17（二）19:30–21:00 進度班：不教新動作，1-2 同學 $500／堂、1-3 同學 $250／堂，有人報名才開；報名進度班可免費參加同晚體驗課。請於 11/2 前至報名頁填寫併班意願調查。',
-      '11/10、11/17（二）21:00–22:00 新手體驗課、22:00–22:30 練習交流，擇一天參加；單人 $200／雙人 $300，現場繳費，報名連結在報名頁。',
-      '11/24–12/29 Bachata Lv2 共六堂 $2000，19:30 上課、20:30 練習；報名表即將開放。',
-      '11/24 起每週二 21:00–22:00 Bachata Lv1 新手班。',
-    ],
+    // 11/10、11/17 的體驗課拆成小卡放在課卡裡。
+    // 同一時段給舊生的進度班不上官網，只在學生群組公告。
+    eventIds: ['tainan-bachata-trial-1110'],
     venueSlug: 'tainan',
     pricePlanId: 'tuesday-plan',
-    priceSummary: 'Lv2 整期六堂 $2000・報名表即將開放',
+    priceSummary: 'Lv2 整期 6 堂 $2000・Lv1 用課卡',
   },
   {
     id: 'tainan-thu',
@@ -376,24 +382,23 @@ export const TRACKS: Track[] = [
     sessionLabelEn: 'THURSDAY',
     dayZh: '週四',
     badge: 'Salsa 1-2 11/5 開課',
-    badgeNote: '丁丁 & Nora 授課，11/5–12/10 共五堂（11/19 停課），課後接練習時間，滿 5 人開班',
+    badgeNote: '丁丁 & Nora・滿 5 人開班',
     tabLabel: '週四・台南',
     slots: [
       { time: '19:15–20:30', title: 'Salsa 1-2' },
       { time: '20:30–21:30', title: '練習時間' },
     ],
     datesTitle: '本期場次',
-    datesNote: '11/19 停課（TSC festival）',
+    datesNote: '11/19 停課',
+    // 十二月的場次（12/3、12/10）先不列；十二月初再補
     dates: [
       { label: '11/5', note: '第一堂' },
       { label: '11/12', note: '第二堂' },
       { label: '11/26', note: '第三堂' },
-      { label: '12/3', note: '第四堂' },
-      { label: '12/10', note: '第五堂' },
     ],
     venueSlug: 'tainan',
     pricePlanId: 'thursday-salsa-plan',
-    priceSummary: '整期五堂 $2000・單堂 $450',
+    priceSummary: '整期 5 堂 $2000・單堂 $450',
   },
   {
     id: 'kaohsiung-tue',
@@ -418,9 +423,10 @@ export const TRACKS: Track[] = [
       { label: '11/17' },
       { label: '11/24' },
     ],
+    walkIn: true,
     venueSlug: 'kaohsiung-24steps',
     pricePlanId: 'card-plan',
-    priceSummary: '課卡制・6 堂 $2000・單堂 $400',
+    priceSummary: '課卡 6 堂 $2000・單堂 $400',
   },
   {
     id: 'kaohsiung-thu',
@@ -447,9 +453,10 @@ export const TRACKS: Track[] = [
       { label: '11/19' },
       { label: '11/26' },
     ],
+    walkIn: true,
     venueSlug: 'kaohsiung-social-hub',
     pricePlanId: 'card-plan',
-    priceSummary: '課卡制・6 堂 $2000・單堂 $400',
+    priceSummary: '課卡 6 堂 $2000・單堂 $400',
   },
 ];
 
@@ -557,7 +564,11 @@ export interface EnrollEvent {
   externalVenue?: ExternalVenue; // 外借場地（與 venueSlug 二擇一）
   price?: number; // 有數字才輸出 JSON-LD 的 offers
   priceNote?: string; // 卡片上顯示的費用文字，例如 '單堂 $400'
-  enrollUrl: string; // 空字串 = 報名未開放 → 整張卡不顯示
+  enrollUrl: string; // 空字串 = 報名未開放 → 整張卡不顯示（除非有填 enrollPending）
+  // 表單還沒開但要先曝光：有填這行字，卡片照樣顯示，按鈕改成私訊粉專。不會輸出 JSON-LD。
+  enrollPending?: string;
+  kindLabel?: string; // 覆寫卡片上的「體驗課／新開課程」標籤，例如 '本期 11/3 結束'
+  alert?: string; // 卡片上醒目的提醒（截止日之類），一句話就好
   bannerText?: string; // 有填就是「主打活動」：辦完之前首頁公告條與 Hero 會改推這一場
 }
 
@@ -592,7 +603,7 @@ export const EVENTS: EnrollEvent[] = [
     endTime: '21:45',
     venueSlug: 'tainan',
     price: 2000,
-    priceNote: '整期五堂 $2000・單堂 $450',
+    priceNote: '整期 5 堂 $2000・單堂 $450',
     enrollUrl: 'https://forms.gle/Yf1afY8bg8qaAfJ28',
   },
   {
@@ -601,7 +612,8 @@ export const EVENTS: EnrollEvent[] = [
     theme: 'tainanTue',
     danceStyle: 'Bachata',
     title: '台南週二 Bachata 1-3・1-2',
-    note: '10/6–11/3 連續五週，19:30 Bachata 1-3、21:00 Bachata 1-2，每堂課後接練習時間。',
+    kindLabel: '本期 11/3 結束',
+    note: '19:30 Bachata 1-3・21:00 Bachata 1-2',
     dateLabel: '10/6',
     endDateLabel: '11/3',
     weekdayEn: 'TUE',
@@ -609,7 +621,7 @@ export const EVENTS: EnrollEvent[] = [
     endTime: '22:30',
     venueSlug: 'tainan',
     price: 1600,
-    priceNote: '整期五堂 $1600・單堂 $400',
+    priceNote: '整期 5 堂 $1600・單堂 $400',
     enrollUrl: 'https://forms.gle/LYF74guiYbcggBCD9',
   },
   {
@@ -618,7 +630,7 @@ export const EVENTS: EnrollEvent[] = [
     theme: 'tainanThu',
     danceStyle: 'Salsa',
     title: '台南週四 Salsa 1-2',
-    note: '丁丁 & Nora 授課。11/5–12/10 共五堂（11/19 停課），19:15–20:30 上課，20:30–21:30 練習時間；滿 5 人開班。',
+    note: '丁丁 & Nora・11/19 停課・滿 5 人開班',
     dateLabel: '11/5',
     endDateLabel: '12/10',
     weekdayEn: 'THU',
@@ -626,26 +638,9 @@ export const EVENTS: EnrollEvent[] = [
     endTime: '21:30',
     venueSlug: 'tainan',
     price: 2000,
-    priceNote: '整期五堂 $2000・單堂 $450',
+    priceNote: '整期 5 堂 $2000・單堂 $450',
     enrollUrl: 'https://forms.gle/icBJWwF1UYsgJYZc9',
-  },
-  {
-    id: 'tainan-bachata-progress-1110',
-    kind: 'course',
-    theme: 'tainanTue',
-    danceStyle: 'Bachata',
-    title: '台南週二 Bachata 進度班',
-    note: '11/10、11/17 19:30–21:00，不教新動作、以複習為主，有人報名才開班；報名進度班可免費參加同晚 21:00 的新手體驗課。請於 11/2 前填寫併班意願調查。',
-    dateLabel: '11/10',
-    endDateLabel: '11/17',
-    weekdayEn: 'TUE',
-    startTime: '19:30',
-    endTime: '21:00',
-    venueSlug: 'tainan',
-    // 兩種身分兩種價格，不填 price（JSON-LD 的 offers 只能放一個數字）
-    priceNote: '1-2 同學 $500／堂・1-3 同學 $250／堂',
-    enrollUrl:
-      'https://docs.google.com/forms/d/1yaEpLpWsJHTxKLg5LXvz5gYikpTxE3ytUtkxGWtcJX8/viewform',
+    bannerText: '11/5（四）台南 Salsa 1-2 開課，丁丁 & Nora 授課',
   },
   {
     id: 'tainan-bachata-trial-1110',
@@ -653,7 +648,8 @@ export const EVENTS: EnrollEvent[] = [
     theme: 'tainanTue',
     danceStyle: 'Bachata',
     title: '台南 Bachata 新手體驗課',
-    note: '11/10、11/17 擇一天參加：21:00–22:00 上課、22:00–22:30 練習交流。零基礎、沒有舞伴都可以來，費用現場繳。',
+    kindLabel: '給新朋友',
+    note: '兩天擇一・先填表，當天現場繳費',
     dateLabel: '11/10',
     endDateLabel: '11/17',
     weekdayEn: 'TUE',
@@ -661,9 +657,10 @@ export const EVENTS: EnrollEvent[] = [
     endTime: '22:30',
     venueSlug: 'tainan',
     price: 200,
-    priceNote: '單人 $200／雙人 $300（現場繳費）',
+    priceNote: '單人 $200・雙人 $300',
     enrollUrl:
       'https://docs.google.com/forms/d/11aLQeYDTDUtxv6li3hOpPSDwRsN1mmf1QQBCN2kNvHs/viewform',
+    bannerText: '11/10、11/17（二）台南 Bachata 新手體驗課 $200，零基礎、沒有舞伴都可以來',
   },
   {
     id: 'tainan-bachata-lv2-1124',
@@ -671,7 +668,7 @@ export const EVENTS: EnrollEvent[] = [
     theme: 'tainanTue',
     danceStyle: 'Bachata',
     title: '台南週二 Bachata Lv2',
-    note: '11/24–12/29 共六堂，19:30 上課、20:30 練習；同晚 21:00–22:00 另有 Bachata Lv1 新手班。',
+    note: '19:30 上課・20:30 練習',
     dateLabel: '11/24',
     endDateLabel: '12/29',
     weekdayEn: 'TUE',
@@ -679,9 +676,29 @@ export const EVENTS: EnrollEvent[] = [
     endTime: '21:00',
     venueSlug: 'tainan',
     price: 2000,
-    priceNote: '整期六堂 $2000',
-    // TODO: 報名表開放後填入，填了這張卡才會出現在 /enroll
+    priceNote: '整期 6 堂 $2000',
+    // TODO: 報名表開放後填入 enrollUrl，並刪掉 enrollPending
     enrollUrl: '',
+    enrollPending: '報名表 11 月初開放，先私訊預約',
+  },
+  {
+    id: 'tainan-bachata-lv1-1124',
+    kind: 'course',
+    theme: 'tainanTue',
+    danceStyle: 'Bachata',
+    title: '台南週二 Bachata Lv1 新手班',
+    note: '零基礎、沒舞伴都可以',
+    dateLabel: '11/24',
+    weekdayEn: 'TUE',
+    startTime: '21:00',
+    endTime: '22:00',
+    venueSlug: 'tainan',
+    // 用課卡，跟台南週日、高雄共用同一張
+    price: 400,
+    priceNote: '課卡 6 堂 $2000・單堂 $400',
+    // TODO: 報名表開放後填入 enrollUrl，並刪掉 enrollPending
+    enrollUrl: '',
+    enrollPending: '報名表 11 月初開放，先私訊預約',
   },
   {
     id: 'kaohsiung-kizomba-trial-1001',
@@ -801,19 +818,24 @@ export function getUpcomingEvents(
 }
 
 /**
- * 現在要主打的活動（有填 bannerText、還能報名、日期最近的那一場）。
- * 沒有的話回傳 null，首頁就退回 UPCOMING_TRACKS 的預告。
+ * 現在要主打的活動（有填 bannerText、表單已開、還沒辦完），依日期排序。
+ * 空陣列時首頁退回 UPCOMING_TRACKS 的預告。
  */
-export function getFeaturedEvent(now: Date = new Date()): EnrollEvent | null {
-  const featured = EVENTS.filter(
-    (event) => event.bannerText && isOpen(event, now)
+export function getFeaturedEvents(now: Date = new Date()): EnrollEvent[] {
+  return EVENTS.filter(
+    (event) => event.bannerText && event.enrollUrl && isOpen(event, now)
   ).sort((a, b) => eventSortKey(a) - eventSortKey(b));
-  return featured[0] ?? null;
 }
 
-/** 報名表已開放、而且還沒辦完（跨天活動要等最後一天過完）。 */
+/** 用 id 找活動（課卡裡的小卡用）；已經辦完或不存在就回 null。 */
+export function getOpenEvent(id: string, now: Date = new Date()): EnrollEvent | null {
+  const event = EVENTS.find((e) => e.id === id);
+  return event && isOpen(event, now) ? event : null;
+}
+
+/** 卡片要不要顯示：表單已開或有填 enrollPending，而且還沒辦完（跨天活動要等最後一天過完）。 */
 function isOpen(event: EnrollEvent, now: Date): boolean {
-  if (!event.enrollUrl) return false;
+  if (!event.enrollUrl && !event.enrollPending) return false;
   const lastDay = event.endDateLabel ?? event.dateLabel;
   return !isPast(lastDay, getEventYear(event), now);
 }
@@ -837,7 +859,7 @@ export function eventDateIso(
 // ---- 費用方案（與課表共用顏色，方便客人對應）----
 
 export interface PriceOption {
-  name: string; // '單堂體驗' / '整期五堂'
+  name: string; // '整期 5 堂' / '課卡 6 堂' / '單堂'
   price: number;
 }
 
@@ -849,7 +871,7 @@ export interface PriceCourse {
 export interface PriceTier {
   title: string; // 'Lv1 課程'
   subtitle?: string;
-  courses: PriceCourse[]; // 適用課程（chip，依 track 上色）
+  courses?: PriceCourse[]; // 適用課程（chip，依 track 上色）；標題已經講清楚是哪堂課就不用放
   options: PriceOption[];
 }
 
@@ -869,17 +891,18 @@ export interface PricePlan {
 export const PRICE_PLANS: PricePlan[] = [
   {
     id: 'card-plan',
-    name: '課卡方案',
+    name: '課卡',
     chips: [
+      { label: '週二・台南', theme: 'tainanTue' },
       { label: '週日・台南', theme: 'tainanSun' },
       { label: '週二・高雄', theme: 'kaohsiungTue' },
       { label: '週四・高雄', theme: 'kaohsiungThu' },
     ],
     tiers: [
       {
-        title: '統一課卡',
-        subtitle: '單一課卡，Lv1、Lv2 同價，適用所有課卡課程',
+        title: '一張課卡，以下都能上',
         courses: [
+          { name: 'Bachata Lv1 新手班', theme: 'tainanTue' },
           { name: 'Body Movement', theme: 'tainanSun' },
           { name: '單人 Salsa', theme: 'tainanSun' },
           { name: 'Salsa LV1', theme: 'kaohsiungTue' },
@@ -888,63 +911,49 @@ export const PRICE_PLANS: PricePlan[] = [
           { name: 'Bachata training', theme: 'kaohsiungThu' },
         ],
         options: [
-          { name: '6 堂課程', price: 2000 },
+          { name: '課卡 6 堂', price: 2000 },
           { name: '單堂', price: 400 },
         ],
       },
     ],
-    note: '*課卡不分 Lv1、Lv2 一律統一價，可插班，未使用完畢可用於下一期；週日台南與高雄週二、週四共用同一張課卡。正式課不用填表，直接到教室上課即可。',
+    // 「直接來」只限台南週日與高雄；台南週二 Lv1 要先填報名表
+    note: '效期半年・台南高雄共用・可插班｜台南週日、高雄直接來上；台南週二 Lv1 要先填報名表',
   },
   {
     id: 'tuesday-plan',
-    name: '週二・Bachata Lv2、進度班、體驗課（台南）',
+    name: '週二 Bachata Lv2・體驗課（台南）',
     chips: [{ label: '週二・台南', theme: 'tainanTue' }],
     tiers: [
       {
-        title: 'Bachata Lv2 6 堂',
-        subtitle: '11/24–12/29 連續六週，19:30 上課、20:30 練習；報名表即將開放',
-        courses: [{ name: 'Bachata Lv2', theme: 'tainanTue' }],
-        options: [{ name: '整期六堂', price: 2000 }],
-      },
-      {
-        title: '進度班（11/10、11/17）',
-        subtitle: '19:30–21:00，不教新動作，有人報名才開；報名進度班可免費參加同晚體驗課',
-        courses: [
-          { name: 'Bachata 1-2 同學', theme: 'tainanTue' },
-          { name: 'Bachata 1-3 同學', theme: 'tainanTue' },
-        ],
-        options: [
-          { name: '1-2 同學・單堂', price: 500 },
-          { name: '1-3 同學・單堂', price: 250 },
-        ],
-      },
-      {
-        title: '新手體驗課（11/10、11/17 擇一）',
-        subtitle: '21:00–22:00 上課、22:00–22:30 練習交流，現場繳費',
-        courses: [{ name: 'Bachata 體驗課', theme: 'tainanTue' }],
+        title: '新手體驗課',
+        subtitle: '給新朋友・11/10、11/17 擇一・現場繳費',
         options: [
           { name: '單人', price: 200 },
           { name: '雙人', price: 300 },
         ],
       },
+      {
+        title: 'Lv2',
+        subtitle: '11/24 起・報名表 11 月初開放',
+        options: [{ name: '整期 6 堂', price: 2000 }],
+      },
     ],
-    note: '*週二 Bachata 為獨立方案，與課卡不通用。',
+    note: '不能用課卡・Lv1 新手班用課卡（見上方）',
   },
   {
     id: 'thursday-salsa-plan',
-    name: '週四・Salsa 1-2（台南）',
+    name: '週四 Salsa 1-2（台南）',
     chips: [{ label: '週四・台南', theme: 'tainanThu' }],
     tiers: [
       {
-        title: 'Salsa 1-2 5 堂',
-        subtitle: '11/5–12/10 共五堂（11/19 停課），含課後練習時間，滿 5 人開班',
-        courses: [{ name: 'Salsa 1-2', theme: 'tainanThu' }],
+        title: 'Salsa 1-2',
+        subtitle: '11/5 起・滿 5 人開班',
         options: [
-          { name: '整期五堂', price: 2000 },
-          { name: '單堂報名', price: 450 },
+          { name: '整期 5 堂', price: 2000 },
+          { name: '單堂', price: 450 },
         ],
       },
     ],
-    note: '*Salsa 1-2 為獨立方案，與課卡、週二 Bachata 不通用。',
+    note: '不能用課卡',
   },
 ];

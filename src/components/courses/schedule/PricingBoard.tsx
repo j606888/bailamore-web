@@ -75,9 +75,8 @@ function TierCard({ tier }: { tier: PriceTier }) {
         )}
       </div>
 
-      <div className="mt-3 flex flex-col gap-1.5">
-        <p className="text-xs font-medium text-gray-400">適用課程</p>
-        <div className="flex flex-wrap gap-1.5">
+      {tier.courses && tier.courses.length > 0 && (
+        <div className="mt-3 flex flex-wrap gap-1.5">
           {tier.courses.map((c) => (
             <span
               key={c.name}
@@ -90,7 +89,7 @@ function TierCard({ tier }: { tier: PriceTier }) {
             </span>
           ))}
         </div>
-      </div>
+      )}
 
       <div className="mt-3 flex flex-col gap-2">
         {tier.options.map((option) => (

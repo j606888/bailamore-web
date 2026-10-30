@@ -26,6 +26,9 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
+  // 首頁是靜態產生的：這個時間就是 build 的時間，主打活動用它過濾掉 build 時已經辦完的場次
+  const renderedAt = Date.now();
+
   const testimonialsData = getPublishedTestimonials().map((t) => ({
     id: t.id,
     name: t.name,
@@ -45,8 +48,8 @@ export default function Home() {
   return (
     <>
       <JsonLd data={faqPageJsonLd(faqs)} />
-      <Hero videoUrl={HERO_VIDEO_URL} />
-      <AnnouncementBar />
+      <Hero videoUrl={HERO_VIDEO_URL} renderedAt={renderedAt} />
+      <AnnouncementBar renderedAt={renderedAt} />
       <WhoWeAre />
       <Testimonials testimonials={testimonialsData} />
       <FAQ faqs={faqsData} />

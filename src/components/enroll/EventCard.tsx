@@ -1,9 +1,10 @@
 import { Fragment, type ReactNode } from 'react';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, CircleAlert } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { getVenue, venuePath } from '@/data/venues';
+import { LINKS } from '@/constants/links';
 import { THEMES, type EnrollEvent } from '@/components/courses/schedule/data';
 
 // 報名頁的配色規則（跟課表卡刻意不同）：卡片一律白底，THEMES 的顏色只出現在
@@ -16,13 +17,27 @@ const KIND_LABEL: Record<EnrollEvent['kind'], string> = {
   workshop: 'Workshop',
 };
 
-export default function EventCard({ event }: { event: EnrollEvent }) {
+// anchorId：同一場活動也會出現在課表的課卡裡，那邊要換一個 id，避免整頁出現兩個 #<event.id>
+// compact：放在課表課卡裡的版本，不重複印地點（課卡底部已經有）
+export default function EventCard({
+  event,
+  anchorId = event.id,
+  compact = false,
+}: {
+  event: EnrollEvent;
+  anchorId?: string;
+  compact?: boolean;
+}) {
+  // 表單還沒開、但先曝光的場次：按鈕改成私訊粉專
+  const pending = !event.enrollUrl && Boolean(event.enrollPending);
   const theme = THEMES[event.theme];
   const venue = event.venueSlug ? getVenue(event.venueSlug) : null;
 
   // 地點・時間・費用用「・」串起來，沒填的欄位不留空位，全都沒填就整行不出現。
   const meta: ReactNode[] = [];
-  if (venue) {
+  if (compact) {
+    // 不放地點
+  } else if (venue) {
     meta.push(
       <Link
         key="venue"
@@ -58,7 +73,7 @@ export default function EventCard({ event }: { event: EnrollEvent }) {
 
   return (
     <article
-      id={event.id}
+      id={anchorId}
       className="flex scroll-mt-20 flex-col gap-4 rounded-3xl bg-white p-4 shadow-sm ring-1 ring-gray-200 sm:flex-row sm:items-center sm:gap-5 sm:p-5"
     >
       {/* 手機：日期章與文字並排、按鈕自己一列。sm:contents 讓這層在桌機消失，變成三欄。 */}
@@ -88,7 +103,7 @@ export default function EventCard({ event }: { event: EnrollEvent }) {
         <div className="flex flex-grow flex-col gap-1.5">
           <div className="flex flex-wrap items-center gap-1.5">
             <span className="rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-600">
-              {KIND_LABEL[event.kind]}
+              {event.kindLabel ?? KIND_LABEL[event.kind]}
             </span>
             <span
               className={cn(
@@ -112,8 +127,17 @@ export default function EventCard({ event }: { event: EnrollEvent }) {
               ))}
             </p>
           )}
+          {event.alert && (
+            <p className="flex items-start gap-1.5 rounded-lg bg-amber-50 px-2.5 py-1.5 text-sm font-bold text-amber-900 ring-1 ring-amber-200">
+              <CircleAlert className="mt-0.5 size-4 flex-shrink-0" aria-hidden />
+              {event.alert}
+            </p>
+          )}
           {event.note && (
             <p className="text-sm leading-relaxed text-gray-500">{event.note}</p>
+          )}
+          {pending && (
+            <p className="text-sm font-medium text-[#2d3a5e]">{event.enrollPending}</p>
           )}
         </div>
       </div>
@@ -124,8 +148,12 @@ export default function EventCard({ event }: { event: EnrollEvent }) {
         variant={event.kind === 'trial' ? 'default' : 'outline'}
         className="h-11 w-full flex-shrink-0 px-5 sm:w-auto"
       >
-        <a href={event.enrollUrl} target="_blank" rel="noopener noreferrer">
-          報名
+        <a
+          href={pending ? LINKS.INSTAGRAM_DM : event.enrollUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {pending ? '私訊預約' : '報名'}
           <ArrowRight className="size-4" />
         </a>
       </Button>
