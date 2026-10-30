@@ -26,7 +26,7 @@ export interface Venue {
   /** 場地暱稱，接在「台南市中西區」後面顯示，例如「台南市中西區・丁宅」 */
   shortName: string; // '丁宅'
   /** 門牌，作為 PostalAddress.streetAddress */
-  streetAddress: string; // '民族路二段57巷5號'
+  streetAddress: string; // '民族路二段45號2F'
   postalCode: string; // '700'
   /** 顯示用完整地址（頁面上直接印出來的那一行） */
   addressFull: string;
@@ -49,10 +49,6 @@ function mapEmbed(lat: number, lng: number): string {
   return `https://maps.google.com/maps?q=${lat},${lng}&hl=zh-TW&z=17&output=embed`;
 }
 
-function mapLink(query: string): string {
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
-}
-
 export const VENUES: Venue[] = [
   {
     slug: 'tainan',
@@ -62,18 +58,18 @@ export const VENUES: Venue[] = [
     cityEn: 'TAINAN',
     name: "Baila'more 台南教室・丁宅",
     shortName: '丁宅',
-    streetAddress: '民族路二段57巷5號',
+    streetAddress: '民族路二段45號2F',
     postalCode: '700',
-    addressFull: '700 台南市中西區民族路二段 57 巷 5 號',
-    addressNote: '丁宅為後門入口、沒有獨立門牌地址，導航請一律搜尋「萬昌起義」。',
+    addressFull: '700 台南市中西區民族路二段 45 號 2F',
+    addressNote: '入口在巷子內，萬昌起義（57巷5號）對面；臨馬路正門是服飾店，請勿走錯。',
     // 座標取自原本 /location 頁面的 Google Maps embed 字串（地標：萬昌起義）
     geo: { lat: 22.994232, lng: 120.21063 },
     // 沿用原本 /location 頁面的 embed（釘在地標「萬昌起義」上）
     mapEmbedSrc:
       'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d239.85183938333768!2d120.21063370455558!3d22.994232091187936!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e768c1cdb6a8b%3A0x63cdd79f783bce5c!2z6JCs5piM6LW3576p!5e0!3m2!1szh-TW!2stw!4v1782357028566!5m2!1szh-TW!2stw',
-    mapLink: mapLink('萬昌起義 台南市中西區民族路二段57巷'),
-    navNote: '導航請搜尋地標「萬昌起義」（一間酒吧），教室在它對面的住宅區。',
-    trackIds: ['tainan-tue', 'tainan-thu'],
+    mapLink: 'https://maps.app.goo.gl/MoxK1QpjUQHCi33h6',
+    navNote: '導航請搜尋地標「萬昌起義」（一間酒吧），教室入口在它對面的巷子裡。',
+    trackIds: ['tainan-tue', 'tainan-thu', 'tainan-sun'],
   },
   {
     slug: 'kaohsiung-social-hub',

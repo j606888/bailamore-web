@@ -8,7 +8,7 @@ import { VENUES, venuePath, type Venue } from '@/data/venues';
 export const metadata: Metadata = {
   title: '上課地點・台南與高雄教室',
   description:
-    "Baila'more 在台南與高雄共有三間教室：台南中西區（每週日、週二）、高雄新興區 24steps（每週二）與高雄三民區 Social hub（每週四）。兩地共用同一張課卡，零基礎、無舞伴都可以報名。",
+    "Baila'more 在台南與高雄共有三間教室：台南中西區（每週二、週四、週日）、高雄新興區 24steps（每週二）與高雄三民區 Social hub（每週四）。兩地共用同一張課卡，零基礎、無舞伴都可以報名。",
   alternates: { canonical: '/location' },
   openGraph: {
     title: "上課地點・台南與高雄教室 | Baila'more",
@@ -31,7 +31,7 @@ export default function LocationPage() {
       />
 
       <p className="w-full text-base leading-relaxed text-gray-700">
-        Baila’more 目前在台南有一間教室、高雄有兩間。台南教室每週日與週二開課，高雄週二在新興區的 24steps、週四在三民區的 Social hub 開課，兩地共用同一張課卡，可以互相跑班。點下方卡片看該據點的完整地址、交通指引與課程時段。
+        Baila’more 目前在台南有一間教室、高雄有兩間。台南教室每週二、週四與週日開課，高雄週二在新興區的 24steps、週四在三民區的 Social hub 開課，兩地共用同一張課卡，可以互相跑班。點下方卡片看該據點的完整地址、交通指引與課程時段。
       </p>
 
       <div className="grid w-full gap-4 md:grid-cols-2">

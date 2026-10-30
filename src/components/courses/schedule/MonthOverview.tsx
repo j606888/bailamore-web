@@ -1,20 +1,21 @@
 'use client';
 
-import { THEMES, type MonthConfig } from './data';
+import { THEMES, type MonthView } from './data';
 
 const WEEKDAYS = ['日', '一', '二', '三', '四', '五', '六'];
 
 // 品牌抬頭（BAILA'MORE / 2026 SCHEDULE）不在這裡，它固定在 MonthCarousel 上方、不隨月份切換。
+// config 是已經依城市過濾過的 MonthView（見 data.ts 的 getMonthForCity），一天最多一個 highlight。
 // onSelectTrack：由 ScheduleBoard 傳入，讓月曆格子改成「切到該課表 tab 再捲過去」。
 // 沒帶這個 prop 時（或 JS 還沒載入）維持原本的 #anchor 連結行為。
 export default function MonthOverview({
   config,
   onSelectTrack,
 }: {
-  config: MonthConfig;
+  config: MonthView;
   onSelectTrack?: (trackId: string) => void;
 }) {
-  const { year, month, titleEn, titleZh, highlights, legend, footnote } = config;
+  const { year, month, titleEn, titleZh, highlights, legend } = config;
 
   const firstWeekday = new Date(year, month - 1, 1).getDay(); // 0 = 週日
   const daysInMonth = new Date(year, month, 0).getDate();
@@ -75,11 +76,12 @@ export default function MonthOverview({
                 <span className="text-base font-bold leading-tight md:text-xl">
                   {day}
                 </span>
-                {/* whitespace-pre-line：label 裡的 \n 是刻意的斷行位置。
-                    手機格子只有約 42px 寬，「台南・高雄」一行塞不下會被裁掉。 */}
-                <span className="whitespace-pre-line text-center text-[10px] leading-tight md:text-xs">
-                  {hl.label}
-                </span>
+                {/* 課表已依城市切換，常態課不用再標城市；只有活動類（PARTY）或特殊場次（★）才有小字 */}
+                {hl.label && (
+                  <span className="text-center text-[10px] leading-tight md:text-xs">
+                    {hl.label}
+                  </span>
+                )}
               </>
             );
             // 活動（派對等）沒有對應的 track 卡片，就不做成錨點連結
@@ -128,9 +130,6 @@ export default function MonthOverview({
             </div>
           );
         })}
-        {footnote && (
-          <p className="mt-1 text-xs text-gray-500 md:text-sm">{footnote}</p>
-        )}
       </div>
     </section>
   );

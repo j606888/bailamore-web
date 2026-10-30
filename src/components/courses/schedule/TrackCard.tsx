@@ -121,6 +121,13 @@ export default function TrackCard({ track }: { track: Track }) {
             />
           ))}
         </div>
+        {track.notes && (
+          <ul className="mt-3 flex list-disc flex-col gap-1 pl-5 text-xs leading-relaxed text-gray-600 md:text-sm">
+            {track.notes.map((note) => (
+              <li key={note}>{note}</li>
+            ))}
+          </ul>
+        )}
       </div>
 
       {/* 費用摘要 */}

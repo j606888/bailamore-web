@@ -15,12 +15,12 @@ const tracks = getTracksByVenue('tainan');
 export const metadata: Metadata = {
   title: '台南拉丁舞教室・上課地點',
   description:
-    "Baila'more 台南教室「丁宅」位於台南市中西區民族路二段57巷5號一帶，每週日與週二開設 Bachata、Salsa 課程。導航請搜尋地標「萬昌起義」，教室在酒吧對面的住宅區、門牌 45 號入口。",
+    "Baila'more 台南教室「丁宅」位於台南市中西區民族路二段45號2F，每週二、週四、週日開設 Bachata、Salsa 課程。入口在巷子內、萬昌起義對面，認準門牌 45 號；臨馬路的正門是服飾店。",
   alternates: { canonical: '/location/tainan' },
   openGraph: {
     title: "台南拉丁舞教室・上課地點 | Baila'more",
     description:
-      "Baila'more 台南據點「丁宅」位於台南市中西區，每週日、週二開課。導航請搜尋「萬昌起義」，教室在酒吧對面住宅區，認準門牌 45 號。",
+      "Baila'more 台南據點「丁宅」位於台南市中西區民族路二段45號2F，每週二、週四、週日開課。入口在巷子內、萬昌起義對面，認準門牌 45 號。",
     url: '/location/tainan',
   },
 };
@@ -44,7 +44,7 @@ export default function TainanLocationPage() {
         eyebrow="台南據點・丁宅"
         title="台南教室位置"
         subtitle="Baila'more 台南上課地點"
-        intro="Baila’more 台南教室「丁宅」位在台南市中西區，每週日與每週二固定開設 Bachata、Salsa 課程。不需舞伴、零基礎都可以直接報名。"
+        intro="Baila’more 台南教室「丁宅」位在台南市中西區，每週二、週四與週日固定開設 Bachata、Salsa 課程。不需舞伴、零基礎都可以直接報名。"
         photo={{
           src: '/images/丁宅.jpg',
           alt: '丁宅教室入口——門牌 45 號的鐵捲門與黑色格柵門',

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import MonthOverview from './MonthOverview';
-import type { MonthConfig } from './data';
+import type { MonthView } from './data';
 
 /**
  * 月曆輪播：一次看一個月，用上方的月份分頁或手指滑動切換。
@@ -15,7 +15,7 @@ export default function MonthCarousel({
   months,
   onSelectTrack,
 }: {
-  months: MonthConfig[];
+  months: MonthView[];
   onSelectTrack?: (trackId: string) => void;
 }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
@@ -65,6 +65,9 @@ export default function MonthCarousel({
   // 預渲染的 HTML 一律從第一個月開始（build 當下的日期會過期，不能寫進 HTML，
   // 跟 TrackCard 用 useEffect 重算「已結束」場次是同一個理由），
   // 掛載後才用瀏覽器當下日期跳過去；找不到當月就維持第一個月。
+  // 依賴用「有哪幾個月」的字串而不是 months 陣列本身：切換城市會換一份新陣列，
+  // 但使用者正在看的月份要留著，不能跳回當月。
+  const monthKeys = months.map((m) => `${m.year}-${m.month}`).join(',');
   useEffect(() => {
     const scroller = scrollerRef.current;
     if (!scroller) return;
@@ -75,7 +78,8 @@ export default function MonthCarousel({
     if (index <= 0) return;
     scroller.scrollTo({ left: index * getStep(), behavior: 'instant' });
     setActiveIndex(index);
-  }, [months]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [monthKeys]);
 
   const scrollToIndex = (index: number) => {
     const scroller = scrollerRef.current;
@@ -87,22 +91,23 @@ export default function MonthCarousel({
 
   return (
     <section className="w-full">
-      {/* 品牌抬頭固定在輪播外面，不隨月份切換 */}
-      <div className="flex flex-col">
-        <p className="font-poppins text-sm font-bold tracking-[0.2em] text-[#c47b5a] md:text-base">
-          BAILA&apos;MORE
-        </p>
-        <p className="font-poppins text-xs font-medium tracking-[0.3em] text-gray-500 md:text-sm">
-          {months[0]?.year} SCHEDULE
-        </p>
-      </div>
+      {/* 品牌抬頭與月份分頁同一列：抬頭靠左、分頁靠右，省一截高度；塞不下時分頁換到下一行 */}
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
+        <div className="flex flex-col">
+          <p className="font-poppins text-sm font-bold tracking-[0.2em] text-[#c47b5a] md:text-base">
+            BAILA&apos;MORE
+          </p>
+          <p className="font-poppins text-xs font-medium tracking-[0.3em] text-gray-500 md:text-sm">
+            {months[0]?.year} SCHEDULE
+          </p>
+        </div>
 
-      {/* 月份分頁：把有哪幾個月直接攤開來，不用點也知道還有下個月可以看
-          （之前只有兩顆箭頭，掃過去看不出來那是切換月份用的）。
-          月份多到四、五個時這一列會塞不下，那時要改成可橫捲的月份列。 */}
-      {showControls && (
-        <div className="mt-4 flex w-fit gap-1 rounded-full bg-gray-100 p-1">
-          {months.map((month, index) => {
+        {/* 月份分頁：把有哪幾個月直接攤開來，不用點也知道還有下個月可以看
+            （之前只有兩顆箭頭，掃過去看不出來那是切換月份用的）。
+            月份多到四、五個時這一列會塞不下，那時要改成可橫捲的月份列。 */}
+        {showControls && (
+          <div className="flex w-fit gap-1 rounded-full bg-gray-100 p-1">
+            {months.map((month, index) => {
             const active = index === activeIndex;
             return (
               <button
@@ -121,8 +126,9 @@ export default function MonthCarousel({
               </button>
             );
           })}
-        </div>
-      )}
+          </div>
+        )}
+      </div>
 
       {/* 一頁一個月：原生 scroll-snap，手機用手指滑、桌機用月份分頁或觸控板。
           slide 寬度剛好等於捲動容器寬度，所以畫在元素框「外面」的外框會被 overflow 裁掉 ——

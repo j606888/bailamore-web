@@ -4,7 +4,8 @@ import { getPublishedTeacherSlugs } from '@/data/teachers';
 import { getCitySlugs } from '@/data/venues';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date();
+  // 固定日期：每次 build 都換成當天會讓 Google 以為全站天天在改。內容有大改時再手動更新。
+  const lastModified = new Date('2026-10-30');
 
   const staticRoutes: { path: string; priority: number }[] = [
     { path: '/', priority: 1 },
